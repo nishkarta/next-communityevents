@@ -9,7 +9,7 @@ export default function Home() {
 	return (
 		<main className='flex h-screen flex-col justify-start md:justify-between items-center bg-primary'>
 			{/* Logo Section */}
-			<div className='mt-36 md:mt-28'>
+			<div className='my-40 md:mt-28'>
 				<Image
 					src='/images/gc-logo.jpg' // Adjust the path to your logo in the public folder
 					alt='Logo'
