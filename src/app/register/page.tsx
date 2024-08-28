@@ -1,13 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, ChevronLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -21,11 +23,8 @@ const phoneRegex = new RegExp(
 
 const formSchema = z
 	.object({
-		firstname: z.string().min(2, {
-			message: "Input your first name properly.",
-		}),
-		lastname: z.string().min(2, {
-			message: "Input your last name properly.",
+		fullname: z.string().min(2, {
+			message: "Input your proper full name.",
 		}),
 		email: z.string().email({
 			message: "Please enter a valid email address.",
@@ -53,12 +52,15 @@ const formSchema = z
 type FormValues = z.infer<typeof formSchema>;
 
 export default function Register() {
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [showConfirmPassword, setShowConfirmPassword] =
+		useState<boolean>(false);
+
 	// Initialize the form with react-hook-form
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			firstname: "",
-			lastname: "",
+			fullname: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
@@ -72,6 +74,9 @@ export default function Register() {
 
 	return (
 		<div className='p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center'>
+			<Link className='md:self-start' href='/'>
+				<ChevronLeft className='mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light' />
+			</Link>
 			<h1 className='text-xl font-bold mb-4'>Register</h1>
 			<Form {...form}>
 				<form
@@ -80,31 +85,14 @@ export default function Register() {
 				>
 					<FormField
 						control={form.control}
-						name='firstname'
+						name='fullname'
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>First Name</FormLabel>
+								<FormLabel>Full Name</FormLabel>
 								<FormControl>
 									<Input
-										className=''
-										placeholder='Enter your First Name'
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name='lastname'
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Last Name</FormLabel>
-								<FormControl>
-									<Input
-										className=''
-										placeholder='Enter your Last Name'
+										className='shadow-md focus-visible:ring-primary-light'
+										placeholder='Enter your full name.'
 										{...field}
 									/>
 								</FormControl>
@@ -120,7 +108,7 @@ export default function Register() {
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
-										className=''
+										className='shadow-md  focus-visible:ring-primary-light'
 										placeholder='Enter your email'
 										{...field}
 									/>
@@ -137,7 +125,7 @@ export default function Register() {
 								<FormLabel>Phone Number</FormLabel>
 								<FormControl>
 									<Input
-										className=''
+										className='shadow-md focus-visible:ring-primary-light'
 										placeholder='Enter your phone number'
 										{...field}
 									/>
@@ -152,14 +140,27 @@ export default function Register() {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Password</FormLabel>
-								<FormControl>
-									<Input
-										className=''
-										type='password'
-										placeholder='Enter your password'
-										{...field}
-									/>
-								</FormControl>
+								<div className='relative'>
+									<FormControl>
+										<Input
+											className='shadow-md focus-visible:ring-primary-light'
+											type={showPassword ? "text" : "password"}
+											placeholder='Enter your password'
+											{...field}
+										/>
+									</FormControl>
+									{showPassword ? (
+										<EyeOff
+											className='absolute right-2 top-2 cursor-pointer text-gray-500'
+											onClick={() => setShowPassword(!showPassword)}
+										/>
+									) : (
+										<Eye
+											className='absolute right-2 top-2 cursor-pointer text-gray-500'
+											onClick={() => setShowPassword(!showPassword)}
+										/>
+									)}
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
@@ -170,20 +171,38 @@ export default function Register() {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Confirm Password</FormLabel>
-								<FormControl>
-									<Input
-										className=''
-										type='password'
-										placeholder='Confirm your password'
-										{...field}
-									/>
-								</FormControl>
+								<div className='relative'>
+									<FormControl>
+										<Input
+											className='shadow-md focus-visible:ring-primary-light'
+											type={showConfirmPassword ? "text" : "password"}
+											placeholder='Confirm your password'
+											{...field}
+										/>
+									</FormControl>
+									{showConfirmPassword ? (
+										<EyeOff
+											className='absolute right-2 top-2 cursor-pointer text-gray-500'
+											onClick={() =>
+												setShowConfirmPassword(!showConfirmPassword)
+											}
+										/>
+									) : (
+										<Eye
+											className='absolute right-2 top-2 cursor-pointer text-gray-500'
+											onClick={() =>
+												setShowConfirmPassword(!showConfirmPassword)
+											}
+										/>
+									)}
+								</div>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
+
 					<Button type='submit' className='w-full sm:w-auto'>
-						Register
+						Submit
 					</Button>
 				</form>
 			</Form>
