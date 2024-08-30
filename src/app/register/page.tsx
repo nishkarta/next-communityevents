@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { isValidPhoneNumber } from "react-phone-number-input";
 import {
 	Form,
 	FormControl,
@@ -16,10 +18,6 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-const phoneRegex = new RegExp(
-	"^\\+?(\\d{1,3})?[-.\\s]?\\(?\\d{1,3}\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}$"
-);
 
 const formSchema = z
 	.object({
@@ -31,7 +29,7 @@ const formSchema = z
 		}),
 		phonenumber: z
 			.string()
-			.regex(phoneRegex, { message: "Invalid phone number format!" }),
+			.refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 		password: z.string().min(6, {
 			message: "Password must be at least 6 characters.",
 		}),
@@ -124,9 +122,10 @@ export default function Register() {
 							<FormItem className='my-5'>
 								<FormLabel>Phone Number</FormLabel>
 								<FormControl>
-									<Input
-										className='shadow-md focus-visible:ring-primary-light'
-										placeholder='Enter your phone number'
+									<PhoneInput
+										defaultCountry='ID'
+										placeholder='Enter a phone number'
+										international
 										{...field}
 									/>
 								</FormControl>
