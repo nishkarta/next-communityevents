@@ -19,11 +19,11 @@ const MobileBottomNav = () => {
 
 	// Determine active state
 	const isActive = (path: string) =>
-		pathname === path ? "text-primary-light" : "text-gray-500";
+		pathname === path ? "text-primary-light font-bold" : "text-gray-500";
 
 	return (
-		<nav className='fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40'>
-			<ul className='flex justify-around p-4'>
+		<nav className='text-sm fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40'>
+			<ul className='flex justify-around p-2'>
 				<li
 					onClick={() => {
 						handleNavigation("/home");
