@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { House, Users, Church, Settings } from "lucide-react";
 
 const MobileBottomNav = () => {
+	const router = useRouter();
 	const pathname = usePathname();
 	const excludedRoutes = ["/", "/login", "/register"];
 	const shouldShowNav = !excludedRoutes.includes(pathname);
@@ -11,23 +12,51 @@ const MobileBottomNav = () => {
 	if (!shouldShowNav) {
 		return null; // Do not render the component if the route is excluded
 	}
+	// Navigation handler
+	const handleNavigation = (path: string) => {
+		router.push(path);
+	};
+
+	// Determine active state
+	const isActive = (path: string) =>
+		pathname === path ? "text-primary-light" : "text-gray-500";
 
 	return (
-		<nav className='fixed bottom-0 w-full bg-white shadow-lg md:hidden'>
+		<nav className='fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40'>
 			<ul className='flex justify-around p-4'>
-				<li className='text-center cursor-pointer'>
+				<li
+					onClick={() => {
+						handleNavigation("/home");
+					}}
+					className={`text-center cursor-pointer ${isActive("/home")}`}
+				>
 					<House className='mx-auto' />
 					Home
 				</li>
-				<li className='text-center cursor-pointer'>
+				<li
+					onClick={() => {
+						handleNavigation("/community");
+					}}
+					className={`text-center cursor-pointer ${isActive("/community")}`}
+				>
 					<Users className='mx-auto' />
 					Community
 				</li>
-				<li className='text-center cursor-pointer'>
+				<li
+					onClick={() => {
+						handleNavigation("/ministry");
+					}}
+					className={`text-center cursor-pointer ${isActive("/ministry")}`}
+				>
 					<Church className='mx-auto' />
 					Ministry
 				</li>
-				<li className='text-center cursor-pointer'>
+				<li
+					onClick={() => {
+						handleNavigation("/settings");
+					}}
+					className={`text-center cursor-pointer ${isActive("/settings")}`}
+				>
 					<Settings className='mx-auto' />
 					Settings
 				</li>
