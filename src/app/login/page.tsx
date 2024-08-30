@@ -77,7 +77,7 @@ export default function Login() {
 									<div className='relative'>
 										<FormControl>
 											<Input
-												className='shadow-md focus-visible:ring-primary-light'
+												className='shadow-md mb-4 focus-visible:ring-primary-light'
 												type={showPassword ? "text" : "password"}
 												placeholder='Enter your password'
 												{...field}
@@ -94,11 +94,15 @@ export default function Login() {
 												onClick={() => setShowPassword(!showPassword)}
 											/>
 										)}
+										<Link href='#' className=' text-sm underline'>
+											Forgot your password?
+										</Link>
 									</div>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+
 						<Button type='submit' className=' my-8 w-full sm:w-auto'>
 							Submit
 						</Button>
