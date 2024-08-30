@@ -81,13 +81,13 @@ export default function Register() {
 			<Form {...form}>
 				<form
 					onSubmit={form.handleSubmit(onSubmit)}
-					className='space-y-6 md:w-1/3'
+					className=' md:space-y-6 md:w-1/3'
 				>
 					<FormField
 						control={form.control}
 						name='fullname'
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className='my-5'>
 								<FormLabel>Full Name</FormLabel>
 								<FormControl>
 									<Input
@@ -104,7 +104,7 @@ export default function Register() {
 						control={form.control}
 						name='email'
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className='my-5'>
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
@@ -121,7 +121,7 @@ export default function Register() {
 						control={form.control}
 						name='phonenumber'
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className='my-5'>
 								<FormLabel>Phone Number</FormLabel>
 								<FormControl>
 									<Input
@@ -138,7 +138,7 @@ export default function Register() {
 						control={form.control}
 						name='password'
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className='my-5'>
 								<FormLabel>Password</FormLabel>
 								<div className='relative'>
 									<FormControl>
@@ -169,7 +169,7 @@ export default function Register() {
 						control={form.control}
 						name='confirmPassword'
 						render={({ field }) => (
-							<FormItem>
+							<FormItem className='my-5'>
 								<FormLabel>Confirm Password</FormLabel>
 								<div className='relative'>
 									<FormControl>
@@ -201,7 +201,7 @@ export default function Register() {
 						)}
 					/>
 
-					<Button type='submit' className='w-full sm:w-auto'>
+					<Button type='submit' className='my-8 w-full sm:w-auto'>
 						Submit
 					</Button>
 				</form>
