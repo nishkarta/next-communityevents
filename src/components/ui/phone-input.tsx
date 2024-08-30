@@ -119,7 +119,10 @@ const CountrySelect = ({
 				<Command>
 					<CommandList>
 						<ScrollArea className='h-72'>
-							<CommandInput placeholder='Search country...' />
+							<CommandInput
+								placeholder='Search country...'
+								onFocus={(e) => e.target.select()}
+							/>
 							<CommandEmpty>No country found.</CommandEmpty>
 							<CommandGroup>
 								{options
