@@ -44,9 +44,15 @@ export default function Login() {
 	return (
 		<>
 			<div className='p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center'>
-				<Link className='md:self-start' href='/'>
-					<ChevronLeft className='mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light' />
-				</Link>
+				<div className='flex flex-row md:self-start'>
+					<Link className='md:self-start' href='/'>
+						<ChevronLeft className='mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light' />
+					</Link>
+					<span className='underline underline-offset-4 ml-1 mt-px text-md'>
+						Back
+					</span>
+				</div>
+
 				<h1 className='text-xl font-bold mb-4'>Sign In</h1>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className='md:w-1/3'>

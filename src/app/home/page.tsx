@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Ticket } from "lucide-react";
+
 import Image from "next/image";
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
 	return (
 		<>
 			<main className=''>
+				{/* Header */}
 				<div className='flex flex-row border bg-primary border-x-primary border-t-primary border-b-black/20 p-3 justify-between items-center'>
 					<span className='text-white'>Hello, Tobias!</span>
 					<div className='flex flex-col items-center'>
@@ -26,7 +28,6 @@ const Home = () => {
 							alt='hero image example'
 						/>
 					</div>
-
 					<div className='relative flex flex-col items-center justify-center h-[45vw] md:h-96'>
 						<h1 className='text-white text-4xl font-bold outline-black drop-shadow-sm'>
 							Come and Join us!
@@ -36,6 +37,7 @@ const Home = () => {
 						</p>
 					</div>
 				</div>
+				{/* Dashboard Icons */}
 			</main>
 		</>
 	);
