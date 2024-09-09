@@ -22,15 +22,15 @@ const MobileBottomNav = () => {
 		pathname === path ? "text-primary-light font-bold" : "text-gray-500";
 
 	return (
-		<nav className='text-sm fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40'>
-			<ul className='flex justify-around p-2'>
+		<nav className="text-sm fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40">
+			<ul className="flex justify-around p-1">
 				<li
 					onClick={() => {
 						handleNavigation("/home");
 					}}
 					className={`text-center cursor-pointer ${isActive("/home")}`}
 				>
-					<House className='mx-auto' />
+					<House className="mx-auto" />
 					Home
 				</li>
 				<li
@@ -39,7 +39,7 @@ const MobileBottomNav = () => {
 					}}
 					className={`text-center cursor-pointer ${isActive("/community")}`}
 				>
-					<Users className='mx-auto' />
+					<Users className="mx-auto" />
 					Community
 				</li>
 				<li
@@ -48,7 +48,7 @@ const MobileBottomNav = () => {
 					}}
 					className={`text-center cursor-pointer ${isActive("/ministry")}`}
 				>
-					<Church className='mx-auto' />
+					<Church className="mx-auto" />
 					Ministry
 				</li>
 				<li
@@ -57,7 +57,7 @@ const MobileBottomNav = () => {
 					}}
 					className={`text-center cursor-pointer ${isActive("/settings")}`}
 				>
-					<Settings className='mx-auto' />
+					<Settings className="mx-auto" />
 					Settings
 				</li>
 			</ul>
