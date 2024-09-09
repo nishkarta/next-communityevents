@@ -65,7 +65,8 @@ const Home = () => {
 						</Button>
 					))}
 				</div>
-				<div className="mt-4 p-3">
+				{/* Upcoming Events */}
+				<div className="my-4 p-3 mb-20">
 					<Card className="p-4">
 						<div className="flex justify-between items-center">
 							<div>
