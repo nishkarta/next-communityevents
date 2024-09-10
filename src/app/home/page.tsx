@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
-import { Ticket } from "lucide-react";
+import Link from "next/link";
 import { LogOut } from "lucide-react";
 import { QrCode } from "lucide-react";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
+import IconButton from "@/components/IconButton";
 
 import Image from "next/image";
 
@@ -58,15 +59,46 @@ const Home = () => {
 					</div>
 				</div>
 				{/* Dashboard Icons */}
-				<div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-2 p-3">
-					{[1, 2, 3, 4, 5, 6].map((num) => (
+				<div className="mt-8 grid grid-cols-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3 md:gap-2 p-3">
+					<IconButton
+						href="/events"
+						iconName="fi fi-tr-calendar-star"
+						name="Events"
+						iconColor="text-sky-500"
+					/>
+					<IconButton
+						href="https://form.jotform.com/DigitalExcom/prayer-form"
+						iconName="fi fi-tr-praying-hands"
+						name="Prayer and Grateful Form"
+						iconColor="text-amber-600"
+					/>
+					<IconButton
+						href="https://growcommunity.church/index.php/give/"
+						iconName="fi fi-tr-hands-heart"
+						name="Giving"
+						iconColor="text-rose-400"
+					/>
+					<IconButton
+						href="https://www.youtube.com/c/GrowCenterChurch"
+						iconName="fi fi-brands-youtube"
+						name="Sermons"
+						iconColor="text-red-600"
+					/>
+					<IconButton
+						href="https://open.spotify.com/show/3Uawgjvfdw3KnHTlrl5GLJ?si=890c04f909654e1c&nd=1&dlsi=e04e2d46b9084aa5"
+						iconName="fi fi-brands-spotify"
+						name="Grow in Words"
+						iconColor="text-green-500"
+					/>
+
+					{/* {[1, 2].map((num) => (
 						<Button key={num} variant="outline" className="h-20">
 							Button {num}
 						</Button>
-					))}
+					))} */}
 				</div>
 				{/* Upcoming Events */}
-				<div className="my-4 p-3 mb-20">
+				<div className="mt-4 p-3 mb-20">
 					<Card className="p-4">
 						<div className="flex justify-between items-center">
 							<div>
