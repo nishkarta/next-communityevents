@@ -12,6 +12,9 @@ const MobileBottomNav = () => {
 	if (!shouldShowNav) {
 		return null; // Do not render the component if the route is excluded
 	}
+	if (pathname.startsWith("/events")) {
+		return null;
+	}
 	// Navigation handler
 	const handleNavigation = (path: string) => {
 		router.push(path);
