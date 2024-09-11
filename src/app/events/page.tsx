@@ -58,9 +58,9 @@ const EventsPage = () => {
 									</Badge>
 									<p className="text-base font-light my-2 pb-2">
 										{/* Event description */}
-										Join us for this year's Home Base event! Lorem ipsum, dolor
-										sit amet consectetur adipisicing elit. In harum quae ab,
-										alias eos corrupti?
+										Join us for this year&apos;s Home Base event! Lorem ipsum,
+										dolor sit amet consectetur adipisicing elit. In harum quae
+										ab, alias eos corrupti?
 									</p>
 									<div className="border-t border-gray-200 mt-2 pt-4">
 										<p className="font-semibold text-gray-700">
