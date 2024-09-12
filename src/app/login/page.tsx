@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, ChevronLeft } from "lucide-react";
+import { Eye, EyeOff, ChevronLeft, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -16,10 +17,12 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-	email: z.string().email({
-		message: "Please enter a valid email address.",
+	identifier: z.string().email({
+		message: "Please enter a valid identifier.",
 	}),
 	password: z.string().min(6, {
 		message: "Password must be at least 6 characters.",
@@ -28,44 +31,78 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 export default function Login() {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
+	const { toast } = useToast();
+	const router = useRouter();
 	// Initialize the form with react-hook-form
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "",
+			identifier: "",
 			password: "",
 		},
 	});
 
-	const onSubmit = (data: FormValues) => {
-		// Handle form submission
-		console.log(data);
-	};
+	async function onSubmit(data: FormValues) {
+		setLoading(true);
+		try {
+			const response = await fetch(`${API_BASE_URL}/api/v1/event/user/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-API-Key": API_KEY || "",
+				},
+				body: JSON.stringify(data),
+			});
+			if (response.ok) {
+				const result = await response.json();
+				localStorage.setItem("userData", JSON.stringify(result));
+				toast({
+					title: "Log In Successful",
+					description: `Redirecting to the home page...`,
+					className: "bg-green-400",
+					duration: 3000,
+				});
+
+				// Redirect to home page after a delay
+				setTimeout(() => {
+					router.push("/home");
+				}, 1000);
+			} else {
+				const errorResult = await response.json();
+				throw errorResult;
+			}
+		} catch (error) {
+			console.error("An error occurred:", error);
+		} finally {
+			setLoading(false);
+		}
+	}
 	return (
 		<>
-			<div className='p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center'>
-				<div className='flex flex-row md:self-start'>
-					<Link className='md:self-start' href='/'>
-						<ChevronLeft className='mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light' />
+			<div className="p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center">
+				<div className="flex flex-row md:self-start">
+					<Link className="md:self-start" href="/">
+						<ChevronLeft className="mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light" />
 					</Link>
-					<span className='underline underline-offset-4 ml-1 mt-px text-md'>
+					<span className="underline underline-offset-4 ml-1 mt-px text-md">
 						Back
 					</span>
 				</div>
 
-				<h1 className='text-xl font-bold mb-4'>Sign In</h1>
+				<h1 className="text-xl font-bold mb-4">Sign In</h1>
 				<Form {...form}>
-					<form onSubmit={form.handleSubmit(onSubmit)} className='md:w-1/3'>
+					<form onSubmit={form.handleSubmit(onSubmit)} className="md:w-1/3">
 						<FormField
 							control={form.control}
-							name='email'
+							name="identifier"
 							render={({ field }) => (
-								<FormItem className='my-6'>
-									<FormLabel>Email</FormLabel>
+								<FormItem className="my-6">
+									<FormLabel>Identifier</FormLabel>
 									<FormControl>
 										<Input
-											className='shadow-md  focus-visible:ring-primary-light'
-											placeholder='Enter your email'
+											className="shadow-md  focus-visible:ring-primary-light"
+											placeholder="Enter your identifier"
 											{...field}
 										/>
 									</FormControl>
@@ -76,31 +113,31 @@ export default function Login() {
 
 						<FormField
 							control={form.control}
-							name='password'
+							name="password"
 							render={({ field }) => (
-								<FormItem className='my-6'>
+								<FormItem className="my-6">
 									<FormLabel>Password</FormLabel>
-									<div className='relative'>
+									<div className="relative">
 										<FormControl>
 											<Input
-												className='shadow-md mb-4 focus-visible:ring-primary-light'
+												className="shadow-md mb-4 focus-visible:ring-primary-light"
 												type={showPassword ? "text" : "password"}
-												placeholder='Enter your password'
+												placeholder="Enter your password"
 												{...field}
 											/>
 										</FormControl>
 										{showPassword ? (
 											<EyeOff
-												className='absolute right-2 top-2 cursor-pointer text-gray-500'
+												className="absolute right-2 top-2 cursor-pointer text-gray-500"
 												onClick={() => setShowPassword(!showPassword)}
 											/>
 										) : (
 											<Eye
-												className='absolute right-2 top-2 cursor-pointer text-gray-500'
+												className="absolute right-2 top-2 cursor-pointer text-gray-500"
 												onClick={() => setShowPassword(!showPassword)}
 											/>
 										)}
-										<Link href='#' className=' text-sm underline'>
+										<Link href="#" className=" text-sm underline">
 											Forgot your password?
 										</Link>
 									</div>
@@ -109,8 +146,19 @@ export default function Login() {
 							)}
 						/>
 
-						<Button type='submit' className=' my-8 w-full sm:w-auto'>
-							Submit
+						<Button
+							type="submit"
+							className="my-8 w-full sm:w-auto"
+							disabled={loading} // Disable button while loading
+						>
+							{loading ? (
+								<>
+									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+									Please wait
+								</>
+							) : (
+								"Submit"
+							)}
 						</Button>
 					</form>
 				</Form>

@@ -8,12 +8,20 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
 import IconButton from "@/components/IconButton";
+import { useRouter } from "next/navigation";
 
 import Image from "next/image";
 
 const Home = () => {
+	const router = useRouter();
 	const IMAGE_URL =
 		"https://images.unsplash.com/photo-1555817128-342e1c8b3101?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+	const handleLogout = () => {
+		localStorage.removeItem("userData");
+		router.push("/");
+		router.refresh();
+	};
+
 	return (
 		<>
 			<main className="h-max overflow-auto">
@@ -28,7 +36,9 @@ const Home = () => {
 					/>
 					<div className="flex flex-row gap-x-3 items-center">
 						<span className="text-white text-sm">Sign Out</span>
-						<LogOut className="md:w-8 md:h-8 mr-2 text-white" />
+						<Button onClick={handleLogout}>
+							<LogOut className="md:w-8 md:h-8 mr-2 text-white" />
+						</Button>
 					</div>
 				</div>
 				<div className="flex flex-row  bg-white  p-8 justify-between items-center">
