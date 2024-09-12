@@ -15,19 +15,23 @@ import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { useAuth } from "@/components/providers/AuthProvider";
+import withAuth from "@/components/providers/AuthWrapper";
 
 const EventSessions = () => {
 	const { eventCode } = useParams(); // Retrieve eventCode from the route params
 	const [sessions, setSessions] = useState<any[]>([]); // State to hold sessions
 	const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading
 	const [error, setError] = useState<string | null>(null); // State for errors
+	const { isAuthenticated, handleExpiredToken } = useAuth();
+	const userData = isAuthenticated
+		? JSON.parse(localStorage.getItem("userData") || "{}")
+		: null;
 
 	// Fetch sessions when the component mounts or when eventCode changes
 	useEffect(() => {
 		async function fetchSessions() {
-			const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 			if (!userData.token || !eventCode) return;
-			console.log(userData.token);
 			setIsLoading(true); // Set loading state
 			setError(null); // Reset error state
 
@@ -44,7 +48,7 @@ const EventSessions = () => {
 				);
 
 				if (response.status === 401) {
-					console.error("Unauthorized - Token expired or invalid");
+					handleExpiredToken();
 					return;
 				}
 
@@ -135,4 +139,4 @@ const EventSessions = () => {
 	);
 };
 
-export default EventSessions;
+export default withAuth(EventSessions);

@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 const formSchema = z.object({
 	identifier: z.string().email({
@@ -34,6 +35,7 @@ export default function Login() {
 	const [loading, setLoading] = useState<boolean>(false);
 	const { toast } = useToast();
 	const router = useRouter();
+	const { login } = useAuth();
 	// Initialize the form with react-hook-form
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
@@ -57,7 +59,7 @@ export default function Login() {
 			});
 			if (response.ok) {
 				const result = await response.json();
-				localStorage.setItem("userData", JSON.stringify(result));
+				login(result);
 				toast({
 					title: "Log In Successful",
 					description: `Redirecting to the home page...`,

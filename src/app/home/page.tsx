@@ -9,6 +9,8 @@ import { Card } from "@/components/ui/card";
 import { ChevronRight } from "lucide-react";
 import IconButton from "@/components/IconButton";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
+import withAuth from "@/components/providers/AuthWrapper";
 
 import Image from "next/image";
 
@@ -16,12 +18,14 @@ const Home = () => {
 	const router = useRouter();
 	const IMAGE_URL =
 		"https://images.unsplash.com/photo-1555817128-342e1c8b3101?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+	const { isAuthenticated, logout } = useAuth();
 	const handleLogout = () => {
-		localStorage.removeItem("userData");
+		logout();
 		router.push("/");
-		router.refresh();
 	};
-	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+	const userData = isAuthenticated
+		? JSON.parse(localStorage.getItem("userData") || "{}")
+		: null;
 
 	return (
 		<>
@@ -44,7 +48,7 @@ const Home = () => {
 				</div>
 				<div className="flex flex-row  bg-white  p-8 justify-between items-center">
 					<span className="text-black text-base font-bold">
-						Hi, {userData.name}!
+						Hi, {userData?.name}!
 					</span>
 					<div className="flex flex-row items-center gap-x-6">
 						<QrCode className="md:w-8 md:h-8 text-black" />
@@ -128,4 +132,4 @@ const Home = () => {
 	);
 };
 
-export default Home;
+export default withAuth(Home);

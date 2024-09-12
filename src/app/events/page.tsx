@@ -17,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import withAuth from "@/components/providers/AuthWrapper";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 const EventsPage = () => {
 	const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -24,11 +26,13 @@ const EventsPage = () => {
 	const EVENT_EXAMPLE_IMAGE_URL =
 		"https://static.wixstatic.com/media/271a07_29fe11ad76aa48fc975dadbeffb766c4~mv2.jpg/v1/fill/w_640,h_366,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/271a07_29fe11ad76aa48fc975dadbeffb766c4~mv2.jpg";
 	const router = useRouter();
+	const { isAuthenticated, handleExpiredToken } = useAuth();
+	const userData = isAuthenticated
+		? JSON.parse(localStorage.getItem("userData") || "{}")
+		: null;
 	// Fetch events on component mount
 	useEffect(() => {
 		async function fetchEvents() {
-			const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-
 			if (!userData.token) return;
 
 			try {
@@ -41,7 +45,10 @@ const EventsPage = () => {
 						Authorization: `Bearer ${userData.token}`, // Include token in Authorization header
 					},
 				});
-
+				if (response.status === 401) {
+					handleExpiredToken();
+					return;
+				}
 				if (!response.ok) {
 					if (response.status === 401) {
 						console.error("Unauthorized - Token expired or invalid");
@@ -159,4 +166,4 @@ const EventsPage = () => {
 	);
 };
 
-export default EventsPage;
+export default withAuth(EventsPage);
