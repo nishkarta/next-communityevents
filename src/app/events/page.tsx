@@ -157,9 +157,9 @@ const EventsPage = () => {
 								</div>
 							</Card>
 						))
-					) : (
+					) : events.length === 0 ? (
 						<p>No events found.</p>
-					)}
+					) : null}
 				</div>
 			</main>
 		</>

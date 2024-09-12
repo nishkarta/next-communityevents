@@ -15,6 +15,7 @@ interface AuthContextType {
 	login: (data: any) => void;
 	logout: () => void;
 	handleExpiredToken: () => void;
+	loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,12 +24,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [loading, setLoading] = useState(true); // Loading state
 	const router = useRouter();
 	const { toast } = useToast();
 
 	useEffect(() => {
 		const userData = localStorage.getItem("userData");
-		setIsAuthenticated(!!userData);
+		if (userData) {
+			setIsAuthenticated(true);
+		}
+		setLoading(false); // Done checking authentication
 	}, []);
 
 	const login = (data: any) => {
@@ -56,7 +61,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
 	return (
 		<AuthContext.Provider
-			value={{ isAuthenticated, login, logout, handleExpiredToken }}
+			value={{ isAuthenticated, login, logout, handleExpiredToken, loading }}
 		>
 			{children}
 		</AuthContext.Provider>

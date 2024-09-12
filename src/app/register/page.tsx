@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, ChevronLeft } from "lucide-react";
+import { Eye, EyeOff, ChevronLeft, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -261,8 +261,19 @@ export default function Register() {
 						)}
 					/>
 
-					<Button type="submit" className="my-8 w-full sm:w-auto">
-						Submit
+					<Button
+						type="submit"
+						className="my-8 w-full sm:w-auto"
+						disabled={loading} // Disable button while loading
+					>
+						{loading ? (
+							<>
+								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								Please wait
+							</>
+						) : (
+							"Submit"
+						)}
 					</Button>
 				</form>
 			</Form>

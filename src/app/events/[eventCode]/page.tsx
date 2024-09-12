@@ -17,6 +17,7 @@ import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
+import { useRouter } from "next/navigation";
 
 const EventSessions = () => {
 	const { eventCode } = useParams(); // Retrieve eventCode from the route params
@@ -27,6 +28,7 @@ const EventSessions = () => {
 	const userData = isAuthenticated
 		? JSON.parse(localStorage.getItem("userData") || "{}")
 		: null;
+	const router = useRouter();
 
 	// Fetch sessions when the component mounts or when eventCode changes
 	useEffect(() => {
@@ -42,13 +44,17 @@ const EventSessions = () => {
 						headers: {
 							"X-API-KEY": API_KEY || "",
 							"Content-Type": "application/json",
-							Authorization: `Bearer ${userData.token}`, // Attach the token
+							Authorization: `Bearer ${userData.token}`,
 						},
 					}
 				);
 
 				if (response.status === 401) {
 					handleExpiredToken();
+					return;
+				}
+				if (response.status === 404) {
+					setSessions([]);
 					return;
 				}
 

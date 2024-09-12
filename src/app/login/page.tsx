@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 
 const formSchema = z.object({
-	identifier: z.string().email({
+	identifier: z.string({
 		message: "Please enter a valid identifier.",
 	}),
 	password: z.string().min(6, {
