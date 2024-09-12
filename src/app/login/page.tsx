@@ -45,6 +45,7 @@ export default function Login() {
 
 	async function onSubmit(data: FormValues) {
 		setLoading(true);
+		data.identifier = data.identifier.trim().replace(/\s+/g, "").toLowerCase();
 		try {
 			const response = await fetch(`${API_BASE_URL}/api/v1/event/user/login`, {
 				method: "POST",
@@ -61,7 +62,7 @@ export default function Login() {
 					title: "Log In Successful",
 					description: `Redirecting to the home page...`,
 					className: "bg-green-400",
-					duration: 3000,
+					duration: 1500,
 				});
 
 				// Redirect to home page after a delay
@@ -70,6 +71,12 @@ export default function Login() {
 				}, 1000);
 			} else {
 				const errorResult = await response.json();
+				toast({
+					title: "Log In Failed!",
+					description: `Error : ${errorResult.message} `,
+					className: "bg-red-400",
+					duration: 1000,
+				});
 				throw errorResult;
 			}
 		} catch (error) {

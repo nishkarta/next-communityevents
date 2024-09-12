@@ -21,6 +21,7 @@ const Home = () => {
 		router.push("/");
 		router.refresh();
 	};
+	const userData = JSON.parse(localStorage.getItem("userData") || "{}");
 
 	return (
 		<>
@@ -42,7 +43,9 @@ const Home = () => {
 					</div>
 				</div>
 				<div className="flex flex-row  bg-white  p-8 justify-between items-center">
-					<span className="text-black text-base font-bold">Hi, Gerald!</span>
+					<span className="text-black text-base font-bold">
+						Hi, {userData.name}!
+					</span>
 					<div className="flex flex-row items-center gap-x-6">
 						<QrCode className="md:w-8 md:h-8 text-black" />
 						<Settings className="md:w-8 md:h-8 text-black" />
