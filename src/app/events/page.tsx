@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { formatDate } from "@/lib/utils";
 
 const EventsPage = () => {
 	const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -114,7 +115,7 @@ const EventsPage = () => {
 										</CardHeader>
 										<CardContent className="flex flex-col">
 											<Badge
-												className={`w-14 text-center mb-2 ${
+												className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
 													event.status === "active"
 														? "bg-green-700"
 														: event.status === "closed"
@@ -135,17 +136,13 @@ const EventsPage = () => {
 													<p className="text-sm text-gray-500 my-3">
 														<span className="font-medium text-gray-700">
 															Open:{" "}
-															{new Date(
-																event.openRegistration
-															).toLocaleString()}
+															{formatDate(new Date(event.openRegistration))}
 														</span>
 													</p>
 													<p className="text-sm text-gray-500">
 														<span className="font-medium text-gray-700">
 															Closed:{" "}
-															{new Date(
-																event.closedRegistration
-															).toLocaleString()}
+															{formatDate(new Date(event.closedRegistration))}
 														</span>
 													</p>
 												</div>

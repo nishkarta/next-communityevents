@@ -18,6 +18,11 @@ const config = {
 			},
 		},
 		extend: {
+			gridTemplateColumns: {
+				// Custom grid template for auto-fill on medium screens and above
+				"auto-fill-md": "repeat(auto-fill, minmax(200px, 1fr))",
+				"auto-fill-lg": "repeat(auto-fill, minmax(250px, 1fr))",
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

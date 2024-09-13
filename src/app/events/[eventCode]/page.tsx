@@ -18,6 +18,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
+import { formatDate } from "@/lib/utils";
 
 const EventSessions = () => {
 	const { eventCode } = useParams(); // Retrieve eventCode from the route params
@@ -59,6 +60,7 @@ const EventSessions = () => {
 				}
 
 				const data = await response.json();
+				console.log(data);
 				console.log(data.data);
 				setSessions(data.data); // Update sessions state
 			} catch (error) {
@@ -76,14 +78,6 @@ const EventSessions = () => {
 		<>
 			<HeaderNav name="Event Sessions" link="events" />
 			<main>
-				<div className="flex flex-col ml-7 my-4">
-					<span className="text-2xl font-bold">HOMEBASE 2024</span>
-					<span className="text-sm font-normal mt-1">
-						Sessions for event code: {eventCode}
-					</span>
-				</div>
-				<Separator className="space-y-3 my-4" />
-
 				{/* Loading and Error States */}
 				{isLoading ? (
 					<LoadingSpinner />
@@ -94,18 +88,18 @@ const EventSessions = () => {
 				) : (
 					// Display fetched sessions
 					sessions.map((session) => (
-						<Card key={session.id} className="rounded-xl mx-2 my-5">
+						<Card
+							key={session.id}
+							className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
+						>
 							<div className="flex flex-col">
 								<CardHeader>
 									<CardTitle>{session.name}</CardTitle> {/* Session Name */}
-									<CardDescription>
-										Session {session.sessionNumber}
-									</CardDescription>{" "}
 									{/* Session Number */}
 								</CardHeader>
 								<CardContent className="flex flex-col">
 									<Badge
-										className={`w-14 text-center mb-2 ${
+										className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
 											session.status === "active"
 												? "bg-green-700"
 												: session.status === "closed"
@@ -123,10 +117,11 @@ const EventSessions = () => {
 										<p className="font-semibold text-gray-700">Event Time:</p>
 										<p className="text-sm text-gray-500 my-3">
 											<span className="font-medium text-gray-700">
-												{new Date(session.time).toLocaleString()}
+												{formatDate(new Date(session.time))}
 											</span>
 										</p>
 									</div>
+
 									<Separator />
 									<div className="mt-2 pt-4">
 										<p className="font-semibold text-gray-700">

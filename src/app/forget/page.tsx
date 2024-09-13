@@ -106,9 +106,9 @@ export default function ForgetPassword() {
 					<Link className="md:self-start" href="/login">
 						<ChevronLeft className="mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light" />
 					</Link>
-					<span className="underline underline-offset-4 ml-1 mt-px text-md">
+					{/* <span className="underline underline-offset-4 ml-1 mt-px text-md">
 						Back
-					</span>
+					</span> */}
 				</div>
 
 				<h1 className="text-xl font-bold mb-3">Forgot Password?</h1>

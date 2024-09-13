@@ -25,7 +25,7 @@ const MobileBottomNav = () => {
 		pathname === path ? "text-primary-light font-bold" : "text-gray-500";
 
 	return (
-		<nav className="text-sm fixed bottom-0 w-full bg-white shadow-lg md:hidden border border-t-black/40">
+		<nav className="text-sm fixed bottom-0 w-full bg-white shadow-lg  border border-t-black/40">
 			<ul className="flex justify-around p-1">
 				<li
 					onClick={() => {
