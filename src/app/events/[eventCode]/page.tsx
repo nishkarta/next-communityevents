@@ -104,8 +104,16 @@ const EventSessions = () => {
 									{/* Session Number */}
 								</CardHeader>
 								<CardContent className="flex flex-col">
-									<Badge className="w-14 bg-green-700 text-center mb-2">
-										{session.status}
+									<Badge
+										className={`w-14 text-center mb-2 ${
+											session.status === "active"
+												? "bg-green-700"
+												: session.status === "closed"
+												? "bg-red-500"
+												: "bg-gray-400" // Default color for other statuses
+										}`}
+									>
+										<span className="mx-auto">{session.status}</span>
 									</Badge>
 									<p className="text-base font-light my-2 pb-2">
 										{session.description}
@@ -133,8 +141,12 @@ const EventSessions = () => {
 									<Separator />
 								</CardContent>
 								<CardFooter>
-									<Button>Register Now!</Button>{" "}
-									{/* Button to register for the session */}
+									{/* Link to register sessions page */}
+									{session.status === "active" ? (
+										<Button>Register Now!</Button>
+									) : (
+										<Button disabled>Registration Closed</Button>
+									)}
 								</CardFooter>
 							</div>
 						</Card>

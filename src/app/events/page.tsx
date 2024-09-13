@@ -113,8 +113,16 @@ const EventsPage = () => {
 											<CardTitle>{event.name}</CardTitle> {/* Event name */}
 										</CardHeader>
 										<CardContent className="flex flex-col">
-											<Badge className="w-14 bg-green-700 text-center mb-2">
-												{event.status}
+											<Badge
+												className={`w-14 text-center mb-2 ${
+													event.status === "active"
+														? "bg-green-700"
+														: event.status === "closed"
+														? "bg-red-500"
+														: "bg-gray-400" // Default color for other statuses
+												}`}
+											>
+												<span className="mx-auto">{event.status}</span>
 											</Badge>
 											<p className="text-base font-light my-2 pb-2">
 												{event.description}
@@ -144,14 +152,14 @@ const EventsPage = () => {
 											</div>
 										</CardContent>
 										<CardFooter>
-											<Button
-												onClick={() => {
-													handleSession(event.code);
-												}}
-											>
-												Register Now!
-											</Button>
 											{/* Link to event sessions page */}
+											{event.status === "active" ? (
+												<Button onClick={() => handleSession(event.code)}>
+													Register Now!
+												</Button>
+											) : (
+												<Button disabled>Registration Closed</Button>
+											)}
 										</CardFooter>
 									</div>
 								</div>
