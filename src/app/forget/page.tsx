@@ -21,17 +21,32 @@ import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 
-const formSchema = z.object({
-	identifier: z.string({
-		message: "Please enter a valid identifier.",
-	}),
-	password: z.string().min(6, {
-		message: "Password must be at least 6 characters.",
-	}),
-});
+const formSchema = z
+	.object({
+		identifier: z.string({
+			message: "Please enter a valid identifier.",
+		}),
+		password: z.string().min(6, {
+			message: "Password must be at least 6 characters.",
+		}),
+		confirmPassword: z.string().min(6, {
+			message: "Confirm Password must be at least 6 characters.",
+		}),
+	})
+	.superRefine(({ confirmPassword, password }, ctx) => {
+		if (confirmPassword !== password) {
+			ctx.addIssue({
+				code: "custom",
+				message: "The passwords did not match",
+				path: ["confirmPassword"],
+			});
+		}
+	});
 type FormValues = z.infer<typeof formSchema>;
-export default function Login() {
+export default function ForgetPassword() {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const [showConfirmPassword, setShowConfirmPassword] =
+		useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 	const { toast } = useToast();
 	const router = useRouter();
@@ -49,28 +64,25 @@ export default function Login() {
 		setLoading(true);
 		data.identifier = data.identifier.trim().replace(/\s+/g, "").toLowerCase();
 		try {
-			const response = await fetch(`${API_BASE_URL}/api/v1/event/user/login`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-API-Key": API_KEY || "",
-				},
-				body: JSON.stringify(data),
-			});
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/event/user/forgot`,
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+						"X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "",
+					},
+					body: JSON.stringify(data),
+				}
+			);
 			if (response.ok) {
-				const result = await response.json();
-				login(result);
 				toast({
-					title: "Log In Successful",
-					description: `Redirecting to the home page...`,
+					title: "Update password successful!",
+					description: `Redirecting to login page...`,
 					className: "bg-green-400",
 					duration: 1500,
 				});
-
-				// Redirect to home page after a delay
-				setTimeout(() => {
-					router.push("/home");
-				}, 1000);
+				router.push("/login"); // Redirect to the login page
 			} else {
 				const errorResult = await response.json();
 				toast({
@@ -84,14 +96,14 @@ export default function Login() {
 		} catch (error) {
 			console.error("An error occurred:", error);
 		} finally {
-			setLoading(false);
+			setLoading(false); // Stop loading
 		}
 	}
 	return (
 		<>
 			<div className="p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center">
 				<div className="flex flex-row md:self-start">
-					<Link className="md:self-start" href="/">
+					<Link className="md:self-start" href="/login">
 						<ChevronLeft className="mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light" />
 					</Link>
 					<span className="underline underline-offset-4 ml-1 mt-px text-md">
@@ -99,7 +111,8 @@ export default function Login() {
 					</span>
 				</div>
 
-				<h1 className="text-xl font-bold mb-4">Sign In</h1>
+				<h1 className="text-xl font-bold mb-3">Forgot Password?</h1>
+				<h2 className="text-base font-light">Insert a new password</h2>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="md:w-1/3">
 						<FormField
@@ -125,13 +138,13 @@ export default function Login() {
 							name="password"
 							render={({ field }) => (
 								<FormItem className="my-6">
-									<FormLabel>Password</FormLabel>
+									<FormLabel>New Password</FormLabel>
 									<div className="relative">
 										<FormControl>
 											<Input
 												className="shadow-md mb-4 focus-visible:ring-primary-light"
 												type={showPassword ? "text" : "password"}
-												placeholder="Enter your password"
+												placeholder="Enter your new password"
 												{...field}
 											/>
 										</FormControl>
@@ -146,9 +159,41 @@ export default function Login() {
 												onClick={() => setShowPassword(!showPassword)}
 											/>
 										)}
-										<Link href="/forget" className=" text-sm underline">
-											Forgot your password?
-										</Link>
+									</div>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="confirmPassword"
+							render={({ field }) => (
+								<FormItem className="my-6">
+									<FormLabel>Confirm new password</FormLabel>
+									<div className="relative">
+										<FormControl>
+											<Input
+												className="shadow-md mb-4 focus-visible:ring-primary-light"
+												type={showConfirmPassword ? "text" : "password"}
+												placeholder="Confirm your new password"
+												{...field}
+											/>
+										</FormControl>
+										{showConfirmPassword ? (
+											<EyeOff
+												className="absolute right-2 top-2 cursor-pointer text-gray-500"
+												onClick={() =>
+													setShowConfirmPassword(!showConfirmPassword)
+												}
+											/>
+										) : (
+											<Eye
+												className="absolute right-2 top-2 cursor-pointer text-gray-500"
+												onClick={() =>
+													setShowConfirmPassword(!showConfirmPassword)
+												}
+											/>
+										)}
 									</div>
 									<FormMessage />
 								</FormItem>
