@@ -4,6 +4,7 @@ import "./globals.css";
 import MobileBottomNav from "@/components/MobileBottomNav";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
