@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import HeaderNav from "@/components/HeaderNav";
 import { Button } from "@/components/ui/button";
-import { UserMinus } from "lucide-react";
+import { UserMinus, Loader2 } from "lucide-react";
 import {
 	Card,
 	CardContent,
@@ -137,9 +137,9 @@ const EventRegistration = () => {
 		const token = userData?.token;
 
 		const payload = {
-			name: registrantData[0]?.name.trim(), // Assuming identifier is used for the name here
+			name: registrantData[0]?.name.trim(),
 			identifier: identifier.trim(),
-			address: registrantData[0]?.address.trim(), // Assuming the first registrant's address
+			address: registrantData[0]?.address.trim(),
 			eventCode: eventCode, // Use the event code from the params
 			sessionCode: sessionCode, // Use the session code from the params
 			otherRegister: registrantData.slice(1).map((input) => ({
@@ -329,19 +329,30 @@ const EventRegistration = () => {
 								</Card>
 							))}
 						</form>
-						<Button
-							onClick={handleSubmit}
-							className="bg-blue-500 text-white ml-5"
-						>
-							Submit Registration
-						</Button>
-						<Button
-							type="button"
-							onClick={handleReset}
-							className="bg-red-500 text-white p-2 rounded mt-4 w-20 mx-5"
-						>
-							Reset
-						</Button>
+						<div className="flex flex-row items-center justify-center gap-x-10">
+							<Button
+								type="submit"
+								className="w-1/3 md:w-1/5"
+								onClick={handleSubmit}
+								disabled={isSubmitting} // Disable button while loading
+							>
+								{isSubmitting ? (
+									<>
+										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+										Submitting...
+									</>
+								) : (
+									"Submit"
+								)}
+							</Button>
+							<Button
+								type="button"
+								onClick={handleReset}
+								className="bg-red-500 text-white p-2 rounded w-1/3 md:w-1/5 "
+							>
+								Reset
+							</Button>
+						</div>
 					</>
 				)}
 			</main>

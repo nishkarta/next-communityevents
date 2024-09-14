@@ -27,7 +27,8 @@ const Home = () => {
 	const userData = isAuthenticated
 		? JSON.parse(localStorage.getItem("userData") || "{}")
 		: null;
-	const [registrations, setRegistrations] = useState<any>({});
+
+	const [registrationsCount, setRegistrationsCount] = useState<number>(0);
 	const fetchRegistrations = async () => {
 		if (!userData?.token) return;
 
@@ -50,7 +51,10 @@ const Home = () => {
 			}
 
 			const data = await response.json();
-			setRegistrations(data.data);
+			const registeredCount = data.data.filter(
+				(registration: any) => registration.status === "registered"
+			).length;
+			setRegistrationsCount(registeredCount);
 		} catch (error) {
 			console.error("Failed to fetch registrations:", error);
 		}
@@ -150,12 +154,25 @@ const Home = () => {
 					<Card className="p-4 md:w-1/2 md:mx-auto">
 						<div className="flex justify-between items-center">
 							<div>
-								<h3 className="font-medium mb-2">Your upcoming event</h3>
+								<h3 className="font-medium mb-2">Your Events</h3>
 								<p className="text-sm text-muted-foreground">
-									You currently have no registrations.
+									{registrationsCount > 0 ? (
+										<>
+											You have currently registered for
+											<span className="text-black font-bold">
+												{" "}
+												{registrationsCount}{" "}
+											</span>
+											tickets!
+										</>
+									) : (
+										<>You currently have no registrations.</>
+									)}
 								</p>
 							</div>
-							<ChevronRight className="h-8 w-8"> </ChevronRight>
+							<Link href="/tickets">
+								<ChevronRight className="h-8 w-8"></ChevronRight>
+							</Link>
 						</div>
 					</Card>
 				</div>

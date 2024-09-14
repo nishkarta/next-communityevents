@@ -6,7 +6,7 @@ import { House, Users, Church, Settings } from "lucide-react";
 const MobileBottomNav = () => {
 	const router = useRouter();
 	const pathname = usePathname();
-	const excludedRoutes = ["/", "/login", "/register", "/events"];
+	const excludedRoutes = ["/", "/login", "/register", "/events", "/tickets"];
 	const shouldShowNav = !excludedRoutes.includes(pathname);
 
 	if (!shouldShowNav) {
