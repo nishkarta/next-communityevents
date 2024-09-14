@@ -12,6 +12,11 @@ const nextConfig = {
 				hostname: "static.wixstatic.com",
 				port: "",
 			},
+			{
+				protocol: "https",
+				hostname: "growcommunity.church",
+				port: "",
+			},
 		],
 	},
 };

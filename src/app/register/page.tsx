@@ -33,6 +33,10 @@ const formSchema = z
 		}),
 		phoneNumber: z
 			.string()
+			.regex(/^\+62/, {
+				message:
+					"Sorry! Phone numbers temporarily can only be with Indonesian format only (+62)",
+			})
 			.refine(isValidPhoneNumber, { message: "Invalid phone number" }),
 		password: z.string().min(6, {
 			message: "Password must be at least 6 characters.",
