@@ -181,6 +181,16 @@ const EventRegistration = () => {
 					return; // Exit function after handling expired token
 				}
 				// Handle other statuses or errors if needed
+				else {
+					const errorResult = await response.json();
+					toast({
+						title: "Registration Failed!",
+						description: `Error : ${errorResult.message} `,
+						className: "bg-red-400",
+						duration: 2000,
+					});
+					throw errorResult;
+				}
 			}
 		} catch (error) {
 			console.error("An error occurred:", error);
@@ -240,6 +250,7 @@ const EventRegistration = () => {
 									<CardTitle>Identifier</CardTitle>
 									<CardDescription>
 										Please fill with your email address or phone number.
+										<br></br> Phone number format : 08123456789
 									</CardDescription>
 								</CardHeader>
 								<CardContent>
@@ -269,6 +280,7 @@ const EventRegistration = () => {
 											<div className="flex flex-row items-center justify-between">
 												<h1>Registrant {index + 1}</h1>
 												<Button
+													type="button"
 													onClick={() => handleDeleteRegistrant(index)}
 													className="bg-red-500 text-white p-2 rounded mt-4 w-9 h-9"
 												>

@@ -54,7 +54,7 @@ const MobileBottomNav = () => {
 					<Church className="mx-auto" />
 					Ministry
 				</li>
-				<li
+				{/* <li
 					onClick={() => {
 						handleNavigation("/settings");
 					}}
@@ -62,7 +62,7 @@ const MobileBottomNav = () => {
 				>
 					<Settings className="mx-auto" />
 					Settings
-				</li>
+				</li> */}
 			</ul>
 		</nav>
 	);
