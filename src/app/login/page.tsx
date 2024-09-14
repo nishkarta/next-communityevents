@@ -15,6 +15,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
@@ -111,14 +112,19 @@ export default function Login() {
 									<FormControl>
 										<Input
 											className="shadow-md  focus-visible:ring-primary-light"
-											placeholder="Enter your identifier"
+											placeholder="Enter your email or phone number"
 											{...field}
 										/>
 									</FormControl>
+									<FormDescription>
+										{" "}
+										Phone number format : 087800001234
+									</FormDescription>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+						<span className="text-xs font-bold italic"></span>
 
 						<FormField
 							control={form.control}
