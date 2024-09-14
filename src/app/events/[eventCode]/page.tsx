@@ -74,6 +74,13 @@ const EventSessions = () => {
 		fetchSessions();
 	}, [eventCode]);
 
+	function handleRegistration(
+		eventCode: string | string[],
+		sessionCode: string
+	) {
+		return router.push(`/events/${eventCode}/${sessionCode}/registration`);
+	}
+
 	return (
 		<>
 			<HeaderNav name="Event Sessions" link="events" />
@@ -138,7 +145,13 @@ const EventSessions = () => {
 								<CardFooter>
 									{/* Link to register sessions page */}
 									{session.status === "active" ? (
-										<Button>Register Now!</Button>
+										<Button
+											onClick={() =>
+												handleRegistration(eventCode, session.code)
+											}
+										>
+											Register Now!
+										</Button>
 									) : (
 										<Button disabled>Registration Closed</Button>
 									)}

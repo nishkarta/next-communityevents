@@ -13,12 +13,13 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const Home = () => {
 	const router = useRouter();
 	const IMAGE_URL =
 		"https://images.unsplash.com/photo-1555817128-342e1c8b3101?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-	const { isAuthenticated, logout } = useAuth();
+	const { isAuthenticated, logout, handleExpiredToken } = useAuth();
 	const handleLogout = () => {
 		logout();
 		router.push("/");
@@ -26,6 +27,38 @@ const Home = () => {
 	const userData = isAuthenticated
 		? JSON.parse(localStorage.getItem("userData") || "{}")
 		: null;
+	const [registrations, setRegistrations] = useState<any>({});
+	const fetchRegistrations = async () => {
+		if (!userData?.token) return;
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration`,
+				{
+					headers: {
+						"X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${userData.token}`,
+					},
+				}
+			);
+
+			if (response.status === 401) {
+				// Handle expired token
+				handleExpiredToken();
+				return;
+			}
+
+			const data = await response.json();
+			setRegistrations(data.data);
+		} catch (error) {
+			console.error("Failed to fetch registrations:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchRegistrations();
+	}, []);
 
 	return (
 		<>
