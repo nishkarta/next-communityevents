@@ -19,6 +19,7 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
+	FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
@@ -31,13 +32,7 @@ const formSchema = z
 		email: z.string().email({
 			message: "Please enter a valid email address.",
 		}),
-		phoneNumber: z
-			.string()
-			.regex(/^\+62/, {
-				message:
-					"Sorry! Phone numbers temporarily can only be with Indonesian format only (+62)",
-			})
-			.refine(isValidPhoneNumber, { message: "Invalid phone number" }),
+		phoneNumber: z.string().min(8, { message: "Invalid phone number" }),
 		password: z.string().min(6, {
 			message: "Password must be at least 6 characters.",
 		}),
@@ -113,14 +108,14 @@ export default function Register() {
 				const errorResult = await response.json();
 				if (errorResult.status === "ALREADY_EXISTS") {
 					toast({
-						title: "Log In Failed!",
+						title: "Register Failed!",
 						description: `Error : User with your email/phone number already exists. Please log in! `,
 						className: "bg-red-400",
 						duration: 3000,
 					});
 				} else {
 					toast({
-						title: "Log In Failed!",
+						title: "Register Failed!",
 						description: `Error : ${errorResult.message} `,
 						className: "bg-red-400",
 						duration: 3000,
@@ -187,13 +182,16 @@ export default function Register() {
 							<FormItem className="my-5">
 								<FormLabel>Phone Number</FormLabel>
 								<FormControl>
-									<PhoneInput
-										defaultCountry="ID"
-										placeholder="Enter a phone number"
-										international
+									<Input
+										className="shadow-md  focus-visible:ring-primary-light"
+										placeholder="Enter your phone number"
+										defaultValue="0"
 										{...field}
 									/>
 								</FormControl>
+								<FormDescription>
+									Phone number format : 087800001234
+								</FormDescription>
 								<FormMessage />
 							</FormItem>
 						)}

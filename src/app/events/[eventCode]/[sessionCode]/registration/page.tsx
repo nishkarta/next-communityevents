@@ -250,7 +250,7 @@ const EventRegistration = () => {
 									<CardTitle>Identifier</CardTitle>
 									<CardDescription>
 										Please fill with your email address or phone number.
-										<br></br> Phone number format : 08123456789
+										<br /> Phone number format : 087800001234
 									</CardDescription>
 								</CardHeader>
 								<CardContent>

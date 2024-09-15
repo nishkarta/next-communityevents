@@ -103,7 +103,7 @@ const Ministry = () => {
 				</div>
 			</Card>
 			{/* Manado */}
-			<Card className="rounded-xl shadow-lg bg-white mb-4 mx-3 overflow-hidden">
+			<Card className="rounded-xl shadow-lg bg-white mb-20 mx-3 overflow-hidden">
 				<div className="flex flex-col md:flex-row">
 					<div className="relative h-48 md:h-72 w-full md:w-1/2">
 						<Image

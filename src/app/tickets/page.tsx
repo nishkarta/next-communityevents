@@ -22,6 +22,8 @@ import {
 	DialogHeader,
 	DialogFooter,
 } from "@/components/ui/dialog"; // Import ShadCN Dialog components
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const TicketsPage = () => {
 	const [registrations, setRegistrations] = useState<any[]>([]);
@@ -32,7 +34,7 @@ const TicketsPage = () => {
 	const userData = isAuthenticated
 		? JSON.parse(localStorage.getItem("userData") || "{}")
 		: null;
-
+	const { toast } = useToast();
 	const fetchRegistrations = async () => {
 		if (!userData?.token) return;
 
@@ -68,6 +70,54 @@ const TicketsPage = () => {
 	useEffect(() => {
 		fetchRegistrations();
 	}, [userData?.token]);
+
+	const handleDelete = async (code: string) => {
+		const confirm = window.confirm(
+			"Are you sure you want to delete this registration?"
+		);
+		if (!confirm) return;
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/${code}`,
+				{
+					method: "DELETE",
+					headers: {
+						"X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${userData?.token}`,
+					},
+				}
+			);
+
+			if (response.status === 401) {
+				handleExpiredToken();
+				return;
+			}
+
+			if (response.ok) {
+				setRegistrations((prev) => prev.filter((reg) => reg.code !== code));
+				toast({
+					title: "Deletion Successful",
+					description: `You have cancelled your registration.`,
+					className: "bg-green-400",
+					duration: 1500,
+				});
+			} else {
+				const errorResult = await response.json();
+				toast({
+					title: "Deletion Failed!",
+					description: `Error : ${errorResult.message} `,
+					className: "bg-red-400",
+					duration: 2000,
+				});
+				throw errorResult;
+			}
+		} catch (error) {
+			alert("An error occurred. Please try again.");
+			console.error("An error occurred:", error);
+		}
+	};
 
 	// Filter registrations based on selected status
 	const filteredRegistrations = registrations.filter(
@@ -204,7 +254,22 @@ const TicketsPage = () => {
 												{registration.sessionCode})
 											</p>
 										</CardContent>
-										{/* Additional details as needed */}
+										<CardFooter>
+											{registration.status === "registered" ? (
+												<>
+													<Button
+														className="bg-red-500"
+														onClick={() => {
+															handleDelete(registration.code);
+														}}
+													>
+														Delete{" "}
+													</Button>
+												</>
+											) : (
+												<></>
+											)}
+										</CardFooter>
 									</Card>
 								))
 							)}

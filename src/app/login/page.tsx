@@ -78,7 +78,7 @@ export default function Login() {
 					title: "Log In Failed!",
 					description: `Error : ${errorResult.message} `,
 					className: "bg-red-400",
-					duration: 1000,
+					duration: 2000,
 				});
 				throw errorResult;
 			}
@@ -117,7 +117,6 @@ export default function Login() {
 										/>
 									</FormControl>
 									<FormDescription>
-										{" "}
 										Phone number format : 087800001234
 									</FormDescription>
 									<FormMessage />

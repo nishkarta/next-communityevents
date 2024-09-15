@@ -89,7 +89,7 @@ export default function ForgetPassword() {
 					title: "Log In Failed!",
 					description: `Error : ${errorResult.message} `,
 					className: "bg-red-400",
-					duration: 1000,
+					duration: 2000,
 				});
 				throw errorResult;
 			}
