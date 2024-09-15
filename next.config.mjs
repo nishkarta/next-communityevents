@@ -17,6 +17,12 @@ const nextConfig = {
 				hostname: "growcommunity.church",
 				port: "",
 			},
+			//i.imgur.com
+			{
+				protocol: "https",
+				hostname: "i.imgur.com",
+				port: "",
+			},
 		],
 	},
 };

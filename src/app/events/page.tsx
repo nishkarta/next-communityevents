@@ -24,8 +24,7 @@ import { formatDate } from "@/lib/utils";
 const EventsPage = () => {
 	const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
 	const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
-	const EVENT_EXAMPLE_IMAGE_URL =
-		"https://static.wixstatic.com/media/271a07_29fe11ad76aa48fc975dadbeffb766c4~mv2.jpg/v1/fill/w_640,h_366,al_c,q_80,usm_0.66_1.00_0.01,enc_auto/271a07_29fe11ad76aa48fc975dadbeffb766c4~mv2.jpg";
+	const EVENT_EXAMPLE_IMAGE_URL = "https://i.imgur.com/gI86sW4.jpeg";
 	const router = useRouter();
 	const { isAuthenticated, handleExpiredToken } = useAuth();
 	const userData = isAuthenticated
@@ -97,14 +96,13 @@ const EventsPage = () => {
 						events.map((event) => (
 							<Card key={event.id} className="rounded-xl mb-4">
 								<div className="flex flex-col md:flex-row">
-									{/* Left Half / Top Half : Image */}
-									<div className="md:w-1/2 relative h-48 md:h-auto">
+									{/* Left Half / Top Half: Image */}
+									<div className=" mt-8 relative md:w-full h-60 md:h-96 overflow-hidden">
 										<Image
 											src={EVENT_EXAMPLE_IMAGE_URL} // Use event's image or default
 											alt="Event Image"
 											layout="fill"
-											objectFit="cover"
-											className="rounded-t-xl rounded-b-none"
+											className="object-contain rounded-xl"
 											priority
 										/>
 									</div>
