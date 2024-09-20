@@ -92,7 +92,7 @@ const EventsPage = () => {
 						<p>
 							<LoadingSpinner />
 						</p>
-					) : events.length > 0 ? (
+					) : events && events.length > 0 ? (
 						events.map((event) => (
 							<Card key={event.id} className="rounded-xl mb-4">
 								<div className="flex flex-col md:flex-row">
@@ -160,9 +160,9 @@ const EventsPage = () => {
 								</div>
 							</Card>
 						))
-					) : events.length === 0 ? (
+					) : events && events.length === 0 ? (
 						<p>No events found.</p>
-					) : null}
+					) : <p>No events found.</p>}
 				</div>
 			</main>
 		</>

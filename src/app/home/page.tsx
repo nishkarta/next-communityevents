@@ -142,6 +142,13 @@ const Home = () => {
 							iconColor="text-green-500"
 						/>
 
+						{userData.role === "admin"? (<><IconButton
+							href="/dashboard"
+							iconName="fi fi-tr-dashboard-monitor"
+							name="Admin"
+							iconColor="text-black-500"
+						/></>) : (<></>)}
+
 						{/* {[1, 2].map((num) => (
 						<Button key={num} variant="outline" className="h-20">
 							Button {num}
