@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import HeaderNav from "@/components/HeaderNav";
 import Link from "next/link";
+import VerifyTicketDialog from "@/components/VerifyTicketDialog";
 
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import {
@@ -56,6 +57,10 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
+  if (userData.role === "user") {
+    router.push("/home");
+    return null;
+  }
 
   // Fetch sessions
   const fetchSessions = async () => {
@@ -410,6 +415,12 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
             ) : (
               <CardFooter className="mt-5">Scanner disabled!</CardFooter>
             )}
+            <CardFooter className="mt-5">
+              <VerifyTicketDialog
+                sessionCode={selectedSession || ""}
+                sessionName={selectedSessionName || ""}
+              />
+            </CardFooter>
           </Card>
         </section>
 

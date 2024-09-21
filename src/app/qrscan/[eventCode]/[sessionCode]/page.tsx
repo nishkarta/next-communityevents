@@ -12,23 +12,35 @@ import withAuth from "@/components/providers/AuthWrapper";
 import HeaderNav from "@/components/HeaderNav";
 import { useParams } from "next/navigation";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
-import { Button } from "@/components/ui/button";
+import { EventResponse } from "@/lib/types/event";
+import { Loader2 } from "lucide-react"; // Import a loading icon for better feedback
+import { useRouter } from "next/navigation";
 
 const QRScan: React.FC = () => {
   const { eventCode, sessionCode } = useParams();
   const [scannerInput, setScannerInput] = useState<string>("");
   const { isAuthenticated, handleExpiredToken } = useAuth();
   const [message, setMessage] = useState<string>("");
+  const [registeredResponse, setRegisteredResponse] =
+    useState<EventResponse | null>(null);
+  const [error, setError] = useState<boolean>(false); // Add error state
+  const [loading, setLoading] = useState<boolean>(false); // Add a loading state
+  const lastSubmittedQRCode = useRef<string | null>(null);
+  const router = useRouter();
 
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
-
-  const lastSubmittedQRCode = useRef<string | null>(null); // Track the last submitted QR code
+  if (userData.role === "user") {
+    router.push("/home");
+    return null;
+  }
 
   const sendToAPI = async (qrCode: string) => {
-    if (lastSubmittedQRCode.current === qrCode) return; // Prevent redundant calls
+    if (lastSubmittedQRCode.current === qrCode || !qrCode) return; // Prevent redundant calls
     lastSubmittedQRCode.current = qrCode;
+    setLoading(true);
+    setError(false); // Reset error state
 
     try {
       const response = await fetch(
@@ -47,18 +59,24 @@ const QRScan: React.FC = () => {
         }
       );
 
-      if (response.ok) {
-        setMessage("Success!");
-      } else {
-        if (response.status === 401) {
-          handleExpiredToken();
-        } else {
-          const errorResult = await response.json();
-          setMessage(errorResult.status);
-        }
+      if (!response.ok) {
+        // Manually throw an error to handle it in the catch block
+        const errorResult = await response.json(); // Try to get the error details from the response body
+        const errorMessage = errorResult?.message || "Unknown error occurred";
+        throw new Error(errorMessage); // Throw the error so it can be caught by the catch block
       }
-    } catch (error) {
+
+      const data = await response.json();
+      setMessage("Registration successful!");
+      setRegisteredResponse(data);
+      console.log(data);
+    } catch (error: any) {
+      // Catch both fetch errors and manually thrown errors
       console.error("Error while connecting to the API", error);
+      setMessage(error.message || "Error connecting to the server.");
+      setError(true); // Set error state in case of failure
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,21 +95,18 @@ const QRScan: React.FC = () => {
       const key = event.key;
 
       if (key === "Enter" || key === "n") {
-        const scannedCode = accumulatedInput.trim(); // Trim the accumulated value for safety
+        const scannedCode = accumulatedInput.trim();
         if (scannedCode) {
-          setScannerInput(scannedCode); // Trigger API call
+          setScannerInput(scannedCode);
         }
         accumulatedInput = ""; // Clear accumulated input after submission
       } else {
-        // Accumulate characters into a separate variable
         accumulatedInput += key;
       }
     };
 
-    // Listen for keyboard events
     window.addEventListener("keydown", handleKeyDown);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
@@ -100,20 +115,51 @@ const QRScan: React.FC = () => {
   return (
     <>
       <HeaderNav
-        name={`QR Scanner for Event Code : ${eventCode} Session : ${sessionCode}`}
+        name={`QR Scanner for Event Code: ${eventCode} | Session: ${sessionCode}`}
         link={`dashboard/${eventCode}`}
       />
-      <Card className="xl:col-span-2 w-1/2 mx-auto mt-4">
-        <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle>QR Scanner</CardTitle>
-            <CardDescription>Message : {message}</CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p>Current QR Code: {scannerInput || "No QR code scanned yet."}</p>
-        </CardContent>
-      </Card>
+      <div className="w-full flex justify-center mt-8">
+        <Card className="w-full max-w-2xl mx-auto p-4 shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-center text-lg font-bold">
+              QR Scanner
+            </CardTitle>
+            <CardDescription className="text-center">
+              {loading ? "Processing..." : message || "Awaiting scan..."}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center">
+            <div className="py-4">
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <Loader2 className="animate-spin h-6 w-6" />
+                </div>
+              ) : error ? (
+                <div className="bg-red-100 p-4 rounded-md">
+                  <h3 className="font-semibold text-xl text-red-700">
+                    Scan Failed!
+                  </h3>
+                  <p>{message}</p>
+                </div>
+              ) : registeredResponse ? (
+                <div className="bg-green-100 p-4 rounded-md">
+                  <h3 className="font-semibold text-xl">Scan Successful!</h3>
+                  <p>Name: {registeredResponse.name}</p>
+                  <p>Registered By: {registeredResponse.registeredBy}</p>
+                  <p>Status: {registeredResponse.status}</p>
+                </div>
+              ) : (
+                <p className="text-gray-500">No QR code scanned yet.</p>
+              )}
+            </div>
+            <div className="mt-6">
+              <p className="text-gray-600">
+                Next scan ready. Please scan the next QR code.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 };
