@@ -321,25 +321,23 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
               <LoadingSpinner></LoadingSpinner>
             ) : (
               <CardFooter className="flex flex-col w-fit mx-auto gap-2 content-center justify-center">
-                {sessions
-                  .filter((session) => session.status === "active")
-                  .map((session) => (
-                    <Button
-                      className={`w-full ${
-                        selectedSession === session.code
-                          ? "bg-green-500 text-white"
-                          : ""
-                      }`}
-                      key={session.code}
-                      onClick={() => {
-                        setSelectedSession(session.code);
-                        setSelectedSessionName(session.name);
-                        handleCheckSession(session.code);
-                      }}
-                    >
-                      {session.name}
-                    </Button>
-                  ))}
+                {sessions.map((session) => (
+                  <Button
+                    className={`w-full ${
+                      selectedSession === session.code
+                        ? "bg-green-500 text-white"
+                        : ""
+                    }`}
+                    key={session.code}
+                    onClick={() => {
+                      setSelectedSession(session.code);
+                      setSelectedSessionName(session.name);
+                      handleCheckSession(session.code);
+                    }}
+                  >
+                    {session.name}
+                  </Button>
+                ))}
               </CardFooter>
             )}
           </Card>
