@@ -102,35 +102,41 @@ const Home = () => {
           <span className="text-black text-base font-bold">
             Hi, {userData?.name}!
           </span>
+
           <div className="flex flex-row gap-x-8">
-            <Dialog>
-              <DialogTrigger asChild>
-                <QrCode></QrCode>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>Your Homebase Ticket</DialogHeader>
+            {userData.role === "worker" ? (
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <QrCode></QrCode>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>Your Homebase Ticket</DialogHeader>
 
-                <div className="flex justify-center">
-                  <SVG
-                    text={userData.kkj}
-                    options={{
-                      type: "image/jpeg",
-                      quality: 0.8,
-                      errorCorrectionLevel: "M",
-                      margin: 3,
-                      scale: 10,
-                      width: 300, // Larger width for display
-                      color: {
-                        dark: "#000000",
-                        light: "#FFFFFF",
-                      },
-                    }}
-                  />
-                </div>
-
-                <DialogFooter></DialogFooter>
-              </DialogContent>
-            </Dialog>
+                    <div className="flex justify-center">
+                      <SVG
+                        text={userData.kkj}
+                        options={{
+                          type: "image/jpeg",
+                          quality: 0.8,
+                          errorCorrectionLevel: "M",
+                          margin: 3,
+                          scale: 10,
+                          width: 300, // Larger width for display
+                          color: {
+                            dark: "#000000",
+                            light: "#FFFFFF",
+                          },
+                        }}
+                      />
+                    </div>
+                    <DialogFooter></DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </>
+            ) : (
+              <></>
+            )}
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
