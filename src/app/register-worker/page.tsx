@@ -1,0 +1,338 @@
+"use client";
+
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, ChevronLeft, Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import WorkerRegistrationForm from "@/components/WorkerRegistrationForm";
+
+// Base form schema for general user fields
+const baseFormSchema = z.object({
+  name: z.string().min(2, {
+    message: "Input your proper full name.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  phoneNumber: z.string().min(8, { message: "Invalid phone number" }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+  confirmPassword: z.string().min(6, {
+    message: "Confirm Password must be at least 6 characters.",
+  }),
+});
+
+// Worker-specific schema
+const workerFormSchema = z.object({
+  gender: z.enum(["male", "female"], {
+    message: "Field required!",
+  }),
+  maritalStatus: z.enum(["single", "married", "divorced", "widowed"], {
+    message: "Field required!",
+  }),
+  department: z.string().min(1, { message: "Field required!" }),
+  kkj: z
+    .string()
+    .min(2, { message: "Enter a valid KKJ number!" })
+    .max(10, { message: "Enter a valid KKJ number!" }),
+  kom: z.boolean(),
+  baptis: z.boolean(),
+});
+
+// Type for the entire form schema (general + worker-specific fields)
+type FormValues = z.infer<typeof baseFormSchema> &
+  z.infer<typeof workerFormSchema>;
+
+export default function Register() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const [isWorker, setIsWorker] = useState<boolean>(false);
+
+  // Dynamically set the form schema based on the `isWorker` checkbox state
+  const formSchema = isWorker
+    ? baseFormSchema.merge(workerFormSchema) // Merge schemas if worker is selected
+    : baseFormSchema; // Use only base schema if not a worker
+
+  // Initialize the form with react-hook-form
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+
+      gender: undefined,
+      maritalStatus: undefined,
+      department: "",
+      kkj: "",
+      kom: false,
+      baptis: false,
+    },
+  });
+
+  // Handle form submission
+  async function onSubmit(data: FormValues) {
+    setLoading(true);
+    data.email = data.email.trim().replace(/\s+/g, "").toLowerCase();
+    data.phoneNumber = data.phoneNumber
+      .trim()
+      .replace(/\s+/g, "")
+      .replace("+62", "0");
+
+    try {
+      let response;
+      // Handle worker registration separately
+      if (isWorker) {
+        const workerData = { ...data, workerSpecificField: "value" };
+        response = await fetch(
+          `${API_BASE_URL}/api/v1/event/user/register-worker`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-API-Key": API_KEY || "",
+            },
+            body: JSON.stringify(workerData),
+          }
+        );
+      } else {
+        // Regular user registration API call
+        response = await fetch(`${API_BASE_URL}/api/v1/event/user/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-Key": API_KEY || "",
+          },
+          body: JSON.stringify(data),
+        });
+      }
+
+      if (response.ok) {
+        toast({
+          title: "Sign up Successful!",
+          description: `Redirecting to the log in page...`,
+          className: "bg-green-400",
+          duration: 1500,
+        });
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 1000);
+      } else {
+        const errorResult = await response.json();
+        if (errorResult.status === "ALREADY_EXISTS") {
+          toast({
+            title: "Register Failed!",
+            description: `Error : User with your email/phone number already exists. Please log in!`,
+            className: "bg-red-400",
+            duration: 3000,
+          });
+        } else {
+          toast({
+            title: "Register Failed!",
+            description: `Error : ${errorResult.message}`,
+            className: "bg-red-400",
+            duration: 3000,
+          });
+        }
+        throw errorResult;
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center">
+      <Link className="md:self-start" href="/">
+        <ChevronLeft className="mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light" />
+      </Link>
+      <h1 className="text-xl font-bold mb-4">Register</h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="md:space-y-6 md:w-1/3"
+        >
+          {/* Main registration form fields */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input
+                    className="shadow-md focus-visible:ring-primary-light"
+                    placeholder="Enter your full name."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    className="shadow-md focus-visible:ring-primary-light"
+                    placeholder="Enter your email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Phone Number</FormLabel>
+                <FormControl>
+                  <Input
+                    className="shadow-md focus-visible:ring-primary-light"
+                    placeholder="Enter your phone number"
+                    defaultValue="0"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Phone number format: 087800001234
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Password</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      className="shadow-md focus-visible:ring-primary-light"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  {showPassword ? (
+                    <EyeOff
+                      className="absolute right-2 top-2 cursor-pointer text-gray-500"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  ) : (
+                    <Eye
+                      className="absolute right-2 top-2 cursor-pointer text-gray-500"
+                      onClick={() => setShowPassword(!showPassword)}
+                    />
+                  )}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Confirm Password</FormLabel>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      className="shadow-md focus-visible:ring-primary-light"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  {showConfirmPassword ? (
+                    <EyeOff
+                      className="absolute right-2 top-2 cursor-pointer text-gray-500"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    />
+                  ) : (
+                    <Eye
+                      className="absolute right-2 top-2 cursor-pointer text-gray-500"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                    />
+                  )}
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Worker Checkbox */}
+          <FormItem className="my-5">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="isWorker"
+                checked={isWorker} // Controlled by the `isWorker` state
+                onCheckedChange={(checked: boolean) => setIsWorker(checked)}
+              />
+              <Label htmlFor="isWorker">
+                I am a worker (pengerja, volunteer, aktivis)
+              </Label>
+            </div>
+          </FormItem>
+
+          {/* Conditionally render Worker Registration Form */}
+          {isWorker && <WorkerRegistrationForm />}
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            className="my-8 w-full sm:w-auto"
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
+}

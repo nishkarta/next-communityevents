@@ -14,6 +14,7 @@ const MobileBottomNav = () => {
     "/tickets",
     "/qrtest",
     "/dashboard",
+    "/register-worker",
   ];
   const shouldShowNav = !excludedRoutes.includes(pathname);
 
