@@ -58,7 +58,7 @@ const workerFormSchema = z.object({
   }),
   department: z.string().min(1, { message: "Field required!" }),
   cool: z.string().min(1, { message: "Field required!" }),
-  homebase: z.string().min(1, { message: "Field required!" }),
+  campus: z.string().min(1, { message: "Field required!" }),
   kkj: z.string().optional(),
   kom: z.boolean(),
   baptis: z.boolean(),
@@ -97,7 +97,7 @@ export default function Register() {
       maritalStatus: undefined,
       department: "",
       cool: "",
-      homebase: "",
+      campus: "",
       kkj: "",
       kom: false,
       baptis: false,
@@ -525,7 +525,7 @@ export default function Register() {
               />
               <FormField
                 control={form.control}
-                name="homebase"
+                name="campus"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col ">
                     <FormLabel>Homebase *</FormLabel>
