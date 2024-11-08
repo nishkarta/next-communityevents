@@ -110,27 +110,39 @@ const Home = () => {
                   <DialogTrigger asChild>
                     <QrCode></QrCode>
                   </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>Your Homebase Ticket</DialogHeader>
+                  <DialogContent aria-describedby="Homebase QR Code">
+                    <DialogHeader>
+                      <span className="text-xl font-bold"></span>Your Homebase
+                      Ticket
+                    </DialogHeader>
 
                     <div className="flex justify-center">
                       <SVG
-                        text={userData.kkj}
+                        text={
+                          userData.kkj
+                            ? userData.kkj + userData.accountNumber
+                            : userData.accountNumber
+                        }
                         options={{
                           type: "image/jpeg",
                           quality: 0.8,
                           errorCorrectionLevel: "M",
                           margin: 3,
                           scale: 10,
-                          width: 300, // Larger width for display
+                          width: 350, // Larger width for display
                           color: {
-                            dark: "#000000",
+                            dark: "#573d66",
                             light: "#FFFFFF",
                           },
                         }}
                       />
                     </div>
-                    <DialogFooter></DialogFooter>
+                    <DialogFooter>
+                      <span className="text-sm font-light">
+                        This is your Homebase QR Code. Use this for scanning
+                        during Homebase events.
+                      </span>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               </>
@@ -153,7 +165,7 @@ const Home = () => {
                     <span className="font-bold text-lg">
                       {registrationsCount}
                     </span>{" "}
-                    active tickets!
+                    active event tickets!
                   </p>
                   <Button className="mt-1">
                     <Link href="/tickets">View your QR codes</Link>

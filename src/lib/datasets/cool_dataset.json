@@ -1,0 +1,356 @@
+[
+  {
+    "no": 1,
+    "category": "NEWLYWED",
+    "cool": "NEWLYWED BINTARO 3",
+    "leader": "VICTOR JULIAN A."
+  },
+  {
+    "no": 2,
+    "category": "NEWLYWED",
+    "cool": "NEWLYWED MKJ",
+    "leader": "JIMMY HARIYANTO"
+  },
+  {
+    "no": 3,
+    "category": "NEWLYWED",
+    "cool": "NEWLYWED PESANGGRAHAN",
+    "leader": "DANIEL CHAVIN MANURUNG"
+  },
+  {
+    "no": 4,
+    "category": "NEWLYWED",
+    "cool": "NEWLYWED SUNTER",
+    "leader": "NG TEDDY PAWITRA"
+  },
+  {
+    "no": 5,
+    "category": "NEWLYWED",
+    "cool": "NEWLYWED TAMAN ALFA INDAH",
+    "leader": "PANCE JONATHAN"
+  },
+  {
+    "no": 6,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL BINTARO",
+    "leader": "GIOVANNI MAHARLIAN DAMARA"
+  },
+  {
+    "no": 7,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL BLOK-M",
+    "leader": "SHERLY NOVAGIA KASTANYA"
+  },
+  {
+    "no": 8,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL GANDARIA CITY 1",
+    "leader": "YUSTINA SORTA"
+  },
+  {
+    "no": 9,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL BSD",
+    "leader": "WINA NOVRIYANTI LUMBAN TORUAN"
+  },
+  {
+    "no": 10,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL GANDARIA CITY 3",
+    "leader": "ADINA MARBUN"
+  },
+  {
+    "no": 11,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL HOMECOMING",
+    "leader": "BRYAN JEFFERSON HADIDJAJA"
+  },
+  {
+    "no": 12,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL LOTTE AVENUE",
+    "leader": "FISELLA MUTIARA AULINA"
+  },
+  {
+    "no": 13,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL KAIROS",
+    "leader": "MARIA KRISTYANTI"
+  },
+  {
+    "no": 14,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL PONDOK INDAH",
+    "leader": "BETHARIA DWI PRAMARTI"
+  },
+  {
+    "no": 15,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL SENAYAN",
+    "leader": "ERNA WIJAYANTI"
+  },
+  {
+    "no": 16,
+    "category": "PROFESSIONAL",
+    "cool": "PROFESSIONAL TANJUNG DUREN",
+    "leader": "TAMMY PATRICK SIDARTAWAN"
+  },
+  {
+    "no": 17,
+    "category": "UMUM",
+    "cool": "UMUM ALFA INDAH",
+    "leader": "LIOE YANTO HARYONO"
+  },
+  {
+    "no": 18,
+    "category": "UMUM",
+    "cool": "UMUM AMPERA",
+    "leader": "LINA SILALAHI"
+  },
+  {
+    "no": 19,
+    "category": "UMUM",
+    "cool": "UMUM BINTARO 1",
+    "leader": "MICHAEL HUTAGALUNG"
+  },
+  {
+    "no": 20,
+    "category": "UMUM",
+    "cool": "UMUM BINTARO 2",
+    "leader": "DANIEL SUNDJAJA"
+  },
+  {
+    "no": 21,
+    "category": "UMUM",
+    "cool": "UMUM BOGOR",
+    "leader": "RICHARD MANGAPUL SINAGA"
+  },
+  {
+    "no": 22,
+    "category": "UMUM",
+    "cool": "UMUM BSD",
+    "leader": "LUKAS EKLOPAS WENI"
+  },
+  {
+    "no": 23,
+    "category": "UMUM",
+    "cool": "UMUM CENDANA",
+    "leader": "WIDIAWATI"
+  },
+  {
+    "no": 24,
+    "category": "UMUM",
+    "cool": "UMUM CIBUBUR",
+    "leader": "FREDDY SIRINGORINGO"
+  },
+  {
+    "no": 25,
+    "category": "UMUM",
+    "cool": "UMUM CIJANTUNG",
+    "leader": "SUMARDO CATUR CAHYONO"
+  },
+  {
+    "no": 26,
+    "category": "UMUM",
+    "cool": "UMUM CINERE CILANDAK",
+    "leader": "HANKY TANDAYU"
+  },
+  {
+    "no": 27,
+    "category": "UMUM",
+    "cool": "UMUM CIRENDEU",
+    "leader": "IR. METLYDON H.HUTAURUK"
+  },
+  {
+    "no": 28,
+    "category": "UMUM",
+    "cool": "UMUM GANDARIA CITY 1",
+    "leader": "FERDINAND ROBOT"
+  },
+  {
+    "no": 29,
+    "category": "UMUM",
+    "cool": "UMUM GANDARIA CITY 2",
+    "leader": "REFNI ULI PATARINA"
+  },
+  {
+    "no": 30,
+    "category": "UMUM",
+    "cool": "UMUM GANDARIA CITY 3",
+    "leader": "HOTBEN NAINGGOLAN"
+  },
+  {
+    "no": 31,
+    "category": "UMUM",
+    "cool": "UMUM GANDARIA CITY 4",
+    "leader": "SONDANG SILAEN"
+  },
+  {
+    "no": 32,
+    "category": "UMUM",
+    "cool": "UMUM KEBAYORAN LAMA",
+    "leader": "JOHNNY PURBA"
+  },
+  {
+    "no": 33,
+    "category": "UMUM",
+    "cool": "UMUM KELAPA GADING",
+    "leader": "ADRI FABIANUS"
+  },
+  {
+    "no": 34,
+    "category": "UMUM",
+    "cool": "UMUM LENTENG AGUNG",
+    "leader": "DOUGLAS J J MACAWALANG"
+  },
+  {
+    "no": 35,
+    "category": "UMUM",
+    "cool": "UMUM PASAR MINGGU",
+    "leader": "CALEB"
+  },
+  {
+    "no": 36,
+    "category": "UMUM",
+    "cool": "UMUM PONDOK AREN",
+    "leader": "BUGIE TRIYOGA WISNUMURTI"
+  },
+  {
+    "no": 37,
+    "category": "UMUM",
+    "cool": "UMUM PONDOK INDAH",
+    "leader": "FRANS RAHARDIAN"
+  },
+  {
+    "no": 38,
+    "category": "UMUM",
+    "cool": "UMUM PONDOK PINANG",
+    "leader": "EIKO SIHOMBING"
+  },
+  {
+    "no": 39,
+    "category": "UMUM",
+    "cool": "UMUM SENTUL",
+    "leader": "JOPHIE WENAS"
+  },
+  {
+    "no": 40,
+    "category": "UMUM",
+    "cool": "UMUM BOGOR NIRWANA RESIDENCE",
+    "leader": "BILLY YOSAFAT"
+  },
+  {
+    "no": 41,
+    "category": "PASTORAL",
+    "cool": "TEAM 21",
+    "leader": "BILLY YOSAFAT"
+  },
+  {
+    "no": 42,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 7 Male",
+    "leader": "Ethan Matthew Yosafat, Yehuda Anthony"
+  },
+  {
+    "no": 43,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 7 Female",
+    "leader": "Darlene Pesulima"
+  },
+  {
+    "no": 44,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 8 Male",
+    "leader": "Jason Anthony, Joshua Hanityo"
+  },
+  {
+    "no": 45,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 8 Female",
+    "leader": "Olivia Deborah"
+  },
+  {
+    "no": 46,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 9 Male",
+    "leader": "Charis Isaachar"
+  },
+  {
+    "no": 47,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 9 Female",
+    "leader": "Donatella Lengkong"
+  },
+  {
+    "no": 48,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 10 & 11 Male",
+    "leader": "Bryan Jonathan"
+  },
+  {
+    "no": 49,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 10 Female",
+    "leader": "Fellicya Jennifer"
+  },
+  {
+    "no": 50,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 11 Female",
+    "leader": "Calista Abigail"
+  },
+  {
+    "no": 51,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 12 Male",
+    "leader": "Rian Laoh"
+  },
+  {
+    "no": 52,
+    "category": "HUDDLE YOUTH",
+    "cool": "Huddle 12 Female",
+    "leader": "Manassah Laoh"
+  },
+  {
+    "no": 53,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Ari & Mima",
+    "leader": "Ari, Mima"
+  },
+  {
+    "no": 54,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Reydia & Valerie",
+    "leader": "Reydia, Valerie"
+  },
+  {
+    "no": 55,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Anjani",
+    "leader": "Anjani"
+  },
+  {
+    "no": 56,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Rian & Paskah",
+    "leader": "Rian, Paskah"
+  },
+  {
+    "no": 57,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Wilson & Sharon",
+    "leader": "Wilson, Sharon"
+  },
+  {
+    "no": 58,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Edwin & Fibi",
+    "leader": "Edwin, Fibi"
+  },
+  {
+    "no": 59,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle Kevin & Cindy",
+    "leader": "Kevin, Cindy"
+  }
+]

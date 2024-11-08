@@ -33,8 +33,12 @@ import {
   CommandList,
   CommandGroup,
   CommandItem,
+  CommandInput,
 } from "@/components/ui/command";
 import { ChevronsUpDown } from "lucide-react";
+import coolDatasets from "../../lib/datasets/cool_dataset.json";
+import departmentDatasets from "../../lib/datasets/departments_dataset.json";
+import homebaseDatasets from "../../lib/datasets/homebase_dataset.json";
 
 // Base form schema for general user fields
 const baseFormSchema = z.object({
@@ -53,10 +57,9 @@ const workerFormSchema = z.object({
     message: "Field required!",
   }),
   department: z.string().min(1, { message: "Field required!" }),
-  kkj: z
-    .string()
-    .min(2, { message: "Enter a valid KKJ number!" })
-    .max(10, { message: "Enter a valid KKJ number!" }),
+  cool: z.string().min(1, { message: "Field required!" }),
+  homebase: z.string().min(1, { message: "Field required!" }),
+  kkj: z.string().optional(),
   kom: z.boolean(),
   baptis: z.boolean(),
 });
@@ -74,6 +77,8 @@ export default function Register() {
   const [openGenderBox, setOpenGenderBox] = useState(false);
   const [openMarriageBox, setOpenMarriageBox] = useState(false);
   const [openDepartmentBox, setOpenDepartmentBox] = useState(false);
+  const [openCoolBox, setOpenCoolBox] = useState(false);
+  const [openHomebaseBox, setOpenHomebaseBox] = useState(false);
 
   // Dynamically set the form schema based on the `isWorker` checkbox state
   const formSchema = isWorker
@@ -91,6 +96,8 @@ export default function Register() {
       gender: undefined,
       maritalStatus: undefined,
       department: "",
+      cool: "",
+      homebase: "",
       kkj: "",
       kom: false,
       baptis: false,
@@ -342,7 +349,11 @@ export default function Register() {
                   <FormItem className="my-5">
                     <FormLabel>KKJ</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="Enter KKJ number" />
+                      <Input
+                        className="w-[250px] justify-between"
+                        {...field}
+                        placeholder="Enter KKJ number"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -433,33 +444,115 @@ export default function Register() {
                       </PopoverTrigger>
                       <PopoverContent className="w-[200px] p-0">
                         <Command>
+                          <CommandInput placeholder="Search department..." />
                           <CommandList>
-                            <CommandGroup>
-                              <CommandItem
-                                onSelect={() => {
-                                  field.onChange("Excom");
-                                  setOpenDepartmentBox(false);
-                                }}
-                              >
-                                Excom
-                              </CommandItem>
-                              <CommandItem
-                                onSelect={() => {
-                                  field.onChange("MIS");
-                                  setOpenDepartmentBox(false);
-                                }}
-                              >
-                                MIS
-                              </CommandItem>
-                              <CommandItem
-                                onSelect={() => {
-                                  field.onChange("Pastoral");
-                                  setOpenDepartmentBox(false);
-                                }}
-                              >
-                                Pastoral
-                              </CommandItem>
-                            </CommandGroup>
+                            {departmentDatasets.map((item, index) => (
+                              <CommandGroup key={index}>
+                                <CommandItem
+                                  onSelect={() => {
+                                    field.onChange(
+                                      item.department.toUpperCase()
+                                    );
+                                    setOpenDepartmentBox(false);
+                                  }}
+                                >
+                                  <span className="font-medium">
+                                    {item.department.toUpperCase()}
+                                  </span>
+                                </CommandItem>
+                              </CommandGroup>
+                            ))}
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cool"
+                render={({ field }) => (
+                  <FormItem className="my-5 flex flex-col">
+                    <FormLabel>COOL</FormLabel>
+                    <Popover open={openCoolBox} onOpenChange={setOpenCoolBox}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="sm:w-[250px] md:w-[350px] justify-between"
+                        >
+                          {field.value || "Select your COOL"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="sm:w-[250px] md:w-[350px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search COOL..." />
+                          <CommandList>
+                            {coolDatasets.map((item, index) => (
+                              <CommandGroup key={index} heading={item.category}>
+                                <CommandItem
+                                  onSelect={() => {
+                                    field.onChange(item.cool.toUpperCase());
+                                    setOpenCoolBox(false);
+                                  }}
+                                >
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">
+                                      {item.cool.toUpperCase()}
+                                    </span>
+                                    <span className="text-sm text-gray-500">
+                                      Leader(s) : {item.leader.toUpperCase()}
+                                    </span>
+                                  </div>
+                                </CommandItem>
+                              </CommandGroup>
+                            ))}
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="homebase"
+                render={({ field }) => (
+                  <FormItem className="my-5 flex flex-col ">
+                    <FormLabel>Homebase</FormLabel>
+                    <Popover
+                      open={openHomebaseBox}
+                      onOpenChange={setOpenHomebaseBox}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className="w-[200px] justify-between"
+                        >
+                          {field.value || "Select your homebase"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandList>
+                            {homebaseDatasets.map((item, index) => (
+                              <CommandGroup key={index}>
+                                <CommandItem
+                                  onSelect={() => {
+                                    field.onChange(item.homebase.toUpperCase());
+                                    setOpenHomebaseBox(false);
+                                  }}
+                                >
+                                  <span className="font-medium">
+                                    {item.homebase.toUpperCase()}
+                                  </span>
+                                </CommandItem>
+                              </CommandGroup>
+                            ))}
                           </CommandList>
                         </Command>
                       </PopoverContent>
