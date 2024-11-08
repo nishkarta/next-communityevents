@@ -294,12 +294,18 @@ export default function Register() {
           {/* Conditionally render Worker-specific form fields */}
           {isWorker && (
             <>
+              <div className="my-5">
+                <span className=" text-sm font-semibold">
+                  All fields with * are required.
+                </span>
+              </div>
+
               <FormField
                 control={form.control}
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="flex flex-col my-5">
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel>Gender *</FormLabel>
                     <Popover
                       open={openGenderBox}
                       onOpenChange={setOpenGenderBox}
@@ -364,7 +370,7 @@ export default function Register() {
                 name="maritalStatus"
                 render={({ field }) => (
                   <FormItem className="flex flex-col my-5">
-                    <FormLabel>Marital Status</FormLabel>
+                    <FormLabel>Marital Status *</FormLabel>
                     <Popover
                       open={openMarriageBox}
                       onOpenChange={setOpenMarriageBox}
@@ -428,7 +434,7 @@ export default function Register() {
                 name="department"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col ">
-                    <FormLabel>Department</FormLabel>
+                    <FormLabel>Department *</FormLabel>
                     <Popover
                       open={openDepartmentBox}
                       onOpenChange={setOpenDepartmentBox}
@@ -475,7 +481,7 @@ export default function Register() {
                 name="cool"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col">
-                    <FormLabel>COOL</FormLabel>
+                    <FormLabel>COOL *</FormLabel>
                     <Popover open={openCoolBox} onOpenChange={setOpenCoolBox}>
                       <PopoverTrigger asChild>
                         <Button
@@ -522,7 +528,7 @@ export default function Register() {
                 name="homebase"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col ">
-                    <FormLabel>Homebase</FormLabel>
+                    <FormLabel>Homebase *</FormLabel>
                     <Popover
                       open={openHomebaseBox}
                       onOpenChange={setOpenHomebaseBox}
