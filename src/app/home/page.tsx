@@ -104,7 +104,7 @@ const Home = () => {
           </span>
 
           <div className="flex flex-row gap-x-8">
-            {userData.role === "worker" ? (
+            {userData.role === "worker" || userData.role === "admin" ? (
               <>
                 <Dialog>
                   <DialogTrigger asChild>
