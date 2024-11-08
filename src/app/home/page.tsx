@@ -129,7 +129,7 @@ const Home = () => {
                           errorCorrectionLevel: "M",
                           margin: 3,
                           scale: 10,
-                          width: 350, // Larger width for display
+                          width: 250, // Larger width for display
                           color: {
                             dark: "#573d66",
                             light: "#FFFFFF",
