@@ -81,7 +81,7 @@ const Home = () => {
   const { SVG } = useQRCode();
   return (
     <>
-      <main className="h-max overflow-auto">
+      <main className="h-max min-w-full overflow-auto">
         {/* Header */}
         <div className="flex flex-row border bg-primary border-x-primary border-t-primary border-b-black/20 p-2 justify-between items-center">
           <Image
