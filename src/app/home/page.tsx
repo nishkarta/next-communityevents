@@ -205,7 +205,7 @@ const Home = () => {
               iconColor="text-sky-500"
             />
             <IconButton
-              href="https://form.jotform.com/DigitalExcom/prayer-form"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSeoI9uokd3sBj6GsJL69348EGxh8x5bE8Ozw4cm-C8iR253zg/viewform?usp=sf_link"
               iconName="fi fi-tr-praying-hands"
               name="Prayer and Grateful Form"
               iconColor="text-amber-600"
