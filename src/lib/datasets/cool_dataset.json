@@ -414,119 +414,126 @@
   },
   {
     "no": 60,
-    "category": "COOL",
-    "cool": "Cool Senior",
+    "category": "UMUM",
+    "cool": "Cool Senior Bekasi",
     "leader": "Wellem March Paulus",
     "campus": "GC BEKASI"
   },
   {
     "no": 61,
-    "category": "COOL",
+    "category": "UMUM",
     "cool": "Cool Wanita Bijak",
     "leader": " Sandra Pangemanan",
     "campus": "GC BEKASI"
   },
   {
     "no": 62,
-    "category": "COOL",
+    "category": "UMUM",
     "cool": "Cool Satu Atap",
     "leader": " Anton Ardhi Purboyo",
     "campus": "GC BEKASI"
   },
   {
     "no": 63,
-    "category": "COOL",
+    "category": "UMUM",
+    "cool": "Cool Topi",
+    "leader": "Rudy Gunawan",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 64,
+    "category": "NEWLYWED",
     "cool": "Cool Bintara",
     "leader": " Veronika Coryna",
     "campus": "GC BEKASI"
   },
   {
-    "no": 64,
-    "category": "COOL",
-    "cool": "Cool Tomodachie",
+    "no": 65,
+    "category": "NEWLYWED",
+    "cool": "Cool Tomodachi",
     "leader": " Randy Nataniel",
     "campus": "GC BEKASI"
   },
   {
-    "no": 65,
-    "category": "COOL",
+    "no": 66,
+    "category": "NEWLYWED",
     "cool": "Cool Delight",
     "leader": " Andrea Patrick Panggabean",
     "campus": "GC BEKASI"
   },
   {
-    "no": 66,
-    "category": "COOL",
-    "cool": "Cool ladies 1",
+    "no": 67,
+    "category": "PROFESSIONAL",
+    "cool": "Ladies Bekasi 1",
     "leader": " Natasya Christy",
     "campus": "GC BEKASI"
   },
   {
-    "no": 67,
-    "category": "COOL",
+    "no": 68,
+    "category": "PROFESSIONAL",
     "cool": "Cool Ladies 2",
     "leader": "Chelsea Priscillya",
     "campus": "GC BEKASI"
   },
   {
-    "no": 68,
-    "category": "COOL",
+    "no": 69,
+    "category": "PROFESSIONAL",
     "cool": "Cool Winner",
     "leader": "Sri Yuliani",
     "campus": "GC BEKASI"
   },
   {
-    "no": 69,
-    "category": "COOL",
+    "no": 70,
+    "category": "PROFESSIONAL",
     "cool": "Cool Extra",
     "leader": "Yosef Aryadi",
     "campus": "GC BEKASI"
   },
   {
-    "no": 70,
-    "category": "COOL",
+    "no": 71,
+    "category": "PROFESSIONAL",
     "cool": "Cool Unstopable",
     "leader": "Lisia Apriany",
     "campus": "GC BEKASI"
   },
   {
-    "no": 71,
-    "category": "COOL",
+    "no": 72,
+    "category": "PROFESSIONAL",
     "cool": "Cool Miracle",
     "leader": "Leonardus Tommy",
     "campus": "GC BEKASI"
   },
   {
-    "no": 72,
-    "category": "COOL",
+    "no": 73,
+    "category": "PROFESSIONAL",
     "cool": "Cool East",
     "leader": "Sandy",
     "campus": "GC BEKASI"
   },
   {
-    "no": 73,
-    "category": "COOL",
+    "no": 74,
+    "category": "PROFESSIONAL",
     "cool": "Cool SouthEast",
     "leader": "Christian Hehanusa",
     "campus": "GC BEKASI"
   },
   {
-    "no": 74,
-    "category": "COOL",
+    "no": 75,
+    "category": "PROFESSIONAL",
     "cool": "Cool NorthEast",
     "leader": "Hans Franklin",
     "campus": "GC BEKASI"
   },
   {
-    "no": 75,
-    "category": "HUDDLE COLLEGE",
+    "no": 76,
+    "category": "HUDDLE YOUTH",
     "cool": "Huddle 1",
     "leader": "Joshua Kevin",
     "campus": "GC BEKASI"
   },
   {
-    "no": 76,
-    "category": "HUDDLE COLLEGE",
+    "no": 77,
+    "category": "HUDDLE YOUTH",
     "cool": "Huddle 2",
     "leader": "Odiska Napitu",
     "campus": "GC BEKASI"
