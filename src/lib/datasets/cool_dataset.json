@@ -3,354 +3,532 @@
     "no": 1,
     "category": "NEWLYWED",
     "cool": "NEWLYWED BINTARO 3",
-    "leader": "VICTOR JULIAN A."
+    "leader": "VICTOR JULIAN A.",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 2,
     "category": "NEWLYWED",
     "cool": "NEWLYWED MKJ",
-    "leader": "JIMMY HARIYANTO"
+    "leader": "JIMMY HARIYANTO",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 3,
     "category": "NEWLYWED",
     "cool": "NEWLYWED PESANGGRAHAN",
-    "leader": "DANIEL CHAVIN MANURUNG"
+    "leader": "DANIEL CHAVIN MANURUNG",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 4,
     "category": "NEWLYWED",
     "cool": "NEWLYWED SUNTER",
-    "leader": "NG TEDDY PAWITRA"
+    "leader": "NG TEDDY PAWITRA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 5,
     "category": "NEWLYWED",
     "cool": "NEWLYWED TAMAN ALFA INDAH",
-    "leader": "PANCE JONATHAN"
+    "leader": "PANCE JONATHAN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 6,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL BINTARO",
-    "leader": "GIOVANNI MAHARLIAN DAMARA"
+    "leader": "GIOVANNI MAHARLIAN DAMARA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 7,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL BLOK-M",
-    "leader": "SHERLY NOVAGIA KASTANYA"
+    "leader": "SHERLY NOVAGIA KASTANYA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 8,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL GANDARIA CITY 1",
-    "leader": "YUSTINA SORTA"
+    "leader": "YUSTINA SORTA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 9,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL BSD",
-    "leader": "WINA NOVRIYANTI LUMBAN TORUAN"
+    "leader": "WINA NOVRIYANTI LUMBAN TORUAN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 10,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL GANDARIA CITY 3",
-    "leader": "ADINA MARBUN"
+    "leader": "ADINA MARBUN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 11,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL HOMECOMING",
-    "leader": "BRYAN JEFFERSON HADIDJAJA"
+    "leader": "BRYAN JEFFERSON HADIDJAJA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 12,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL LOTTE AVENUE",
-    "leader": "FISELLA MUTIARA AULINA"
+    "leader": "FISELLA MUTIARA AULINA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 13,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL KAIROS",
-    "leader": "MARIA KRISTYANTI"
+    "leader": "MARIA KRISTYANTI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 14,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL PONDOK INDAH",
-    "leader": "BETHARIA DWI PRAMARTI"
+    "leader": "BETHARIA DWI PRAMARTI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 15,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL SENAYAN",
-    "leader": "ERNA WIJAYANTI"
+    "leader": "ERNA WIJAYANTI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 16,
     "category": "PROFESSIONAL",
     "cool": "PROFESSIONAL TANJUNG DUREN",
-    "leader": "TAMMY PATRICK SIDARTAWAN"
+    "leader": "TAMMY PATRICK SIDARTAWAN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 17,
     "category": "UMUM",
     "cool": "UMUM ALFA INDAH",
-    "leader": "LIOE YANTO HARYONO"
+    "leader": "LIOE YANTO HARYONO",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 18,
     "category": "UMUM",
     "cool": "UMUM AMPERA",
-    "leader": "LINA SILALAHI"
+    "leader": "LINA SILALAHI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 19,
     "category": "UMUM",
     "cool": "UMUM BINTARO 1",
-    "leader": "MICHAEL HUTAGALUNG"
+    "leader": "MICHAEL HUTAGALUNG",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 20,
     "category": "UMUM",
     "cool": "UMUM BINTARO 2",
-    "leader": "DANIEL SUNDJAJA"
+    "leader": "DANIEL SUNDJAJA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 21,
     "category": "UMUM",
     "cool": "UMUM BOGOR",
-    "leader": "RICHARD MANGAPUL SINAGA"
+    "leader": "RICHARD MANGAPUL SINAGA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 22,
     "category": "UMUM",
     "cool": "UMUM BSD",
-    "leader": "LUKAS EKLOPAS WENI"
+    "leader": "LUKAS EKLOPAS WENI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 23,
     "category": "UMUM",
     "cool": "UMUM CENDANA",
-    "leader": "WIDIAWATI"
+    "leader": "WIDIAWATI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 24,
     "category": "UMUM",
-    "cool": "UMUM CIBUBUR",
-    "leader": "FREDDY SIRINGORINGO"
+    "cool": "UMUM CBUR",
+    "leader": "FREDDY SIRINGORINGO",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 25,
     "category": "UMUM",
     "cool": "UMUM CIJANTUNG",
-    "leader": "SUMARDO CATUR CAHYONO"
+    "leader": "SUMARDO CATUR CAHYONO",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 26,
     "category": "UMUM",
     "cool": "UMUM CINERE CILANDAK",
-    "leader": "HANKY TANDAYU"
+    "leader": "HANKY TANDAYU",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 27,
     "category": "UMUM",
     "cool": "UMUM CIRENDEU",
-    "leader": "IR. METLYDON H.HUTAURUK"
+    "leader": "IR. METLYDON H.HUTAURUK",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 28,
     "category": "UMUM",
     "cool": "UMUM GANDARIA CITY 1",
-    "leader": "FERDINAND ROBOT"
+    "leader": "FERDINAND ROBOT",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 29,
     "category": "UMUM",
     "cool": "UMUM GANDARIA CITY 2",
-    "leader": "REFNI ULI PATARINA"
+    "leader": "REFNI ULI PATARINA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 30,
     "category": "UMUM",
     "cool": "UMUM GANDARIA CITY 3",
-    "leader": "HOTBEN NAINGGOLAN"
+    "leader": "HOTBEN NAINGGOLAN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 31,
     "category": "UMUM",
     "cool": "UMUM GANDARIA CITY 4",
-    "leader": "SONDANG SILAEN"
+    "leader": "SONDANG SILAEN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 32,
     "category": "UMUM",
     "cool": "UMUM KEBAYORAN LAMA",
-    "leader": "JOHNNY PURBA"
+    "leader": "JOHNNY PURBA",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 33,
     "category": "UMUM",
     "cool": "UMUM KELAPA GADING",
-    "leader": "ADRI FABIANUS"
+    "leader": "ADRI FABIANUS",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 34,
     "category": "UMUM",
     "cool": "UMUM LENTENG AGUNG",
-    "leader": "DOUGLAS J J MACAWALANG"
+    "leader": "DOUGLAS J J MACAWALANG",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 35,
     "category": "UMUM",
     "cool": "UMUM PASAR MINGGU",
-    "leader": "CALEB"
+    "leader": "CALEB",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 36,
     "category": "UMUM",
     "cool": "UMUM PONDOK AREN",
-    "leader": "BUGIE TRIYOGA WISNUMURTI"
+    "leader": "BUGIE TRIYOGA WISNUMURTI",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 37,
     "category": "UMUM",
     "cool": "UMUM PONDOK INDAH",
-    "leader": "FRANS RAHARDIAN"
+    "leader": "FRANS RAHARDIAN",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 38,
     "category": "UMUM",
     "cool": "UMUM PONDOK PINANG",
-    "leader": "EIKO SIHOMBING"
+    "leader": "EIKO SIHOMBING",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 39,
     "category": "UMUM",
     "cool": "UMUM SENTUL",
-    "leader": "JOPHIE WENAS"
+    "leader": "JOPHIE WENAS",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 40,
     "category": "UMUM",
     "cool": "UMUM BOGOR NIRWANA RESIDENCE",
-    "leader": "BILLY YOSAFAT"
+    "leader": "BILLY YOSAFAT",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 41,
     "category": "PASTORAL",
     "cool": "TEAM 21",
-    "leader": "BILLY YOSAFAT"
+    "leader": "BILLY YOSAFAT",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 42,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 7 Male",
-    "leader": "Ethan Matthew Yosafat, Yehuda Anthony"
+    "leader": "Ethan Matthew Yosafat, Yehuda Anthony",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 43,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 7 Female",
-    "leader": "Darlene Pesulima"
+    "leader": "Darlene Pesulima",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 44,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 8 Male",
-    "leader": "Jason Anthony, Joshua Hanityo"
+    "leader": "Jason Anthony, Joshua Hanityo",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 45,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 8 Female",
-    "leader": "Olivia Deborah"
+    "leader": "Olivia Deborah",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 46,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 9 Male",
-    "leader": "Charis Isaachar"
+    "leader": "Charis Isaachar",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 47,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 9 Female",
-    "leader": "Donatella Lengkong"
+    "leader": "Donatella Lengkong",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 48,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 10 & 11 Male",
-    "leader": "Bryan Jonathan"
+    "leader": "Bryan Jonathan",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 49,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 10 Female",
-    "leader": "Fellicya Jennifer"
+    "leader": "Fellicya Jennifer",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 50,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 11 Female",
-    "leader": "Calista Abigail"
+    "leader": "Calista Abigail",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 51,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 12 Male",
-    "leader": "Rian Laoh"
+    "leader": "Rian Laoh",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 52,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 12 Female",
-    "leader": "Manassah Laoh"
+    "leader": "Manassah Laoh",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 53,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Ari & Mima",
-    "leader": "Ari, Mima"
+    "leader": "Ari, Mima",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 54,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Reydia & Valerie",
-    "leader": "Reydia, Valerie"
+    "leader": "Reydia, Valerie",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 55,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Anjani",
-    "leader": "Anjani"
+    "leader": "Anjani",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 56,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Rian & Paskah",
-    "leader": "Rian, Paskah"
+    "leader": "Rian, Paskah",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 57,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Wilson & Sharon",
-    "leader": "Wilson, Sharon"
+    "leader": "Wilson, Sharon",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 58,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Edwin & Fibi",
-    "leader": "Edwin, Fibi"
+    "leader": "Edwin, Fibi",
+    "campus": "GC JAKARTA"
   },
   {
     "no": 59,
     "category": "HUDDLE COLLEGE",
     "cool": "Huddle Kevin & Cindy",
-    "leader": "Kevin, Cindy"
+    "leader": "Kevin, Cindy",
+    "campus": "GC JAKARTA"
+  },
+  {
+    "no": 60,
+    "category": "COOL",
+    "cool": "Cool Senior",
+    "leader": "Wellem March Paulus",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 61,
+    "category": "COOL",
+    "cool": "Cool Wanita Bijak",
+    "leader": " Sandra Pangemanan",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 62,
+    "category": "COOL",
+    "cool": "Cool Satu Atap",
+    "leader": " Anton Ardhi Purboyo",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 63,
+    "category": "COOL",
+    "cool": "Cool Bintara",
+    "leader": " Veronika Coryna",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 64,
+    "category": "COOL",
+    "cool": "Cool Tomodachie",
+    "leader": " Randy Nataniel",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 65,
+    "category": "COOL",
+    "cool": "Cool Delight",
+    "leader": " Andrea Patrick Panggabean",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 66,
+    "category": "COOL",
+    "cool": "Cool ladies 1",
+    "leader": " Natasya Christy",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 67,
+    "category": "COOL",
+    "cool": "Cool Ladies 2",
+    "leader": "Chelsea Priscillya",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 68,
+    "category": "COOL",
+    "cool": "Cool Winner",
+    "leader": "Sri Yuliani",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 69,
+    "category": "COOL",
+    "cool": "Cool Extra",
+    "leader": "Yosef Aryadi",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 70,
+    "category": "COOL",
+    "cool": "Cool Unstopable",
+    "leader": "Lisia Apriany",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 71,
+    "category": "COOL",
+    "cool": "Cool Miracle",
+    "leader": "Leonardus Tommy",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 72,
+    "category": "COOL",
+    "cool": "Cool East",
+    "leader": "Sandy",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 73,
+    "category": "COOL",
+    "cool": "Cool SouthEast",
+    "leader": "Christian Hehanusa",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 74,
+    "category": "COOL",
+    "cool": "Cool NorthEast",
+    "leader": "Hans Franklin",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 75,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle 1",
+    "leader": "Joshua Kevin",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 76,
+    "category": "HUDDLE COLLEGE",
+    "cool": "Huddle 2",
+    "leader": "Odiska Napitu",
+    "campus": "GC BEKASI"
   }
 ]

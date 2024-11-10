@@ -509,7 +509,11 @@ export default function Register() {
                                       {item.cool.toUpperCase()}
                                     </span>
                                     <span className="text-sm text-gray-500">
-                                      Leader(s) : {item.leader.toUpperCase()}
+                                      Leader(s): {item.leader.toUpperCase()}
+                                    </span>
+                                    {/* Display campus in smaller font below the leader */}
+                                    <span className="text-xs text-gray-400">
+                                      {item.campus.trim()}
                                     </span>
                                   </div>
                                 </CommandItem>
