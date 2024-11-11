@@ -526,13 +526,20 @@
   },
   {
     "no": 76,
+    "category": "PROFESSIONAL",
+    "cool": "Cool Putri Sion",
+    "leader": "Naftali Rebecca",
+    "campus": "GC BEKASI"
+  },
+  {
+    "no": 77,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 1",
     "leader": "Joshua Kevin",
     "campus": "GC BEKASI"
   },
   {
-    "no": 77,
+    "no": 78,
     "category": "HUDDLE YOUTH",
     "cool": "Huddle 2",
     "leader": "Odiska Napitu",
