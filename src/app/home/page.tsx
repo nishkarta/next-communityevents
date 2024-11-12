@@ -176,7 +176,7 @@ const Home = () => {
                         This is your Homebase QR Code. Use this for scanning
                         during Homebase events.
                       </span>
-                      <Button onClick={handleManualVerify}>Verify</Button>
+                      {/* <Button onClick={handleManualVerify}>Verify</Button> */}
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
