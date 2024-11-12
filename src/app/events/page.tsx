@@ -152,6 +152,8 @@ const EventsPage = () => {
                         <Button onClick={() => handleSession(event.code)}>
                           Register Now!
                         </Button>
+                      ) : event.status === "walkin" ? (
+                        <Button disabled>Walk-in : Register On Site</Button>
                       ) : (
                         <Button disabled>Registration Closed</Button>
                       )}
