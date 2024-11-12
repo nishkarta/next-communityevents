@@ -112,6 +112,11 @@ const Home = () => {
       console.error("Error:", error);
       // Rollback optimistic update in case of error
     }
+    console.log(
+      userData.accountNumber + "+" + userData.email
+        ? userData.email
+        : userData.phoneNumber + "+" + userData.name
+    );
   };
   return (
     <>
@@ -153,10 +158,11 @@ const Home = () => {
                     <div className="flex justify-center">
                       <SVG
                         text={
-                          userData.accountNumber + "+" + userData.email
-                            ? userData.email
-                            : userData.phoneNumber + "+" + userData.name
-                          // ? userData.kkj + userData.accountNumber
+                          userData.accountNumber +
+                          "+" +
+                          userData.email +
+                          "+" +
+                          userData.name // ? userData.kkj + userData.accountNumber
                           // : userData.accountNumber
                         }
                         options={{
@@ -177,6 +183,11 @@ const Home = () => {
                       <span className="text-sm font-light">
                         This is your Homebase QR Code. Use this for scanning
                         during Homebase events.
+                        {userData.accountNumber +
+                          "+" +
+                          userData.email +
+                          "+" +
+                          userData.name}
                       </span>
                       {/* <Button onClick={handleManualVerify}>Verify</Button> */}
                     </DialogFooter>

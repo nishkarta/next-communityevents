@@ -42,6 +42,7 @@ const QRScan: React.FC = () => {
     setLoading(true);
     setError(false); // Reset error state
     const splitData = qrCode.split("+");
+    console.log(splitData);
 
     try {
       // const response = await fetch(
