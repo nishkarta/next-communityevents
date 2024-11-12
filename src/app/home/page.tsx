@@ -153,7 +153,11 @@ const Home = () => {
                     <div className="flex justify-center">
                       <SVG
                         text={
-                          userData.accountNumber
+                          userData.accountNumber +
+                          "+" +
+                          userData.identifier +
+                          "+" +
+                          userData.name
                           // ? userData.kkj + userData.accountNumber
                           // : userData.accountNumber
                         }

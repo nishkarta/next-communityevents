@@ -41,6 +41,7 @@ const QRScan: React.FC = () => {
     lastSubmittedQRCode.current = qrCode;
     setLoading(true);
     setError(false); // Reset error state
+    const splitData = qrCode.split("+");
 
     try {
       // const response = await fetch(
@@ -68,9 +69,9 @@ const QRScan: React.FC = () => {
             Authorization: `Bearer ${userData.token}`,
           },
           body: JSON.stringify({
-            name: userData.name,
-            identifier: userData.email ? userData.email : userData.phoneNumber,
-            accountNumber: qrCode,
+            name: splitData[2],
+            identifier: splitData[1],
+            accountNumber: splitData[0],
             eventCode: "HB-001",
             sessionCode: "HB-001-01",
             otherRegister: [],
@@ -164,7 +165,7 @@ const QRScan: React.FC = () => {
                 <div className="bg-green-100 p-4 rounded-md">
                   <h3 className="font-semibold text-xl">Scan Successful!</h3>
                   <p>Name: {registeredResponse.name}</p>
-                  <p>Registered By: {registeredResponse.registeredBy}</p>
+                  <p>Registered By: {registeredResponse.identifier}</p>
                   <p>Status: {registeredResponse.status}</p>
                 </div>
               ) : (
