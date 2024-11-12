@@ -232,12 +232,6 @@ function EventsAdmin() {
                 </Card>
               </TabsContent>
             </Tabs>
-            {/* HARDCODED QR SCANNER FOR TESTING */}
-            <Button className="w-1/5 mx-auto">
-              <Link href={`/qrscan/HB-001/HB-001-01`}>
-                QR Scanner (Hardware)
-              </Link>
-            </Button>
           </main>
         </div>
       </div>
