@@ -43,18 +43,37 @@ const QRScan: React.FC = () => {
     setError(false); // Reset error state
 
     try {
+      // const response = await fetch(
+      //   `${API_BASE_URL}/api/v1/internal/events/registrations/${qrCode}`,
+      //   {
+      //     method: "PATCH",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${userData?.token}`,
+      //       "X-API-Key": API_KEY || "",
+      //     },
+      //     body: JSON.stringify({
+      //       sessionCode: sessionCode,
+      //       status: "active",
+      //     }),
+      //   }
+      // );
       const response = await fetch(
-        `${API_BASE_URL}/api/v1/internal/events/registrations/${qrCode}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/homebase`,
         {
-          method: "PATCH",
+          method: "POST",
           headers: {
+            "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${userData?.token}`,
-            "X-API-Key": API_KEY || "",
+            Authorization: `Bearer ${userData.token}`,
           },
           body: JSON.stringify({
-            sessionCode: sessionCode,
-            status: "active",
+            name: userData.name,
+            identifier: userData.email ? userData.email : userData.phoneNumber,
+            accountNumber: qrCode,
+            eventCode: "HB-001",
+            sessionCode: "HB-001-01",
+            otherRegister: [],
           }),
         }
       );

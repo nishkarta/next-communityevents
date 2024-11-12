@@ -79,6 +79,40 @@ const Home = () => {
     fetchRegistrations();
   }, []);
   const { SVG } = useQRCode();
+
+  const handleManualVerify = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/homebase`,
+        {
+          method: "POST",
+          headers: {
+            "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            name: userData.name,
+            identifier: userData.email ? userData.email : userData.phoneNumber,
+            accountNumber: userData.accountNumber,
+            eventCode: "HB-001",
+            sessionCode: "HB-001-01",
+            otherRegister: [],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      const registrantName = responseData.name || "Registrant";
+      alert(`Verification successful for ${registrantName}`);
+    } catch (error) {
+      console.error("Error:", error);
+      // Rollback optimistic update in case of error
+    }
+  };
   return (
     <>
       <main className="h-max min-w-full overflow-auto">
@@ -119,9 +153,9 @@ const Home = () => {
                     <div className="flex justify-center">
                       <SVG
                         text={
-                          userData.kkj
-                            ? userData.kkj + userData.accountNumber
-                            : userData.accountNumber
+                          userData.accountNumber
+                          // ? userData.kkj + userData.accountNumber
+                          // : userData.accountNumber
                         }
                         options={{
                           type: "image/jpeg",
@@ -142,6 +176,7 @@ const Home = () => {
                         This is your Homebase QR Code. Use this for scanning
                         during Homebase events.
                       </span>
+                      <Button onClick={handleManualVerify}>Verify</Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>

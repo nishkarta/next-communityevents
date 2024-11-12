@@ -6,6 +6,7 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { Event } from "@/lib/types/event";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -181,13 +182,16 @@ function EventsAdmin() {
                                   ).toLocaleString()}
                                 </TableCell>
                                 <TableCell>
-                                  {event.status === "active" && (
-                                    <Button
-                                      onClick={() => handleSession(event.code)}
-                                    >
-                                      View
-                                    </Button>
-                                  )}
+                                  {event.status === "active" ||
+                                    (event.status === "walkin" && (
+                                      <Button
+                                        onClick={() =>
+                                          handleSession(event.code)
+                                        }
+                                      >
+                                        View
+                                      </Button>
+                                    ))}
                                 </TableCell>
                               </TableRow>
                             ))}
@@ -228,6 +232,12 @@ function EventsAdmin() {
                 </Card>
               </TabsContent>
             </Tabs>
+            {/* HARDCODED QR SCANNER FOR TESTING */}
+            <Button className="w-1/5 mx-auto">
+              <Link href={`/qrscan/HB-001/HB-001-01`}>
+                QR Scanner (Hardware)
+              </Link>
+            </Button>
           </main>
         </div>
       </div>

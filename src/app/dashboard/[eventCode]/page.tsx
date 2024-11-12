@@ -392,16 +392,17 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                 {selectedSessionName || "None"}
               </CardTitle>
             </CardHeader>
-            {scannerValid && (
+            {scannerValid ||
+            (true && (
               <CardFooter className="mt-5">Scanner disabled!</CardFooter>
-            ) ? (
+            )) ? (
               <>
                 <CardFooter className="mt-5">
                   {/* <VerifyTicketDialog
 									sessionCode={selectedSession || ""}
 									sessionName={selectedSessionName || ""}
 								/> */}{" "}
-                  <Button>
+                  <Button className="w-fit">
                     <Link
                       href={`/qrscan/${params.eventCode}/${selectedSession}`}
                     >

@@ -23,7 +23,7 @@ const VerifyTicketDialog = ({
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="w-36 h-10">QR Scanner (Camera)</Button>
+          <Button className="w-FIT h-10">QR Scanner (Camera)</Button>
         </DialogTrigger>
         <DialogContent className="w-full max-w-lg md:max-w-xl mx-auto my-auto flex flex-col justify-center items-center">
           <DialogHeader>
