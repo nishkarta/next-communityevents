@@ -28,6 +28,7 @@ function QrCodeScanner({ sessionCode }: { sessionCode: string }) {
   const handleScan = async (result: IDetectedBarcode[]) => {
     if (result && result.length > 0) {
       const uuid = result[0]?.rawValue;
+      const splitData = uuid.split("+");
 
       try {
         setLoading(true);
@@ -56,11 +57,9 @@ function QrCodeScanner({ sessionCode }: { sessionCode: string }) {
               Authorization: `Bearer ${userData.token}`,
             },
             body: JSON.stringify({
-              name: userData.name,
-              identifier: userData.email
-                ? userData.email
-                : userData.phoneNumber,
-              accountNumber: uuid,
+              name: splitData[2],
+              identifier: splitData[1],
+              accountNumber: splitData[0],
               eventCode: "HB-001",
               sessionCode: "HB-001-01",
               otherRegister: [],
