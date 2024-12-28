@@ -402,13 +402,21 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
 									sessionCode={selectedSession || ""}
 									sessionName={selectedSessionName || ""}
 								/> */}{" "}
-                  <Button className="w-fit">
-                    <Link
-                      href={`/qrscan/${params.eventCode}/${selectedSession}`}
-                    >
-                      QR Scanner (Hardware)
-                    </Link>
-                  </Button>
+                  {selectedSession ? (
+                    <Button>
+                      <Link
+                        href={`/qrscan/${params.eventCode}/${selectedSession}`}
+                      >
+                        QR Scanner (Hardware)
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button>
+                      <span className="text-gray-500 cursor-not-allowed">
+                        QR Scanner (Hardware)
+                      </span>
+                    </Button>
+                  )}
                 </CardFooter>
               </>
             ) : (

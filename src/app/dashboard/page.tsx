@@ -182,16 +182,14 @@ function EventsAdmin() {
                                   ).toLocaleString()}
                                 </TableCell>
                                 <TableCell>
-                                  {event.status === "active" ||
-                                    (event.status === "walkin" && (
-                                      <Button
-                                        onClick={() =>
-                                          handleSession(event.code)
-                                        }
-                                      >
-                                        View
-                                      </Button>
-                                    ))}
+                                  {(event.status === "active" ||
+                                    event.status === "walkin") && (
+                                    <Button
+                                      onClick={() => handleSession(event.code)}
+                                    >
+                                      View
+                                    </Button>
+                                  )}
                                 </TableCell>
                               </TableRow>
                             ))}

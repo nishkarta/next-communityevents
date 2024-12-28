@@ -143,60 +143,6 @@ const Home = () => {
           </span>
 
           <div className="flex flex-row gap-x-8">
-            {userData.role === "worker" || userData.role === "admin" ? (
-              <>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <QrCode></QrCode>
-                  </DialogTrigger>
-                  <DialogContent aria-describedby="Homebase QR Code">
-                    <DialogHeader>
-                      <span className="text-xl font-bold"></span>Your Homebase
-                      Ticket
-                    </DialogHeader>
-
-                    <div className="flex justify-center">
-                      <SVG
-                        text={
-                          userData.accountNumber +
-                          "+" +
-                          userData.email +
-                          "+" +
-                          userData.name // ? userData.kkj + userData.accountNumber
-                          // : userData.accountNumber
-                        }
-                        options={{
-                          type: "image/jpeg",
-                          quality: 0.8,
-                          errorCorrectionLevel: "M",
-                          margin: 3,
-                          scale: 10,
-                          width: 250, // Larger width for display
-                          color: {
-                            dark: "#573d66",
-                            light: "#FFFFFF",
-                          },
-                        }}
-                      />
-                    </div>
-                    <DialogFooter>
-                      <span className="text-sm font-light">
-                        This is your Homebase QR Code. Use this for scanning
-                        during Homebase events.
-                        {userData.accountNumber +
-                          "+" +
-                          userData.email +
-                          "+" +
-                          userData.name}
-                      </span>
-                      {/* <Button onClick={handleManualVerify}>Verify</Button> */}
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </>
-            ) : (
-              <></>
-            )}
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
@@ -251,30 +197,35 @@ const Home = () => {
               iconName="fi fi-tr-calendar-star"
               name="Events"
               iconColor="text-sky-500"
+              openInNewTab={false}
             />
             <IconButton
               href="https://docs.google.com/forms/d/e/1FAIpQLSeoI9uokd3sBj6GsJL69348EGxh8x5bE8Ozw4cm-C8iR253zg/viewform?usp=sf_link"
               iconName="fi fi-tr-praying-hands"
               name="Prayer and Grateful Form"
               iconColor="text-amber-600"
+              openInNewTab={true}
             />
             <IconButton
               href="https://growcommunity.church/index.php/give/"
               iconName="fi fi-tr-hands-heart"
               name="Giving"
               iconColor="text-rose-400"
+              openInNewTab={true}
             />
             <IconButton
               href="https://www.youtube.com/c/GrowCenterChurch"
               iconName="fi fi-brands-youtube"
               name="Sermons"
               iconColor="text-red-600"
+              openInNewTab={true}
             />
             <IconButton
               href="https://open.spotify.com/show/3Uawgjvfdw3KnHTlrl5GLJ?si=890c04f909654e1c&nd=1&dlsi=e04e2d46b9084aa5"
               iconName="fi fi-brands-spotify"
               name="Grow in Words"
               iconColor="text-green-500"
+              openInNewTab={true}
             />
 
             {userData.role === "admin" ? (
