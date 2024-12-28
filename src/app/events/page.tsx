@@ -24,7 +24,8 @@ import { formatDate } from "@/lib/utils";
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
   const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
-  const EVENT_EXAMPLE_IMAGE_URL = "https://i.imgur.com/PrlED7v.jpeg";
+  const EVENT_EXAMPLE_IMAGE_URL =
+    "https://utfs.io/f/OiRxrZt1JqQ4CQoHxw3RfX59ZPjs6OUdGVqBiH0rFAY34Ltm";
   const router = useRouter();
   const { isAuthenticated, handleExpiredToken } = useAuth();
   const userData = isAuthenticated
@@ -97,12 +98,12 @@ const EventsPage = () => {
               <Card key={event.id} className="rounded-xl mb-4">
                 <div className="flex flex-col md:flex-row">
                   {/* Left Half / Top Half: Image */}
-                  <div className=" mt-8 relative md:w-full h-60 md:h-96 overflow-hidden">
+                  <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
                     <Image
-                      src={EVENT_EXAMPLE_IMAGE_URL} // Use event's image or default
+                      src={EVENT_EXAMPLE_IMAGE_URL}
                       alt="Event Image"
                       layout="fill"
-                      className="object-contain rounded-xl"
+                      className="object-cover"
                       priority
                     />
                   </div>

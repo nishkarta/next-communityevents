@@ -194,7 +194,7 @@ const EventRegistration = () => {
                 <CardHeader>
                   <CardTitle>Identifier</CardTitle>
                   <CardDescription>
-                    Please fill with your email address or phone number.
+                    You can change with another email address or phone number.
                     <br /> Phone number format : 087800001234
                   </CardDescription>
                 </CardHeader>
@@ -240,7 +240,7 @@ const EventRegistration = () => {
                   <CardContent>
                     <div className="mb-6">
                       <label htmlFor={`name-${index}`} className="block mb-1">
-                        Full Name
+                        Full Name*
                       </label>
                       <Input
                         type="text"
@@ -254,7 +254,9 @@ const EventRegistration = () => {
                       />
                     </div>
                   </CardContent>
-                  <CardFooter></CardFooter>
+                  <CardFooter>
+                    <span className="text-sm"></span>
+                  </CardFooter>
                 </Card>
               ))}
             </form>

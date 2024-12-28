@@ -278,7 +278,7 @@ export default function Register() {
           />
 
           {/* Worker Checkbox */}
-          <FormItem className="my-5">
+          <FormItem className="my-5 hidden">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="isWorker"
