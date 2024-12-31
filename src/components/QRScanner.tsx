@@ -32,37 +32,18 @@ function QrCodeScanner({ sessionCode }: { sessionCode: string }) {
 
       try {
         setLoading(true);
-        // const response = await fetch(
-        //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/internal/events/registrations/${uuid}`,
-        //   {
-        //     method: "PATCH",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //       Authorization: `Bearer ${userData.token}`,
-        //       "X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "",
-        //     },
-        //     body: JSON.stringify({
-        //       sessionCode: sessionCode,
-        //       status: "active",
-        //     }),
-        //   }
-        // );
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/homebase`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/internal/events/registrations/${uuid}`,
           {
-            method: "POST",
+            method: "PATCH",
             headers: {
-              "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
               "Content-Type": "application/json",
               Authorization: `Bearer ${userData.token}`,
+              "X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "",
             },
             body: JSON.stringify({
-              name: splitData[2],
-              identifier: splitData[1],
-              accountNumber: splitData[0],
-              eventCode: "HB-001",
-              sessionCode: "HB-001-01",
-              otherRegister: [],
+              sessionCode: sessionCode,
+              status: "active",
             }),
           }
         );
