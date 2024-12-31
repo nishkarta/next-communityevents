@@ -29,12 +29,41 @@ import {
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Announcement from "@/components/Announcement";
 
 const Home = () => {
   const router = useRouter();
   const IMAGE_URL =
     "https://images.unsplash.com/photo-1555817128-342e1c8b3101?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   const { isAuthenticated, logout, handleExpiredToken } = useAuth();
+
+  const [isAnnouncementVisible, setIsAnnouncementVisible] = useState(false);
+
+  useEffect(() => {
+    const hasSeenAnnouncement = localStorage.getItem("hasSeenAnnouncement");
+    const timestamp = localStorage.getItem("announcementTimestamp");
+
+    // Show announcement if user hasn't seen it or timestamp expired (more than 3 hours)
+    if (
+      !hasSeenAnnouncement ||
+      !timestamp ||
+      Date.now() - parseInt(timestamp) > 3 * 60 * 60 * 1000
+    ) {
+      setIsAnnouncementVisible(true);
+      localStorage.setItem("hasSeenAnnouncement", "true");
+      localStorage.setItem("announcementTimestamp", Date.now().toString());
+    }
+  }, []);
+
+  // Programmatic trigger for announcement
+  const showAnnouncement = () => {
+    setIsAnnouncementVisible(true);
+  };
+
+  const hideAnnouncement = () => {
+    setIsAnnouncementVisible(false);
+  };
+
   const handleLogout = () => {
     logout();
     router.push("/");
@@ -143,6 +172,31 @@ const Home = () => {
           </span>
 
           <div className="flex flex-row gap-x-8">
+            {/* Button to Trigger Announcement Programmatically */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <div className="relative inline-block cursor-pointer">
+                  <i className="fi fi-rs-file-invoice text-2xl mt-1"></i>
+                  <Badge className="absolute -top-2 right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none hover:bg-red-600 text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
+                    {1}
+                  </Badge>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="flex flex-col gap-2 text-center">
+                  <p>
+                    You currently have{" "}
+                    <span className="font-bold text-lg">1</span> announcement!
+                  </p>
+                  <Button
+                    onClick={showAnnouncement}
+                    className="bg-red-600 mt-1"
+                  >
+                    Informasi Event Tahun Baru
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
@@ -190,6 +244,15 @@ const Home = () => {
           </div>
         </div>
         {/* Dashboard Icons */}
+
+        {/* Announcement Component */}
+        <Announcement
+          title="Informasi Event Tahun Baru"
+          message="We're excited to have you here. Check out the latest features and upcoming events!"
+          isVisible={isAnnouncementVisible}
+          onClose={hideAnnouncement}
+        />
+
         <div className="mt-8 flex justify-center">
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-auto-fill-md lg:grid-cols-auto-fill-lg gap-3 md:gap-6 p-3 justify-items-center w-full">
             <IconButton
