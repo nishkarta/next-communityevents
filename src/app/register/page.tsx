@@ -148,7 +148,7 @@ export default function Register() {
       phoneNumber: data.phoneNumber,
       email: data.email,
       password: data.password,
-      userTypes: isWorker ? ["worker"] : ["user"],
+      userTypes: isWorker ? ["volunteer"] : ["user"],
       campusCode: data.campus,
       placeOfBirth: data.placeOfBirth, // Add place of birth field if available
       dateOfBirth: formattedDOB, // Add date of birth field if available
