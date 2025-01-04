@@ -1,5 +1,5 @@
 [
   { "id": 1, "homebase": "GC Jakarta", "code": "JKT" },
-  { "id": 2, "homebase": "GC Bekasi", "code": "JKT" },
-  { "id": 3, "homebase": "GC Manado", "code": "JKT" }
+  { "id": 2, "homebase": "GC Bekasi", "code": "BKS" },
+  { "id": 3, "homebase": "GC Manado", "code": "MDO" }
 ]

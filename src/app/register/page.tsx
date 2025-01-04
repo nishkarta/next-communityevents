@@ -93,6 +93,7 @@ export default function Register() {
   const [selectedDepartment, setSelectedDepartment] = useState("");
   const [selectedCool, setSelectedCool] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedHomebase, setSelectedHomebase] = useState("");
 
   // Dynamically set the form schema based on the isWorker checkbox state
   const formSchema = isWorker
@@ -615,7 +616,7 @@ export default function Register() {
                           variant="outline"
                           className="w-[200px] justify-between"
                         >
-                          {field.value || "Select your homebase"}
+                          {selectedHomebase || "Select your homebase"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -627,6 +628,7 @@ export default function Register() {
                                 <CommandItem
                                   onSelect={() => {
                                     field.onChange(item.code.toUpperCase());
+                                    setSelectedHomebase(item.homebase);
                                     setOpenHomebaseBox(false);
                                   }}
                                 >
