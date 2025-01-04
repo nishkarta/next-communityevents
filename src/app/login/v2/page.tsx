@@ -132,15 +132,22 @@ const LoginV2 = () => {
                     </div>
                     {!userExists && (
                       <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="identifier">Identifier</Label>
+
                         <Input
-                          id="email"
-                          type="email"
-                          placeholder="m@example.com"
+                          id="identifier"
+                          type="text"
+                          placeholder="Enter your email or phone number"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
                         />
+                        <Label
+                          htmlFor="identifier"
+                          className="text-sm text-muted-foreground"
+                        >
+                          Phone Number format: 0812345678
+                        </Label>
                       </div>
                     )}
 
@@ -160,6 +167,13 @@ const LoginV2 = () => {
                     <Button type="submit" className="w-full" disabled={loading}>
                       {loading ? "Loading..." : userExists ? "Login" : "Next"}
                     </Button>
+                    <div className="flex justify-between text-sm"></div>
+                    <Link
+                      href="/forget"
+                      className="text-primary text-center text-sm hover:underline"
+                    >
+                      Forgot Password?
+                    </Link>
                   </div>
                 </form>
                 <div className="relative hidden bg-muted md:block">

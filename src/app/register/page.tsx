@@ -182,7 +182,7 @@ export default function Register() {
         });
 
         setTimeout(() => {
-          router.push("/login");
+          router.push("/login/v2");
         }, 1000);
       } else {
         const errorResult = await response.json();

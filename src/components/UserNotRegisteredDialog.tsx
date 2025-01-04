@@ -31,11 +31,8 @@ export const UserNotRegisteredDialog: React.FC<
           >
             Sign Up
           </Button>
-          <Button
-            onClick={() => router.push("/")}
-            className="w-full sm:w-auto btn-secondary"
-          >
-            Back to Home
+          <Button onClick={onClose} className="w-full sm:w-auto btn-secondary">
+            Back
           </Button>
         </DialogFooter>
       </DialogContent>
