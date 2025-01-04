@@ -108,6 +108,7 @@ const Home = () => {
     fetchRegistrations();
   }, []);
   const { SVG } = useQRCode();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // State for the selected image
 
   const handleManualVerify = async () => {
     try {
@@ -168,7 +169,7 @@ const Home = () => {
         </div>
         <div className="flex flex-row bg-white  p-8 justify-between items-center">
           <span className="text-black text-base font-bold">
-            Hi, {userData?.name}!
+            Hi, {userData?.name} !
           </span>
 
           <div className="flex flex-row gap-x-8">
@@ -221,6 +222,57 @@ const Home = () => {
                 </div>
               </PopoverContent>
             </Popover>
+            {/* QR Code Dialog */}
+            {userData?.userTypes[0] == "volunteer" && (
+              <>
+                {" "}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <div
+                      onClick={() => setSelectedImage(userData?.communityId)}
+                      className="relative inline-block cursor-pointer"
+                    >
+                      <i className="fi fi-rs-qrcode text-2xl mt-1"></i>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Dialog>
+                      <DialogHeader>
+                        <div className="flex flex-col items-center">
+                          <b>{userData?.name}</b>
+                          <span>{userData?.email}</span>
+                        </div>
+                      </DialogHeader>
+                      {selectedImage && (
+                        <div className="flex justify-center">
+                          <SVG
+                            text={selectedImage}
+                            options={{
+                              type: "image/jpeg",
+                              quality: 0.8,
+                              errorCorrectionLevel: "M",
+                              margin: 3,
+                              scale: 10,
+                              width: 200, // Larger width for display
+                              color: {
+                                dark: "#000000",
+                                light: "#FFFFFF",
+                              },
+                            }}
+                          />
+                        </div>
+                      )}
+                      <DialogFooter>
+                        <span className="text-xs text-gray-500 mx-auto text-center">
+                          This is your homebase QR Code! Use it to enter
+                          homebase events. {selectedImage}
+                        </span>
+                      </DialogFooter>
+                    </Dialog>
+                  </PopoverContent>
+                </Popover>
+              </>
+            )}
           </div>
         </div>
         {/* Hero Banner */}
