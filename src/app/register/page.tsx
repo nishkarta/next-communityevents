@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, ChevronLeft, Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -39,12 +39,22 @@ import { ChevronsUpDown } from "lucide-react";
 import coolDatasets from "../../lib/datasets/cool_dataset.json";
 import departmentDatasets from "../../lib/datasets/departments_dataset.json";
 import homebaseDatasets from "../../lib/datasets/homebase_dataset.json";
+import categoryDatasets from "../../lib/datasets/cool_categories_dataset.json";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+
+interface CategoryMap {
+  [key: string]: string;
+}
 
 // Base form schema for general user fields
 const baseFormSchema = z.object({
   name: z.string().min(2, { message: "Input your proper full name." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phoneNumber: z.string().min(8, { message: "Invalid phone number" }),
+  placeOfBirth: z.string(),
+  dateOfBirth: z.date(),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters." }),
@@ -53,12 +63,13 @@ const baseFormSchema = z.object({
 // Worker-specific schema
 const workerFormSchema = z.object({
   gender: z.enum(["Male", "Female"], { message: "Field required!" }),
-  maritalStatus: z.enum(["Single", "Married", "Divorced", "Widowed"], {
+  maritalStatus: z.enum(["single", "married", "others"], {
     message: "Field required!",
   }),
   department: z.string().min(1, { message: "Field required!" }),
-  cool: z.string().min(1, { message: "Field required!" }),
+  cool: z.number(),
   campus: z.string().min(1, { message: "Field required!" }),
+
   kkj: z.string().optional(),
   kom: z.boolean(),
   baptis: z.boolean(),
@@ -79,8 +90,11 @@ export default function Register() {
   const [openDepartmentBox, setOpenDepartmentBox] = useState(false);
   const [openCoolBox, setOpenCoolBox] = useState(false);
   const [openHomebaseBox, setOpenHomebaseBox] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCool, setSelectedCool] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Dynamically set the form schema based on the `isWorker` checkbox state
+  // Dynamically set the form schema based on the isWorker checkbox state
   const formSchema = isWorker
     ? baseFormSchema.merge(workerFormSchema) // Merge schemas if worker is selected
     : baseFormSchema; // Use only base schema if not a worker
@@ -96,13 +110,24 @@ export default function Register() {
       gender: undefined,
       maritalStatus: undefined,
       department: "",
-      cool: "",
+      cool: undefined,
       campus: "",
       kkj: "",
+      placeOfBirth: undefined,
       kom: false,
       baptis: false,
     },
   });
+
+  const categoryMap: CategoryMap = categoryDatasets.reduce((map, category) => {
+    map[category.name.toUpperCase()] = category.code;
+    return map;
+  }, {} as CategoryMap);
+
+  // Function to get the category code
+  function getCategoryCode(categoryName: string): string | null {
+    return categoryMap[categoryName.toUpperCase()] || null;
+  }
 
   // Handle form submission
   async function onSubmit(data: FormValues) {
@@ -113,38 +138,44 @@ export default function Register() {
       .replace(/\s+/g, "")
       .replace("+62", "0");
 
+    const formattedDOB = data.dateOfBirth
+      ? format(new Date(data.dateOfBirth), "yyyy-MM-dd")
+      : null;
+
+    const requestBody = {
+      name: data.name.trim(),
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      password: data.password,
+      userTypes: isWorker ? ["worker"] : ["user"],
+      campusCode: data.campus,
+      placeOfBirth: data.placeOfBirth, // Add place of birth field if available
+      dateOfBirth: formattedDOB, // Add date of birth field if available
+      address: "",
+      gender: data.gender?.toLowerCase() || "",
+      department_code: data.department || "",
+      kkjNumber: data.kkj || "",
+      jemaatId: "", // Add jemaatId field if available
+      isKom100: data.kom,
+      isBaptized: data.baptis,
+      maritalStatus: data.maritalStatus?.toLowerCase() || "",
+      coolID: data.cool,
+    };
+
     try {
-      let response;
-      // Handle worker registration separately
-      if (isWorker) {
-        const workerData = { ...data };
-        response = await fetch(
-          `${API_BASE_URL}/api/v1/event/user/register-worker`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-API-Key": API_KEY || "",
-            },
-            body: JSON.stringify(workerData),
-          }
-        );
-      } else {
-        // Regular user registration API call
-        response = await fetch(`${API_BASE_URL}/api/v1/event/user/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-API-Key": API_KEY || "",
-          },
-          body: JSON.stringify(data),
-        });
-      }
+      const response = await fetch(`${API_BASE_URL}/api/v2/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY || "",
+        },
+        body: JSON.stringify(requestBody),
+      });
 
       if (response.ok) {
         toast({
           title: "Sign up Successful!",
-          description: `Redirecting to the log in page...`,
+          description: "Redirecting to the log in page...",
           className: "bg-green-400",
           duration: 1500,
         });
@@ -157,14 +188,15 @@ export default function Register() {
         if (errorResult.status === "ALREADY_EXISTS") {
           toast({
             title: "Register Failed!",
-            description: `Error : User with your email/phone number already exists. Please log in!`,
+            description:
+              "Error: User with your email/phone number already exists. Please log in!",
             className: "bg-red-400",
             duration: 3000,
           });
         } else {
           toast({
             title: "Register Failed!",
-            description: `Error : ${errorResult.message}`,
+            description: `Error: ${errorResult.message}`,
             className: "bg-red-400",
             duration: 3000,
           });
@@ -247,6 +279,51 @@ export default function Register() {
           />
           <FormField
             control={form.control}
+            name="placeOfBirth"
+            render={({ field }) => (
+              <FormItem className="my-5">
+                <FormLabel>Place of Birth</FormLabel>
+                <FormControl>
+                  <Input
+                    className="w-[250px] justify-between"
+                    {...field}
+                    placeholder="Enter your birthplace"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dateOfBirth"
+            render={({ field }) => (
+              <FormItem className="my-5 flex flex-col">
+                <FormLabel>Date of Birth</FormLabel>
+                <FormControl>
+                  <Controller
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <DatePicker
+                        className="border p-2 rounded shadow-md focus-visible:ring-primary-light mt-3 "
+                        selected={field.value}
+                        onChange={(date: any) => field.onChange(date)}
+                        showYearDropdown
+                        yearDropdownItemNumber={15}
+                        scrollableYearDropdown
+                        placeholderText="Select your date of birth"
+                      />
+                    )}
+                  />
+                </FormControl>
+                <FormDescription>Date format: MM/DD/YYYY</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem className="my-5">
@@ -278,7 +355,7 @@ export default function Register() {
           />
 
           {/* Worker Checkbox */}
-          <FormItem className="my-5 hidden">
+          <FormItem className="my-5">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="isWorker"
@@ -365,6 +442,7 @@ export default function Register() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="maritalStatus"
@@ -390,7 +468,7 @@ export default function Register() {
                             <CommandGroup>
                               <CommandItem
                                 onSelect={() => {
-                                  field.onChange("Single");
+                                  field.onChange("single");
                                   setOpenMarriageBox(false);
                                 }}
                               >
@@ -398,7 +476,7 @@ export default function Register() {
                               </CommandItem>
                               <CommandItem
                                 onSelect={() => {
-                                  field.onChange("Married");
+                                  field.onChange("married");
                                   setOpenMarriageBox(false);
                                 }}
                               >
@@ -406,19 +484,11 @@ export default function Register() {
                               </CommandItem>
                               <CommandItem
                                 onSelect={() => {
-                                  field.onChange("Divorced");
+                                  field.onChange("others");
                                   setOpenMarriageBox(false);
                                 }}
                               >
-                                Divorced
-                              </CommandItem>
-                              <CommandItem
-                                onSelect={() => {
-                                  field.onChange("Widowed");
-                                  setOpenMarriageBox(false);
-                                }}
-                              >
-                                Widowed
+                                Others
                               </CommandItem>
                             </CommandGroup>
                           </CommandList>
@@ -444,7 +514,7 @@ export default function Register() {
                           variant="outline"
                           className="w-[200px] justify-between"
                         >
-                          {field.value || "Select your department"}
+                          {selectedDepartment || "Select your department"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -456,7 +526,8 @@ export default function Register() {
                               <CommandGroup key={index}>
                                 <CommandItem
                                   onSelect={() => {
-                                    field.onChange(
+                                    field.onChange(item.code.toUpperCase());
+                                    setSelectedDepartment(
                                       item.department.toUpperCase()
                                     );
                                     setOpenDepartmentBox(false);
@@ -488,7 +559,7 @@ export default function Register() {
                           variant="outline"
                           className="sm:w-[250px] md:w-[350px] justify-between"
                         >
-                          {field.value || "Select your COOL"}
+                          {selectedCool || "Select your COOL"}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
@@ -500,7 +571,9 @@ export default function Register() {
                               <CommandGroup key={index} heading={item.category}>
                                 <CommandItem
                                   onSelect={() => {
-                                    field.onChange(item.cool.toUpperCase());
+                                    field.onChange(item.no);
+                                    setSelectedCool(item.cool);
+                                    setSelectedCategory(item.category);
                                     setOpenCoolBox(false);
                                   }}
                                 >
@@ -553,7 +626,7 @@ export default function Register() {
                               <CommandGroup key={index}>
                                 <CommandItem
                                   onSelect={() => {
-                                    field.onChange(item.homebase.toUpperCase());
+                                    field.onChange(item.code.toUpperCase());
                                     setOpenHomebaseBox(false);
                                   }}
                                 >

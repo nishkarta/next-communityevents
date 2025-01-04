@@ -1,0 +1,171 @@
+"use client";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import Link from "next/link";
+import HeaderNav from "@/components/HeaderNav";
+import { ChevronLeft } from "lucide-react";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { useRouter } from "next/navigation";
+import { UserNotRegisteredDialog } from "@/components/UserNotRegisteredDialog";
+
+const LoginV2 = () => {
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userExists, setUserExists] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const [showDialog, setShowDialog] = useState(false);
+
+  const checkUserExistence = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v2/users/check/${email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "X-API-Key": API_KEY,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.user) {
+          setUserExists(true);
+        } else {
+          setShowDialog(true);
+        }
+      } else {
+        alert("Failed to check user existence. Please try again.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v2/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY,
+        },
+        body: JSON.stringify({ identifier: email, password: password }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Use the login function from the AuthProvider to handle successful login
+        login(result);
+        alert("Login successful!");
+        setTimeout(() => {
+          router.push("/home");
+        }, 1000);
+      } else {
+        alert("Failed to login. Please check your credentials and try again.");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <div className="flex flex-row md:self-start bg-muted">
+        <Link className="md:self-start mt-5 ml-5" href="/">
+          <ChevronLeft className="mb-5 w-8 h-8 md:mb-0 md:hover:text-primary-light" />
+        </Link>
+      </div>
+      <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+        <div className="w-full max-w-sm md:max-w-3xl">
+          <div className="flex flex-col gap-6">
+            <Card className="overflow-hidden">
+              <CardContent className="grid p-0 md:grid-cols-2">
+                <form
+                  onSubmit={userExists ? handleLogin : checkUserExistence}
+                  className="p-6 md:p-8"
+                >
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col items-center text-center">
+                      <h1 className="text-2xl font-bold">Welcome back</h1>
+                      <p className="text-balance text-muted-foreground">
+                        Login to your Grow Community Account
+                      </p>
+                    </div>
+                    {!userExists && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="m@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                    )}
+
+                    {userExists && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="Enter your password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                    )}
+                    <Button type="submit" className="w-full" disabled={loading}>
+                      {loading ? "Loading..." : userExists ? "Login" : "Next"}
+                    </Button>
+                  </div>
+                </form>
+                <div className="relative hidden bg-muted md:block">
+                  <Image
+                    className="bg-white"
+                    src="/images/gc-logo-2.png" // Adjust the path to your logo in the public folder
+                    alt="Logo"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                </div>
+                <UserNotRegisteredDialog
+                  isVisible={showDialog}
+                  onClose={() => setShowDialog(false)}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default LoginV2;

@@ -183,7 +183,8 @@ function EventsAdmin() {
                                 </TableCell>
                                 <TableCell>
                                   {(event.status === "active" ||
-                                    event.status === "walkin") && (
+                                    event.status === "walkin" ||
+                                    event.status === "full") && (
                                     <Button
                                       onClick={() => handleSession(event.code)}
                                     >

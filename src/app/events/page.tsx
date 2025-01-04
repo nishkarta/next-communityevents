@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import HeaderNav from "@/components/HeaderNav";
-import { Search, MapPin, Calendar } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -27,14 +27,17 @@ const EventsPage = () => {
   const EVENT_EXAMPLE_IMAGE_URL =
     "https://utfs.io/f/OiRxrZt1JqQ4CQoHxw3RfX59ZPjs6OUdGVqBiH0rFAY34Ltm";
   const router = useRouter();
-  const { isAuthenticated, handleExpiredToken } = useAuth();
-  const userData = isAuthenticated
-    ? JSON.parse(localStorage.getItem("userData") || "{}")
-    : null;
+  const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
+    useAuth();
+
   // Fetch events on component mount
   useEffect(() => {
     async function fetchEvents() {
-      if (!userData.token) return;
+      const accessToken = await getValidAccessToken();
+      if (!accessToken) {
+        handleExpiredToken();
+        return;
+      }
 
       try {
         setIsLoading(true); // Set loading state
@@ -43,15 +46,13 @@ const EventsPage = () => {
           headers: {
             "X-API-KEY": API_KEY,
             "Content-Type": "application/json",
-            Authorization: `Bearer ${userData.token}`, // Include token in Authorization header
+            Authorization: `Bearer ${accessToken}`, // Include token in Authorization header
           },
         });
-        if (response.status === 401) {
-          handleExpiredToken();
-          return;
-        }
+
         if (!response.ok) {
           if (response.status === 401) {
+            handleExpiredToken();
             console.error("Unauthorized - Token expired or invalid");
             return;
           }
@@ -69,7 +70,7 @@ const EventsPage = () => {
     }
 
     fetchEvents();
-  }, []);
+  }, [getValidAccessToken, handleExpiredToken]);
 
   function handleSession(code: string) {
     return router.push(`/events/${code}`);

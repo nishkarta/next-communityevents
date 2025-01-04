@@ -56,21 +56,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     )?.token;
 
     if (!refreshToken) {
-      console.error("No refresh token found.");
       return false;
     }
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/tokens`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/users/refresh`,
         {
-          method: "GET",
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-API-Key": "gcgc-2024",
-            Cookie: `refresh_token=${refreshToken}`,
+            "X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "",
           },
-          credentials: "include", // Ensure cookies are included in the request
+          body: JSON.stringify({ refreshToken }),
         }
       );
 
@@ -81,7 +79,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         localStorage.setItem("userData", JSON.stringify(userData));
         return true;
       } else {
-        console.error("Failed to refresh token:", response.statusText);
         return false;
       }
     } catch (error) {

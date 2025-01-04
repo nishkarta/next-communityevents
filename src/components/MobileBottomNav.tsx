@@ -9,6 +9,7 @@ const MobileBottomNav = () => {
   const excludedRoutes = [
     "/",
     "/login",
+    "/login/v2",
     "/register",
     "/events",
     "/tickets",
