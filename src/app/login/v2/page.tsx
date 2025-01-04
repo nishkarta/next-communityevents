@@ -12,6 +12,7 @@ import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { UserNotRegisteredDialog } from "@/components/UserNotRegisteredDialog";
+import { useToast } from "@/components/ui/use-toast";
 
 const LoginV2 = () => {
   const { login } = useAuth();
@@ -21,6 +22,7 @@ const LoginV2 = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [showDialog, setShowDialog] = useState(false);
+  const { toast } = useToast();
 
   const checkUserExistence = async (e: any) => {
     e.preventDefault();
@@ -74,16 +76,32 @@ const LoginV2 = () => {
         const result = await response.json();
         // Use the login function from the AuthProvider to handle successful login
         login(result);
-        alert("Login successful!");
+        toast({
+          title: "Log In Successful",
+          description: `Redirecting to the home page...`,
+          className: "bg-green-400",
+          duration: 1500,
+        });
         setTimeout(() => {
           router.push("/home");
         }, 1000);
       } else {
-        alert("Failed to login. Please check your credentials and try again.");
+        toast({
+          title: "Failed to Log In",
+          description: "Please check your password and try again.",
+          className: "bg-red-400",
+          duration: 1500,
+        });
       }
     } catch (error) {
       console.error("An error occurred:", error);
-      alert("An error occurred. Please try again.");
+      toast({
+        title: "An Error Occurred",
+        description:
+          error instanceof Error ? error.message : "An unknown error occurred",
+        className: "bg-red-400",
+        duration: 1500,
+      });
     } finally {
       setLoading(false);
     }
