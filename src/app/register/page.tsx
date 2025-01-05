@@ -213,22 +213,23 @@ export default function Register() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center">
-      <Link className="md:self-start" href="/">
-        <ChevronLeft className="mb-5 w-7 h-7 md:mb-0 md:hover:text-primary-light" />
-      </Link>
       <h1 className="text-xl font-bold mb-4">Register</h1>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="md:space-y-6 md:w-1/3"
         >
           {/* Main registration form fields */}
+          <span className=" text-sm font-semibold ">
+            All fields with * are required.
+          </span>
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>Full Name *</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -245,7 +246,7 @@ export default function Register() {
             name="email"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Email *</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -262,7 +263,7 @@ export default function Register() {
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>Phone Number *</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -283,7 +284,7 @@ export default function Register() {
             name="placeOfBirth"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Place of Birth</FormLabel>
+                <FormLabel>Place of Birth *</FormLabel>
                 <FormControl>
                   <Input
                     className="w-[250px] justify-between"
@@ -300,7 +301,7 @@ export default function Register() {
             name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="my-5 flex flex-col">
-                <FormLabel>Date of Birth</FormLabel>
+                <FormLabel>Date of Birth *</FormLabel>
                 <FormControl>
                   <Controller
                     control={form.control}
@@ -328,7 +329,7 @@ export default function Register() {
             name="password"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Password *</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <Input

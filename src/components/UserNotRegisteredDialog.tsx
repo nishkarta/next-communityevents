@@ -19,10 +19,7 @@ export const UserNotRegisteredDialog: React.FC<
           <h3 className="text-lg font-bold">User Not Registered</h3>
         </DialogHeader>
         <div className="space-y-4 text-base leading-relaxed">
-          <p>
-            The user identifier doesn't exist. Please sign up or go back to
-            home.
-          </p>
+          <p>The user identifier doesn't exist. Please sign up or try again.</p>
         </div>
         <DialogFooter className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
           <Button

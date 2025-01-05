@@ -109,11 +109,7 @@ const LoginV2 = () => {
 
   return (
     <>
-      <div className="flex flex-row md:self-start bg-muted">
-        <Link className="md:self-start mt-5 ml-5" href="/">
-          <ChevronLeft className="mb-5 w-8 h-8 md:mb-0 md:hover:text-primary-light" />
-        </Link>
-      </div>
+      <div className="flex flex-row md:self-start bg-muted"></div>
       <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
         <div className="w-full max-w-sm md:max-w-3xl">
           <div className="flex flex-col gap-6">

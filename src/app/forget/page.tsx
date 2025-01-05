@@ -65,7 +65,7 @@ export default function ForgetPassword() {
     data.identifier = data.identifier.trim().replace(/\s+/g, "").toLowerCase();
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/event/user/forgot`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/users/${data.identifier}/password`,
         {
           method: "PATCH",
           headers: {

@@ -39,30 +39,30 @@ const Home = () => {
 
   const [isAnnouncementVisible, setIsAnnouncementVisible] = useState(false);
 
-  // useEffect(() => {
-  //   const hasSeenAnnouncement = localStorage.getItem("hasSeenAnnouncement");
-  //   const timestamp = localStorage.getItem("announcementTimestamp");
+  useEffect(() => {
+    const hasSeenAnnouncement = localStorage.getItem("hasSeenAnnouncement");
+    const timestamp = localStorage.getItem("announcementTimestamp");
 
-  //   // Show announcement if user hasn't seen it or timestamp expired (more than 3 hours)
-  //   if (
-  //     !hasSeenAnnouncement ||
-  //     !timestamp ||
-  //     Date.now() - parseInt(timestamp) > 3 * 60 * 60 * 1000
-  //   ) {
-  //     setIsAnnouncementVisible(true);
-  //     localStorage.setItem("hasSeenAnnouncement", "true");
-  //     localStorage.setItem("announcementTimestamp", Date.now().toString());
-  //   }
-  // }, []);
+    // Show announcement if user hasn't seen it or timestamp expired (more than 3 hours)
+    if (
+      !hasSeenAnnouncement ||
+      !timestamp ||
+      Date.now() - parseInt(timestamp) > 3 * 60 * 60 * 1000
+    ) {
+      setIsAnnouncementVisible(true);
+      localStorage.setItem("hasSeenAnnouncement", "true");
+      localStorage.setItem("announcementTimestamp", Date.now().toString());
+    }
+  }, []);
 
-  // // Programmatic trigger for announcement
-  // const showAnnouncement = () => {
-  //   setIsAnnouncementVisible(true);
-  // };
+  // Programmatic trigger for announcement
+  const showAnnouncement = () => {
+    setIsAnnouncementVisible(true);
+  };
 
-  // const hideAnnouncement = () => {
-  //   setIsAnnouncementVisible(false);
-  // };
+  const hideAnnouncement = () => {
+    setIsAnnouncementVisible(false);
+  };
 
   const handleLogout = () => {
     logout();
@@ -174,12 +174,13 @@ const Home = () => {
 
           <div className="flex flex-row gap-x-8">
             {/* Button to Trigger Announcement Programmatically */}
+
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
                   <i className="fi fi-rs-file-invoice text-2xl mt-1"></i>
                   <Badge className="absolute -top-2 right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none hover:bg-red-600 text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                    {0}
+                    {userData?.userTypes[0] === "volunteer" ? 1 : 0}
                   </Badge>
                 </div>
               </PopoverTrigger>
@@ -187,14 +188,19 @@ const Home = () => {
                 <div className="flex flex-col gap-2 text-center">
                   <p>
                     You currently have{" "}
-                    <span className="font-bold text-lg">0</span> announcement!
+                    <span className="font-bold text-lg">
+                      {userData?.userTypes[0] === "volunteer" ? 1 : 0}
+                    </span>{" "}
+                    announcement!
                   </p>
-                  {/* <Button
-                    onClick={showAnnouncement}
-                    className="bg-red-600 mt-1"
-                  >
-                    Informasi Event Tahun Baru
-                  </Button> */}
+                  {userData?.userTypes[0] === "volunteer" && (
+                    <Button
+                      onClick={showAnnouncement}
+                      className="bg-red-600 mt-1"
+                    >
+                      Informasi Homebase Onsite
+                    </Button>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
@@ -298,12 +304,14 @@ const Home = () => {
         {/* Dashboard Icons */}
 
         {/* Announcement Component */}
-        {/* <Announcement
-          title="Informasi Event Tahun Baru"
-          message="We're excited to have you here. Check out the latest features and upcoming events!"
-          isVisible={isAnnouncementVisible}
-          onClose={hideAnnouncement}
-        /> */}
+        {userData?.userTypes[0] == "volunteer" && (
+          <Announcement
+            title="Informasi Homebase"
+            message="We're excited to have you here. Check out the latest features and upcoming events!"
+            isVisible={isAnnouncementVisible}
+            onClose={hideAnnouncement}
+          />
+        )}
 
         <div className="mt-8 flex justify-center">
           <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-auto-fill-md lg:grid-cols-auto-fill-lg gap-3 md:gap-6 p-3 justify-items-center w-full">

@@ -26,26 +26,60 @@ const Announcement: React.FC<AnnouncementProps> = ({
         <DialogHeader>
           <h3 className="text-lg font-bold">{title}</h3>
         </DialogHeader>
-        <div className="space-y-4 text-base leading-relaxed">
-          <p>
-            Shalom, berikut informasi yang perlu diperhatikan untuk event
-            <strong> "2024 End of the Year Service"</strong>:
-          </p>
 
-          <p>
-            1. Silahkan mengantri dari depan toko Crocs / Reebok di lantai 3.
+        <p className="mb-1">Dear Beloved GC Famz,</p>
+        <p className="mb-1">
+          Gently reminder <strong>HOMEBASE ONSITE</strong> untuk Bulan{" "}
+          <strong>JANUARI 2025</strong> akan diadakan pada:
+        </p>
+        <ul className="list-disc list-inside mb-1">
+          <li>
+            <strong>Selasa, 07 JANUARI 2025</strong>
+          </li>
+          <li>
+            <strong>Pk. 19.00</strong>
+          </li>
+          <li>
+            <strong>Di Pondok Indah Office Tower 6 Lantai 3</strong>
+            <br />
+            (Ada Konsumsi Potluck ready <strong>Pk. 18.00</strong>)
+          </li>
+        </ul>
+        <div className="notes mb-1">
+          <p className="font-bold mb-2">NOTES!</p>
+          <p className="mb-2">
+            Agar Homebase ONSITE ini bisa berjalan dengan baik dan mempermudah
+            absensi, akan ada beberapa hal yang{" "}
+            <span className="font-bold text-red-500">WAJIB DIPERHATIKAN</span>{" "}
+            untuk sistem absensi TERBARU sbb:
           </p>
-          <p>2. Waktu open gate adalah 30 menit sebelum mulai.</p>
-          <p>
-            3. 15 menit setelah ibadah dimulai, seat akan dibuka untuk umum bagi
-            jemaat yang belum mendaftar.
-          </p>
-
-          <p>
-            Terima kasih, Selamat Tahun Baru GROW Family dan Tuhan Memberkati
-            🎉🙏
-          </p>
+          <ul className="list-disc list-inside mb-2">
+            <li>
+              Pengerja tidak perlu mendaftar manual untuk homebase. Cukup
+              tunjukkan QR Code berikut untuk masuk ke acara homebase.
+            </li>
+            <li>
+              Jika masih bingung dengan cara pendaftaran dapat bertanya ke:
+              <ul className="list-disc list-inside ml-6">
+                <li>Ps. Billy Yosafat &amp; MIS Team</li>
+                <li>Leaders di atas nya</li>
+                <li>GC Office</li>
+                <li>Teman teman di satu Dept/Bid</li>
+              </ul>
+            </li>
+          </ul>
         </div>
+        <p className="mb-2">
+          Mari masuk di tahun yang baru ini dengan komitmen dan semangat yang
+          baru~~~
+        </p>
+        <p className="mb-2">
+          Terimakasih.
+          <br />
+          Happy New Year 2025 🎉🎉🎉🎉🎉🎉
+        </p>
+        <p className="text-gray-800 font-bold">Tuhan Yesus Memberkati 🙏🏼😊</p>
+
         <DialogFooter>
           <Button onClick={onClose} className="btn-primary">
             Close
