@@ -21,7 +21,7 @@ const Announcement: React.FC<AnnouncementProps> = ({
   onClose,
 }) => {
   return (
-    <Dialog open={isVisible}>
+    <Dialog open={isVisible} onOpenChange={(open) => !open && onClose()}>
       <DialogContent hideCloseButton={true}>
         <DialogHeader>
           <h3 className="text-md font-bold">{title}</h3>
@@ -34,10 +34,7 @@ const Announcement: React.FC<AnnouncementProps> = ({
           </p>
           <ul className="list-disc list-inside mb-1">
             <li>
-              <strong>Selasa, 07 JANUARI 2025</strong>
-            </li>
-            <li>
-              <strong>Pk. 19.00</strong>
+              <strong>Selasa, 07 JANUARI 2025 19.00 WIB</strong>
             </li>
             <li>
               <strong>Di Pondok Indah Office Tower 6 Lantai 3</strong>
@@ -46,28 +43,17 @@ const Announcement: React.FC<AnnouncementProps> = ({
             </li>
           </ul>
           <div className="notes mb-1">
-            <p className="font-bold mb-2">NOTES!</p>
             <p className="mb-2">
-              Agar Homebase ONSITE ini bisa berjalan dengan baik dan mempermudah
-              absensi, akan ada beberapa hal yang{" "}
-              <span className="font-bold text-red-500">WAJIB DIPERHATIKAN</span>{" "}
-              untuk sistem absensi TERBARU sbb:
+              Untuk sistem registrasi,{" "}
+              <b>
+                pengerja tidak perlu mendaftar manual untuk homebase. Cukup
+                tunjukkan{" "}
+                <span className="font-extrabold text-red-700">
+                  QR Code Homebase di icon paling kanan
+                </span>{" "}
+                untuk masuk ke acara homebase.:
+              </b>
             </p>
-            <ul className="list-disc list-inside mb-2">
-              <li>
-                Pengerja tidak perlu mendaftar manual untuk homebase. Cukup
-                tunjukkan <b>QR Code Homebase di icon paling kanan</b> untuk
-                masuk ke acara homebase.
-              </li>
-              <li>
-                Jika masih bingung dengan cara pendaftaran dapat bertanya ke:
-                <ul className="list-disc list-inside ml-6">
-                  <li>Ps. Billy Yosafat &amp; MIS Team</li>
-                  <li>GC Office</li>
-                  <li>Leaders Teman teman di satu Dept/Bid</li>
-                </ul>
-              </li>
-            </ul>
           </div>
           <p className="mb-1">
             Mari masuk di tahun yang baru ini dengan komitmen dan semangat yang
