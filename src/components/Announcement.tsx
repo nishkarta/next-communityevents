@@ -56,7 +56,8 @@ const Announcement: React.FC<AnnouncementProps> = ({
           <ul className="list-disc list-inside mb-2">
             <li>
               Pengerja tidak perlu mendaftar manual untuk homebase. Cukup
-              tunjukkan QR Code berikut untuk masuk ke acara homebase.
+              tunjukkan <b>QR Code Homebase di icon paling kanan</b> untuk masuk
+              ke acara homebase.
             </li>
             <li>
               Jika masih bingung dengan cara pendaftaran dapat bertanya ke:
