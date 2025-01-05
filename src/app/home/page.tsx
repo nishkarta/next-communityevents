@@ -271,7 +271,7 @@ const Home = () => {
                       <DialogFooter>
                         <span className="text-xs text-gray-500 mx-auto text-center">
                           This is your homebase QR Code! Use it to enter
-                          homebase events. {selectedImage}
+                          homebase events.
                         </span>
                       </DialogFooter>
                     </Dialog>
