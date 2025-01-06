@@ -352,7 +352,8 @@ const Home = () => {
               openInNewTab={true}
             />
 
-            {userData.role === "admin" ? (
+            {userData?.userTypes[0] == "volunteer" ||
+            userData?.userTypes[0] == "admin" ? (
               <>
                 <IconButton
                   href="/dashboard"

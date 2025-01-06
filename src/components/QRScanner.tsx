@@ -57,7 +57,6 @@ function QrCodeScanner({ sessionCode, eventCode }: QrCodeScannerProps) {
             body: JSON.stringify({
               communityId: communityId,
               eventCode: eventCode,
-              identifier: userData.email || userData.phoneNumber,
               instanceCode: sessionCode,
               isPersonalQR: true,
               name: userData.name,
