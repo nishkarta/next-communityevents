@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogFooter,
-  DialogOverlay,
 } from "@/components/ui/dialog"; // Import ShadCN Dialog components
 import { useQRCode } from "next-qrcode";
 
@@ -110,15 +109,44 @@ const Home = () => {
   }, []);
   const { SVG } = useQRCode();
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // State for the selected image
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = (image: string) => {
-    setSelectedImage(image);
-    setIsModalOpen(true);
-  };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedImage(null);
+  const handleManualVerify = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/homebase`,
+        {
+          method: "POST",
+          headers: {
+            "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+          body: JSON.stringify({
+            name: userData.name,
+            identifier: userData.email ? userData.email : userData.phoneNumber,
+            accountNumber: userData.accountNumber,
+            eventCode: "HB-001",
+            sessionCode: "HB-001-01",
+            otherRegister: [],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      const registrantName = responseData.name || "Registrant";
+      alert(`Verification successful for ${registrantName}`);
+    } catch (error) {
+      console.error("Error:", error);
+      // Rollback optimistic update in case of error
+    }
+    console.log(
+      userData.accountNumber + "+" + userData.email
+        ? userData.email
+        : userData.phoneNumber + "+" + userData.name
+    );
   };
   return (
     <>
@@ -161,11 +189,11 @@ const Home = () => {
                   <p>
                     You currently have{" "}
                     <span className="font-bold text-lg">
-                      {userData?.userTypes.includes("volunteer") ? 1 : 0}
+                      {userData?.userTypes[0] === "volunteer" ? 1 : 0}
                     </span>{" "}
                     announcement!
                   </p>
-                  {userData?.userTypes.includes("volunteer") && (
+                  {userData?.userTypes[0] === "volunteer" && (
                     <Button
                       onClick={showAnnouncement}
                       className="bg-red-600 mt-1"
@@ -201,95 +229,57 @@ const Home = () => {
               </PopoverContent>
             </Popover>
             {/* QR Code Dialog */}
-            {userData?.userTypes.includes("volunteer") && (
-              <>
-                {" "}
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <div
-                      onClick={() => setSelectedImage(userData?.communityId)}
-                      className="relative inline-block cursor-pointer"
-                    >
-                      <i className="fi fi-rs-qrcode text-2xl mt-1"></i>
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Dialog>
-                      <DialogHeader>
-                        <div className="flex flex-col items-center">
-                          <b>{userData?.name}</b>
-                          <span>{userData?.email}</span>
-                        </div>
-                      </DialogHeader>
-                      {selectedImage && (
-                        <div
-                          className="flex justify-center cursor-pointer"
-                          onClick={() => openModal(selectedImage)} // Open modal on click
-                        >
-                          <SVG
-                            text={selectedImage}
-                            options={{
-                              type: "image/jpeg",
-                              quality: 0.8,
-                              errorCorrectionLevel: "M",
-                              margin: 3,
-                              scale: 10,
-                              width: 200, // Larger width for display
-                              color: {
-                                dark: "#000000",
-                                light: "#FFFFFF",
-                              },
-                            }}
-                          />
-                        </div>
-                      )}
-
-                      <DialogFooter>
-                        <span className="text-xs text-gray-500 mx-auto text-center">
-                          This is your homebase QR Code! Use it to enter
-                          homebase events.
-                        </span>
-                      </DialogFooter>
-                    </Dialog>
-                  </PopoverContent>
-                </Popover>
-              </>
-            )}
-            {isModalOpen && (
-              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                <DialogOverlay />
-                <DialogContent>
-                  <DialogHeader>
-                    <div className="flex flex-col items-center">
-                      <b>{userData?.name}</b>
-                      <span>{userData?.email}</span>
-                    </div>
-                  </DialogHeader>
-                  {selectedImage && (
-                    <div className="flex justify-center">
-                      <SVG
-                        text={selectedImage}
-                        options={{
-                          type: "image/jpeg",
-                          quality: 0.8,
-                          errorCorrectionLevel: "M",
-                          margin: 3,
-                          scale: 10,
-                          width: 400, // Even larger width for modal display
-                          color: {
-                            dark: "#000000",
-                            light: "#FFFFFF",
-                          },
-                        }}
-                      />
-                    </div>
-                  )}
-                  <DialogFooter>
-                    <Button onClick={closeModal}>Close</Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            )}
+            {userData?.userTypes[0] == "volunteer" ||
+              (userData?.userTypes[0] == "admin" && (
+                <>
+                  {" "}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <div
+                        onClick={() => setSelectedImage(userData?.communityId)}
+                        className="relative inline-block cursor-pointer"
+                      >
+                        <i className="fi fi-rs-qrcode text-2xl mt-1"></i>
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <Dialog>
+                        <DialogHeader>
+                          <div className="flex flex-col items-center">
+                            <b>{userData?.name}</b>
+                            <span>{userData?.email}</span>
+                          </div>
+                        </DialogHeader>
+                        {selectedImage && (
+                          <div className="flex justify-center">
+                            <SVG
+                              text={selectedImage}
+                              options={{
+                                type: "image/jpeg",
+                                quality: 0.8,
+                                errorCorrectionLevel: "M",
+                                margin: 3,
+                                scale: 10,
+                                width: 200, // Larger width for display
+                                color: {
+                                  dark: "#000000",
+                                  light: "#FFFFFF",
+                                },
+                              }}
+                            />
+                          </div>
+                        )}
+                        <DialogFooter>
+                          <span className="text-xs text-gray-500 mx-auto text-center">
+                            This is your homebase QR Code! Use it to enter
+                            homebase events.
+                          </span>
+                        </DialogFooter>
+                      </Dialog>
+                    </PopoverContent>
+                  </Popover>
+                </>
+              ))}
           </div>
         </div>
         {/* Hero Banner */}
@@ -315,7 +305,7 @@ const Home = () => {
         {/* Dashboard Icons */}
 
         {/* Announcement Component */}
-        {userData?.userTypes.includes("volunteer") && (
+        {userData?.userTypes[0] == "volunteer" && (
           <Announcement
             title="Informasi Homebase"
             message="We're excited to have you here. Check out the latest features and upcoming events!"
@@ -362,7 +352,7 @@ const Home = () => {
               openInNewTab={true}
             />
 
-            {userData.userTypes.includes("admin") ? (
+            {userData.role === "admin" ? (
               <>
                 <IconButton
                   href="/dashboard"
