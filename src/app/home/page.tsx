@@ -229,57 +229,57 @@ const Home = () => {
               </PopoverContent>
             </Popover>
             {/* QR Code Dialog */}
-            {userData?.userTypes[0] == "volunteer" ||
-              (userData?.userTypes[0] == "admin" && (
-                <>
-                  {" "}
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <div
-                        onClick={() => setSelectedImage(userData?.communityId)}
-                        className="relative inline-block cursor-pointer"
-                      >
-                        <i className="fi fi-rs-qrcode text-2xl mt-1"></i>
-                      </div>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <Dialog>
-                        <DialogHeader>
-                          <div className="flex flex-col items-center">
-                            <b>{userData?.name}</b>
-                            <span>{userData?.email}</span>
-                          </div>
-                        </DialogHeader>
-                        {selectedImage && (
-                          <div className="flex justify-center">
-                            <SVG
-                              text={selectedImage}
-                              options={{
-                                type: "image/jpeg",
-                                quality: 0.8,
-                                errorCorrectionLevel: "M",
-                                margin: 3,
-                                scale: 10,
-                                width: 200, // Larger width for display
-                                color: {
-                                  dark: "#000000",
-                                  light: "#FFFFFF",
-                                },
-                              }}
-                            />
-                          </div>
-                        )}
-                        <DialogFooter>
-                          <span className="text-xs text-gray-500 mx-auto text-center">
-                            This is your homebase QR Code! Use it to enter
-                            homebase events.
-                          </span>
-                        </DialogFooter>
-                      </Dialog>
-                    </PopoverContent>
-                  </Popover>
-                </>
-              ))}
+            {(userData?.userTypes.includes("volunteer") ||
+              userData?.userTypes.includes("admin")) && (
+              <>
+                {" "}
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <div
+                      onClick={() => setSelectedImage(userData?.communityId)}
+                      className="relative inline-block cursor-pointer"
+                    >
+                      <i className="fi fi-rs-qrcode text-2xl mt-1"></i>
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Dialog>
+                      <DialogHeader>
+                        <div className="flex flex-col items-center">
+                          <b>{userData?.name}</b>
+                          <span>{userData?.email}</span>
+                        </div>
+                      </DialogHeader>
+                      {selectedImage && (
+                        <div className="flex justify-center">
+                          <SVG
+                            text={selectedImage}
+                            options={{
+                              type: "image/jpeg",
+                              quality: 0.8,
+                              errorCorrectionLevel: "M",
+                              margin: 3,
+                              scale: 10,
+                              width: 200, // Larger width for display
+                              color: {
+                                dark: "#000000",
+                                light: "#FFFFFF",
+                              },
+                            }}
+                          />
+                        </div>
+                      )}
+                      <DialogFooter>
+                        <span className="text-xs text-gray-500 mx-auto text-center">
+                          This is your homebase QR Code! Use it to enter
+                          homebase events.
+                        </span>
+                      </DialogFooter>
+                    </Dialog>
+                  </PopoverContent>
+                </Popover>
+              </>
+            )}
           </div>
         </div>
         {/* Hero Banner */}
@@ -305,7 +305,7 @@ const Home = () => {
         {/* Dashboard Icons */}
 
         {/* Announcement Component */}
-        {userData?.userTypes[0] == "volunteer" && (
+        {userData?.userTypes.includes("volunteer") && (
           <Announcement
             title="Informasi Homebase"
             message="We're excited to have you here. Check out the latest features and upcoming events!"
@@ -352,8 +352,7 @@ const Home = () => {
               openInNewTab={true}
             />
 
-            {userData?.userTypes[0] == "volunteer" ||
-            userData?.userTypes[0] == "admin" ? (
+            {userData?.userTypes.includes("admin") ? (
               <>
                 <IconButton
                   href="/dashboard"
