@@ -6,6 +6,7 @@ import { useAuth } from "@/components/providers/AuthProvider";
 import { Event } from "@/lib/types/event";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
 import Link from "next/link";
 import {
   Card,
@@ -37,12 +38,13 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import HeaderNav from "@/components/HeaderNav";
 
 function EventsAdmin() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true); // Add loading state
-  const { isAuthenticated, handleExpiredToken } = useAuth();
+  const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
+    useAuth();
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
@@ -53,27 +55,38 @@ function EventsAdmin() {
     return null;
   }
 
-  function handleSession(code: string) {
+  function handleSession(code: any) {
     return router.push(`/dashboard/${code}`);
   }
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   useEffect(() => {
     async function fetchEvents() {
-      if (!userData?.token) return;
+      const accessToken = await getValidAccessToken();
+      if (!accessToken) {
+        handleExpiredToken();
+        return;
+      }
 
       setIsLoading(true); // Set loading to true before fetching
 
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events`,
-          {
-            headers: {
-              "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userData.token}`,
-            },
-          }
-        );
+        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
+          headers: {
+            "X-API-KEY": API_KEY || "",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         if (response.status === 401) {
           handleExpiredToken();
           return;
@@ -118,120 +131,55 @@ function EventsAdmin() {
     <>
       <div className="flex min-h-screen w-full flex-col">
         <HeaderNav name="Admin Dashboard" link="home"></HeaderNav>
-        <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-            <Tabs defaultValue="all">
-              <TabsContent value="all">
-                <Card x-chunk="dashboard-06-chunk-0">
-                  <CardHeader>
-                    <CardDescription>
-                      Grow Community Admin Panel
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {isLoading ? ( // Display spinner while loading
-                      <div className="flex justify-center items-center h-64">
-                        <LoadingSpinner />
-                      </div>
-                    ) : (
-                      <div className="overflow-x-auto">
-                        <Table className="min-w-full">
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Event Name</TableHead>
-                              <TableHead>Status</TableHead>
-                              <TableHead className="hidden sm:table-cell">
-                                Description
-                              </TableHead>
-                              <TableHead className="hidden sm:table-cell">
-                                Registration Time
-                              </TableHead>
-                              <TableHead></TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {events.map((event) => (
-                              <TableRow key={event.id}>
-                                <TableCell className="font-medium">
-                                  {isSmallScreen ? (
-                                    <button
-                                      onClick={() => handleEventClick(event)}
-                                      className="text-blue-500 underline sm:no-underline"
-                                    >
-                                      {event.name}
-                                    </button>
-                                  ) : (
-                                    event.name
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  <Badge variant="outline">
-                                    {event.status}
-                                  </Badge>
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                  {event.description}
-                                </TableCell>
-                                <TableCell className="hidden sm:table-cell">
-                                  {new Date(
-                                    event.openRegistration
-                                  ).toLocaleString()}{" "}
-                                  -{" "}
-                                  {new Date(
-                                    event.closedRegistration
-                                  ).toLocaleString()}
-                                </TableCell>
-                                <TableCell>
-                                  {(event.status === "active" ||
-                                    event.status === "walkin" ||
-                                    event.status === "full") && (
-                                    <Button
-                                      onClick={() => handleSession(event.code)}
-                                    >
-                                      View
-                                    </Button>
-                                  )}
-                                </TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </div>
-                    )}
-                    {selectedEvent && (
-                      <Dialog
-                        open={isDialogOpen}
-                        onOpenChange={handleDialogClose}
-                      >
-                        <DialogContent className="sm:max-w-[425px] max-w-full py-2 sm:px-4 sm:py-4">
-                          <DialogHeader>
-                            <DialogTitle>{selectedEvent.name}</DialogTitle>
-                            <DialogDescription>
-                              {selectedEvent.status}
-                            </DialogDescription>
-                          </DialogHeader>
-                          <p>{selectedEvent.description}</p>
-                          <p>
-                            Registration Time:{" "}
-                            {new Date(
-                              selectedEvent.openRegistration
-                            ).toLocaleString()}{" "}
-                            -{" "}
-                            {new Date(
-                              selectedEvent.closedRegistration
-                            ).toLocaleString()}
-                          </p>
-                          <DialogFooter>
-                            <Button onClick={handleDialogClose}>Close</Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </main>
+        <div className="container mx-auto p-4">
+          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Description
+                  </TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Registration
+                  </TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {events.map((event) => (
+                  <TableRow key={event.code}>
+                    <TableCell>{event.title}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {event.availabilityStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {event.topics.join(", ")}
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">
+                      {formatDate(event.registerStartAt)} -{" "}
+                      {formatDate(event.registerEndAt)}
+                    </TableCell>
+                    <TableCell>
+                      {(event.availabilityStatus === "available" ||
+                        event.availabilityStatus === "soon" ||
+                        event.availabilityStatus === "closed") && (
+                        <Button onClick={() => handleSession(event.code)}>
+                          View Details
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
     </>

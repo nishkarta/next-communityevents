@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { AuthProvider } from "./providers/AuthProvider";
 import { useAuth } from "./providers/AuthProvider";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -13,8 +14,14 @@ import {
   AlertDialogAction,
 } from "./ui/alert-dialog";
 
-function QrCodeScanner({ sessionCode }: { sessionCode: string }) {
-  const { isAuthenticated, handleExpiredToken } = useAuth();
+interface QrCodeScannerProps {
+  sessionCode: string;
+  eventCode: string;
+}
+
+function QrCodeScanner({ sessionCode, eventCode }: QrCodeScannerProps) {
+  const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
+    useAuth();
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
@@ -26,38 +33,55 @@ function QrCodeScanner({ sessionCode }: { sessionCode: string }) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleScan = async (result: IDetectedBarcode[]) => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+    console.log(result);
     if (result && result.length > 0) {
-      const uuid = result[0]?.rawValue;
-      const splitData = uuid.split("+");
+      const communityId = result[0]?.rawValue;
 
       try {
         setLoading(true);
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/internal/events/registrations/${uuid}`,
+        // Run the POST request to register the user
+        const postResponse = await fetch(
+          `${API_BASE_URL}/api/v2/events/registers`,
           {
-            method: "PATCH",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${userData.token}`,
-              "X-API-Key": process.env.NEXT_PUBLIC_API_KEY || "",
+              Authorization: `Bearer ${accessToken}`,
+              "X-API-Key": API_KEY || "",
             },
             body: JSON.stringify({
-              sessionCode: sessionCode,
-              status: "active",
+              communityId: communityId,
+              eventCode: eventCode,
+              identifier: userData.email || userData.phoneNumber,
+              instanceCode: sessionCode,
+              isPersonalQR: true,
+              name: userData.name,
+              registerAt: new Date().toISOString(),
+              // registrants: [
+              //   {
+              //     name: userData.name,
+              //   },
+              // ],
             }),
           }
         );
 
-        if (response.ok) {
+        if (postResponse.ok) {
+          const responseData = await postResponse.json();
           setDialogTitle("Success!");
-          setDialogDescription("User verified.");
+          setDialogDescription(`User ${responseData.name} registered.`);
           setDialogVariant("success");
         } else {
-          if (response.status === 401) {
+          if (postResponse.status === 401) {
             handleExpiredToken();
             return; // Exit function after handling expired token
           } else {
-            const errorData = await response.json();
+            const errorData = await postResponse.json();
             setDialogTitle(errorData.status || "Error");
             setDialogDescription(errorData.message || "Something went wrong.");
             setDialogVariant("error");

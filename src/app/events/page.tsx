@@ -20,6 +20,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { formatDate } from "@/lib/utils";
+import homebaseDatasets from "../../lib/datasets/homebase_dataset.json";
 
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -42,7 +43,7 @@ const EventsPage = () => {
       try {
         setIsLoading(true); // Set loading state
 
-        const response = await fetch(`${API_BASE_URL}/api/v1/events`, {
+        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
           headers: {
             "X-API-KEY": API_KEY,
             "Content-Type": "application/json",
@@ -75,6 +76,16 @@ const EventsPage = () => {
   function handleSession(code: string) {
     return router.push(`/events/${code}`);
   }
+  const getHomebaseFromCodes = (codes: string[]) => {
+    return codes
+      .map((code: string) => {
+        const homebase = homebaseDatasets.find(
+          (dataset) => dataset.code === code
+        );
+        return homebase ? homebase.homebase : "Unknown";
+      })
+      .join(", ");
+  };
 
   return (
     <>
@@ -111,41 +122,50 @@ const EventsPage = () => {
                   {/* Right Half / Bottom Half: Event Information */}
                   <div className="md:w-1/2">
                     <CardHeader>
-                      <CardTitle>{event.name}</CardTitle> {/* Event name */}
+                      <CardTitle>{event.title}</CardTitle> {/* Event name */}
                     </CardHeader>
                     <CardContent className="flex flex-col">
                       <Badge
                         className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
-                          event.status === "active"
+                          event.availabilityStatus === "soon"
                             ? "bg-green-700"
                             : event.status === "closed"
                             ? "bg-red-500"
-                            : "bg-gray-400" // Default color for other statuses
+                            : "bg-primary" // Default color for other statuses
                         }`}
                       >
-                        <span className="mx-auto">{event.status}</span>
+                        <span className="mx-auto">{event.locationType}</span>
                       </Badge>
-                      <p className="text-base font-light my-2 pb-2">
-                        {event.description}
+                      <p className="text-base font-light">
+                        {`This is a ${
+                          event.allowedFor
+                        } event allowed for ${getHomebaseFromCodes(
+                          event.allowedCampuses
+                        )}.`}
                       </p>
-                      <div className="border-t border-gray-200 mt-2 pt-4">
-                        <p className="font-semibold text-gray-700">
-                          Registration Times:
-                        </p>
-                        <div className="flex flex-col">
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              Open:{" "}
-                              {formatDate(new Date(event.openRegistration))}
-                            </span>
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            <span className="font-medium text-gray-700">
-                              Closed:{" "}
-                              {formatDate(new Date(event.closedRegistration))}
-                            </span>
-                          </p>
-                        </div>
+                      <div className="">
+                        {event.topics.includes("internal") && (
+                          <>
+                            {" "}
+                            <p className="font-semibold text-gray-700">
+                              Registration Times:
+                            </p>
+                            <div className="flex flex-col">
+                              <p className="text-sm text-gray-500 my-3">
+                                <span className="font-medium text-gray-700">
+                                  Open:{" "}
+                                  {formatDate(new Date(event.registerStartAt))}
+                                </span>
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                <span className="font-medium text-gray-700">
+                                  Closed:{" "}
+                                  {formatDate(new Date(event.registerEndAt))}
+                                </span>
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </CardContent>
                     <CardFooter>
@@ -157,7 +177,7 @@ const EventsPage = () => {
                       ) : event.status === "walkin" ? (
                         <Button disabled>Walk-in : Register On Site</Button>
                       ) : (
-                        <Button disabled>Registration Closed</Button>
+                        <></>
                       )}
                     </CardFooter>
                   </div>

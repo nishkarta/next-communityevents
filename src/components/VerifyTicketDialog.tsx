@@ -13,9 +13,13 @@ import { Button } from "./ui/button";
 import QrCodeScanner from "./QRScanner";
 
 const VerifyTicketDialog = ({
+  eventCode,
+  eventName,
   sessionCode,
   sessionName,
 }: {
+  eventCode: string;
+  eventName: string;
   sessionCode: string;
   sessionName: string;
 }) => {
@@ -32,7 +36,7 @@ const VerifyTicketDialog = ({
             </DialogTitle>
           </DialogHeader>
           {sessionCode ? (
-            <QrCodeScanner sessionCode={sessionCode} />
+            <QrCodeScanner eventCode={eventCode} sessionCode={sessionCode} />
           ) : (
             <div className="text-red-500">Error: Please select a session.</div>
           )}
