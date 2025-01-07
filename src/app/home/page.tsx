@@ -12,9 +12,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import withAuth from "@/components/providers/AuthWrapper";
 import { Badge } from "@/components/ui/badge";
+import { hasType } from "@/lib/utils";
 import {
   Dialog,
-  DialogTrigger,
+  DialogOverlay,
   DialogContent,
   DialogHeader,
   DialogFooter,
@@ -71,6 +72,7 @@ const Home = () => {
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [registrationsCount, setRegistrationsCount] = useState<number>(0);
   const fetchRegistrations = async () => {
@@ -110,44 +112,16 @@ const Home = () => {
   const { SVG } = useQRCode();
   const [selectedImage, setSelectedImage] = useState<string | null>(null); // State for the selected image
 
-  const handleManualVerify = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/homebase`,
-        {
-          method: "POST",
-          headers: {
-            "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userData.token}`,
-          },
-          body: JSON.stringify({
-            name: userData.name,
-            identifier: userData.email ? userData.email : userData.phoneNumber,
-            accountNumber: userData.accountNumber,
-            eventCode: "HB-001",
-            sessionCode: "HB-001-01",
-            otherRegister: [],
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-      const registrantName = responseData.name || "Registrant";
-      alert(`Verification successful for ${registrantName}`);
-    } catch (error) {
-      console.error("Error:", error);
-      // Rollback optimistic update in case of error
-    }
-    console.log(
-      userData.accountNumber + "+" + userData.email
-        ? userData.email
-        : userData.phoneNumber + "+" + userData.name
-    );
+  const openModal = (image: string) => {
+    setSelectedImage(image);
+    setIsModalOpen(true);
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   return (
     <>
       <main className="h-max min-w-full overflow-auto">
@@ -180,7 +154,7 @@ const Home = () => {
                 <div className="relative inline-block cursor-pointer">
                   <i className="fi fi-rs-file-invoice text-2xl mt-1"></i>
                   <Badge className="absolute -top-2 right-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold leading-none hover:bg-red-600 text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">
-                    {userData?.userTypes[0] === "volunteer" ? 1 : 0}
+                    {hasType(userData, "volunteer") ? 1 : 0}
                   </Badge>
                 </div>
               </PopoverTrigger>
@@ -189,11 +163,11 @@ const Home = () => {
                   <p>
                     You currently have{" "}
                     <span className="font-bold text-lg">
-                      {userData?.userTypes[0] === "volunteer" ? 1 : 0}
+                      {hasType(userData, "volunteer") ? 1 : 0}
                     </span>{" "}
                     announcement!
                   </p>
-                  {userData?.userTypes[0] === "volunteer" && (
+                  {hasType(userData, "volunteer") && (
                     <Button
                       onClick={showAnnouncement}
                       className="bg-red-600 mt-1"
@@ -229,8 +203,7 @@ const Home = () => {
               </PopoverContent>
             </Popover>
             {/* QR Code Dialog */}
-            {(userData?.userTypes.includes("volunteer") ||
-              userData?.userTypes.includes("admin")) && (
+            {(hasType(userData, "volunteer") || hasType(userData, "admin")) && (
               <>
                 {" "}
                 <Popover>
@@ -251,7 +224,10 @@ const Home = () => {
                         </div>
                       </DialogHeader>
                       {selectedImage && (
-                        <div className="flex justify-center">
+                        <div
+                          className="flex justify-center cursor-pointer"
+                          onClick={() => openModal(selectedImage)}
+                        >
                           <SVG
                             text={selectedImage}
                             options={{
@@ -268,6 +244,49 @@ const Home = () => {
                             }}
                           />
                         </div>
+                      )}
+                      {isModalOpen && (
+                        <Dialog
+                          open={isModalOpen}
+                          onOpenChange={setIsModalOpen}
+                        >
+                          <DialogOverlay />
+                          <DialogContent>
+                            <DialogHeader>
+                              <div className="flex flex-col items-center">
+                                <b>{userData?.name}</b>
+                                <span>{userData?.email}</span>
+                              </div>
+                            </DialogHeader>
+                            {selectedImage && (
+                              <div className="flex justify-center">
+                                <SVG
+                                  text={selectedImage}
+                                  options={{
+                                    type: "image/jpeg",
+                                    quality: 0.8,
+                                    errorCorrectionLevel: "M",
+                                    margin: 3,
+                                    scale: 10,
+                                    width: 300, // Even larger width for modal display
+                                    color: {
+                                      dark: "#000000",
+                                      light: "#FFFFFF",
+                                    },
+                                  }}
+                                />
+                              </div>
+                            )}
+                            <DialogFooter>
+                              <Button
+                                className="w-1/2 mx-auto"
+                                onClick={closeModal}
+                              >
+                                Close
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       )}
                       <DialogFooter>
                         <span className="text-xs text-gray-500 mx-auto text-center">
@@ -305,7 +324,7 @@ const Home = () => {
         {/* Dashboard Icons */}
 
         {/* Announcement Component */}
-        {userData?.userTypes.includes("volunteer") && (
+        {hasType(userData, "volunteer") && (
           <Announcement
             title="Informasi Homebase"
             message="We're excited to have you here. Check out the latest features and upcoming events!"
@@ -352,15 +371,13 @@ const Home = () => {
               openInNewTab={true}
             />
 
-            {userData?.userTypes.includes("admin") ? (
-              <>
-                <IconButton
-                  href="/dashboard"
-                  iconName="fi fi-tr-dashboard-monitor"
-                  name="Admin"
-                  iconColor="text-black-500"
-                />
-              </>
+            {hasType(userData, "admin") ? (
+              <IconButton
+                href="/dashboard"
+                iconName="fi fi-tr-dashboard-monitor"
+                name="Admin"
+                iconColor="text-black-500"
+              />
             ) : (
               <></>
             )}

@@ -125,7 +125,10 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                   <TableHead className="hidden sm:table-cell">
                     Remaining Seats
                   </TableHead>
-                  <TableHead>Action</TableHead>
+                  <TableHead>Camera Scan</TableHead>
+                  <TableHead className="hidden sm:table-cell">
+                    Hardware Scan
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -152,6 +155,17 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                           sessionCode={session.code}
                           sessionName={session.title}
                         ></VerifyTicketDialog>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={() => {
+                            router.push(
+                              `/qrscan/${params.eventCode}/${session.code}`
+                            );
+                          }}
+                        >
+                          QR Scanner (Hardware)
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))

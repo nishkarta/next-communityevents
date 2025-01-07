@@ -27,39 +27,46 @@ const QRScan: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false); // Add a loading state
   const lastSubmittedQRCode = useRef<string | null>(null);
   const router = useRouter();
+  const { getValidAccessToken } = useAuth();
 
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
-  if (userData.role === "user") {
-    router.push("/home");
-    return null;
-  }
 
   const sendToAPI = async (qrCode: string) => {
     if (lastSubmittedQRCode.current === qrCode || !qrCode) return; // Prevent redundant calls
     lastSubmittedQRCode.current = qrCode;
     setLoading(true);
     setError(false); // Reset error state
-    const splitData = qrCode.split("+");
-    console.log(splitData);
+
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/internal/events/registrations/${qrCode}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userData?.token}`,
-            "X-API-Key": API_KEY || "",
-          },
-          body: JSON.stringify({
-            sessionCode: sessionCode,
-            status: "active",
-          }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          "X-API-Key": API_KEY || "",
+        },
+        body: JSON.stringify({
+          communityId: qrCode,
+          eventCode: eventCode,
+          instanceCode: sessionCode,
+          isPersonalQR: true,
+          name: userData.name,
+          registerAt: new Date().toISOString(),
+          // registrants: [
+          //   {
+          //     name: userData.name,
+          //   },
+          // ],
+        }),
+      });
 
       if (!response.ok) {
         // Manually throw an error to handle it in the catch block
