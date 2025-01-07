@@ -163,16 +163,24 @@ const LoginV2 = () => {
                     <Button type="submit" className="w-full" disabled={loading}>
                       {loading ? "Loading..." : userExists ? "Login" : "Next"}
                     </Button>
-                    <div className="flex justify-between text-sm"></div>
-                    <Link
-                      href="/forget"
-                      className="text-primary text-center text-sm hover:underline"
-                    >
-                      Forgot Password?
-                    </Link>
+                    <div className="flex flex-col gap-y-3 justify-between text-sm">
+                      {" "}
+                      <Link
+                        href="/register"
+                        className="text-primary text-center text-sm hover:underline"
+                      >
+                        Don't have an account? Sign Up
+                      </Link>
+                      <Link
+                        href="/forget"
+                        className="text-primary text-center text-sm hover:underline"
+                      >
+                        Forgot Password?
+                      </Link>
+                    </div>
                   </div>
                 </form>
-                <div className="relative hidden bg-muted md:block">
+                <div className="relative hidden bg-white md:block">
                   <Image
                     className="bg-white"
                     src="/images/gc-logo-2.png" // Adjust the path to your logo in the public folder
