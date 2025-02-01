@@ -38,7 +38,6 @@ function QrCodeScanner({ sessionCode, eventCode }: QrCodeScannerProps) {
       handleExpiredToken();
       return;
     }
-    console.log(result);
     if (result && result.length > 0) {
       const communityId = result[0]?.rawValue;
 

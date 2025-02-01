@@ -10,6 +10,7 @@ import Link from "next/link";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+
 import {
   Form,
   FormControl,
@@ -312,7 +313,7 @@ export default function Register() {
                         selected={field.value}
                         onChange={(date: any) => field.onChange(date)}
                         showYearDropdown
-                        yearDropdownItemNumber={15}
+                        yearDropdownItemNumber={80}
                         scrollableYearDropdown
                         placeholderText="Select your date of birth"
                       />
