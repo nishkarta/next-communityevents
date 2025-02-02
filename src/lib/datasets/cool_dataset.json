@@ -24,7 +24,7 @@
     "no": 4,
     "category": "NEWLYWED",
     "cool": "NEWLYWED SUNTER",
-    "leader": "NG TEDDY PAWITRA",
+    "leader": "FRESKI",
     "campus": "GC JAKARTA"
   },
   {
@@ -192,13 +192,13 @@
     "no": 28,
     "category": "UMUM",
     "cool": "UMUM GANDARIA CITY 1",
-    "leader": "FERDINAND ROBOT",
+    "leader": "FIRONICA LAURA ROBOT",
     "campus": "GC JAKARTA"
   },
   {
     "no": 29,
     "category": "UMUM",
-    "cool": "UMUM GANDARIA CITY 2",
+    "cool": "UMUM PIM 2",
     "leader": "REFNI ULI PATARINA",
     "campus": "GC JAKARTA"
   },
@@ -212,7 +212,7 @@
   {
     "no": 31,
     "category": "UMUM",
-    "cool": "UMUM GANDARIA CITY 4",
+    "cool": "UMUM PIM 4",
     "leader": "SONDANG SILAEN",
     "campus": "GC JAKARTA"
   },
@@ -614,5 +614,12 @@
     "cool": "Revival",
     "leader": "",
     "campus": "GC MANADO"
+  },
+  {
+    "no": 89,
+    "category": "UMUM",
+    "cool": "UMUM RAFFLES",
+    "leader": "Agustinus Sarjana, Maureen Tampubolon",
+    "campus": "GC Jakarta"
   }
 ]
