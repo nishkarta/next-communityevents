@@ -17,11 +17,13 @@ const VerifyTicketDialog = ({
   eventName,
   sessionCode,
   sessionName,
+  onlineEvent = false,
 }: {
   eventCode: string;
   eventName: string;
   sessionCode: string;
   sessionName: string;
+  onlineEvent?: boolean;
 }) => {
   return (
     <>

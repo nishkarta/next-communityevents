@@ -544,5 +544,75 @@
     "cool": "Huddle 2",
     "leader": "Odiska Napitu",
     "campus": "GC BEKASI"
+  },
+  {
+    "no": 79,
+    "category": "UMUM",
+    "cool": "New Wine",
+    "leader": "",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 80,
+    "category": "UMUM",
+    "cool": "Borgo",
+    "leader": "Ferry Senewe",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 81,
+    "category": "UMUM",
+    "cool": "Sarani",
+    "leader": "Syerlike Takarangkeang",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 82,
+    "category": "UMUM",
+    "cool": "Ranowangko",
+    "leader": "Meydi Tololiu",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 83,
+    "category": "UMUM",
+    "cool": "Mokupa",
+    "leader": "Henny Tololiu",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 84,
+    "category": "UMUM",
+    "cool": "Zebaoth",
+    "leader": "Yohan Ernst Kuhu",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 85,
+    "category": "UMUM",
+    "cool": "Oikos",
+    "leader": "",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 86,
+    "category": "UMUM",
+    "cool": "Malalayang",
+    "leader": "Lerry Y. Ch Mait",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 87,
+    "category": "UMUM",
+    "cool": "Star Square",
+    "leader": "Ps. Carlo Paath",
+    "campus": "GC MANADO"
+  },
+  {
+    "no": 88,
+    "category": "UMUM",
+    "cool": "Revival",
+    "leader": "",
+    "campus": "GC MANADO"
   }
 ]

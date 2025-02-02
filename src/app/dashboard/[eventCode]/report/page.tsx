@@ -71,6 +71,8 @@ interface Registrant {
   eventName: string;
   instanceCode: string;
   instanceName: string;
+  departmentName: string;
+  coolName: string;
   registeredBy: string;
   status: string;
   registeredAt: string;
@@ -111,7 +113,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
 
     try {
       const url = new URL(`${API_BASE_URL}/api/v2/internal/events/registers`);
-      url.searchParams.append("limit", "10");
+      url.searchParams.append("limit", "500");
       url.searchParams.append("EventCode", params.eventCode);
       if (cursor) {
         url.searchParams.append("cursor", cursor);
@@ -322,6 +324,9 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Community ID</TableHead>
+              <TableHead>Instance Name</TableHead>
+              <TableHead>Department Name</TableHead>
+              <TableHead>Cool Name</TableHead>
               <TableHead>Registered At</TableHead>
               <TableHead>Verified At</TableHead>
             </TableRow>
@@ -334,6 +339,9 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
                     {registrant.name}
                   </TableCell>
                   <TableCell>{registrant.communityId}</TableCell>
+                  <TableCell>{registrant.instanceName}</TableCell>
+                  <TableCell>{registrant.departmentName ?? null}</TableCell>
+                  <TableCell>{registrant.coolName ?? null}</TableCell>
                   <TableCell>
                     {new Date(registrant.registeredAt).toLocaleString()}
                   </TableCell>

@@ -62,6 +62,8 @@ interface User {
   phoneNumber: string;
   email: string;
   status: string;
+  departmentName: string;
+  coolName: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -395,6 +397,8 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
               <TableHead>Community ID</TableHead>
               <TableHead>Phone Number</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Department Name</TableHead>
+              <TableHead>Cool Name</TableHead>
               <TableHead>Register</TableHead>
             </TableRow>
           </TableHeader>
@@ -406,6 +410,8 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                   <TableCell>{user.communityId}</TableCell>
                   <TableCell>{user.phoneNumber}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.departmentName ?? null}</TableCell>
+                  <TableCell>{user.coolName ?? null}</TableCell>
                   <TableCell>
                     <Button onClick={() => registerUser(user)}>Register</Button>
                   </TableCell>

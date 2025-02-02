@@ -17,9 +17,14 @@ import {
 interface QrCodeScannerProps {
   sessionCode: string;
   eventCode: string;
+  onlineEvent?: boolean;
 }
 
-function QrCodeScanner({ sessionCode, eventCode }: QrCodeScannerProps) {
+function QrCodeScanner({
+  sessionCode,
+  eventCode,
+  onlineEvent = false,
+}: QrCodeScannerProps) {
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
     useAuth();
   const userData = isAuthenticated
@@ -38,7 +43,7 @@ function QrCodeScanner({ sessionCode, eventCode }: QrCodeScannerProps) {
       handleExpiredToken();
       return;
     }
-    if (result && result.length > 0) {
+    if (result && result.length > 0 && !onlineEvent) {
       const communityId = result[0]?.rawValue;
 
       try {

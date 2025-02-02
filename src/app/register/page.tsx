@@ -223,14 +223,14 @@ export default function Register() {
         >
           {/* Main registration form fields */}
           <span className=" text-sm font-semibold ">
-            All fields with * are required.
+            All fields are required unless otherwise stated.
           </span>
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Full Name *</FormLabel>
+                <FormLabel>Full Name</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -247,7 +247,7 @@ export default function Register() {
             name="email"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Email *</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -264,7 +264,7 @@ export default function Register() {
             name="phoneNumber"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Phone Number *</FormLabel>
+                <FormLabel>Phone Number</FormLabel>
                 <FormControl>
                   <Input
                     className="shadow-md focus-visible:ring-primary-light"
@@ -285,7 +285,7 @@ export default function Register() {
             name="placeOfBirth"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Place of Birth *</FormLabel>
+                <FormLabel>Place of Birth</FormLabel>
                 <FormControl>
                   <Input
                     className="w-[250px] justify-between"
@@ -302,7 +302,7 @@ export default function Register() {
             name="dateOfBirth"
             render={({ field }) => (
               <FormItem className="my-5 flex flex-col">
-                <FormLabel>Date of Birth *</FormLabel>
+                <FormLabel>Date of Birth</FormLabel>
                 <FormControl>
                   <Controller
                     control={form.control}
@@ -330,7 +330,7 @@ export default function Register() {
             name="password"
             render={({ field }) => (
               <FormItem className="my-5">
-                <FormLabel>Password *</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <div className="relative">
                   <FormControl>
                     <Input
@@ -376,7 +376,7 @@ export default function Register() {
             <>
               <div className="my-5">
                 <span className=" text-sm font-semibold">
-                  All fields with * are required.
+                  All fields are required unless otherwise stated.
                 </span>
               </div>
 
@@ -385,7 +385,7 @@ export default function Register() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="flex flex-col my-5">
-                    <FormLabel>Gender *</FormLabel>
+                    <FormLabel>Gender</FormLabel>
                     <Popover
                       open={openGenderBox}
                       onOpenChange={setOpenGenderBox}
@@ -433,7 +433,7 @@ export default function Register() {
                 name="kkj"
                 render={({ field }) => (
                   <FormItem className="my-5">
-                    <FormLabel>KKJ</FormLabel>
+                    <FormLabel>KKJ (Optional)</FormLabel>
                     <FormControl>
                       <Input
                         className="w-[250px] justify-between"
@@ -451,7 +451,7 @@ export default function Register() {
                 name="maritalStatus"
                 render={({ field }) => (
                   <FormItem className="flex flex-col my-5">
-                    <FormLabel>Marital Status *</FormLabel>
+                    <FormLabel>Marital Status</FormLabel>
                     <Popover
                       open={openMarriageBox}
                       onOpenChange={setOpenMarriageBox}
@@ -507,7 +507,7 @@ export default function Register() {
                 name="department"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col ">
-                    <FormLabel>Department *</FormLabel>
+                    <FormLabel>Department</FormLabel>
                     <Popover
                       open={openDepartmentBox}
                       onOpenChange={setOpenDepartmentBox}
@@ -555,7 +555,7 @@ export default function Register() {
                 name="cool"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col">
-                    <FormLabel>COOL *</FormLabel>
+                    <FormLabel>COOL</FormLabel>
                     <Popover open={openCoolBox} onOpenChange={setOpenCoolBox}>
                       <PopoverTrigger asChild>
                         <Button
@@ -608,7 +608,7 @@ export default function Register() {
                 name="campus"
                 render={({ field }) => (
                   <FormItem className="my-5 flex flex-col ">
-                    <FormLabel>Homebase *</FormLabel>
+                    <FormLabel>Homebase</FormLabel>
                     <Popover
                       open={openHomebaseBox}
                       onOpenChange={setOpenHomebaseBox}

@@ -43,7 +43,7 @@ const EventsPage = () => {
       try {
         setIsLoading(true); // Set loading state
 
-        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
+        const response = await fetch(`${API_BASE_URL}/api/v2/internal/events`, {
           headers: {
             "X-API-KEY": API_KEY,
             "Content-Type": "application/json",
@@ -75,6 +75,9 @@ const EventsPage = () => {
 
   function handleSession(code: string) {
     return router.push(`/events/${code}`);
+  }
+  function handleInternalSession(code: string) {
+    return router.push(`/events/${code}/internal`);
   }
   const getHomebaseFromCodes = (codes: string[]) => {
     return codes
@@ -122,10 +125,19 @@ const EventsPage = () => {
                   {/* Right Half / Bottom Half: Event Information */}
                   <div className="md:w-1/2">
                     <CardHeader>
-                      <CardTitle>{event.title}</CardTitle> {/* Event name */}
+                      <CardTitle className="mx-auto md:mx-0">
+                        {event.title}
+                      </CardTitle>{" "}
+                      {/* Event name */}
                     </CardHeader>
-                    <CardContent className="flex flex-col">
-                      <Badge
+                    <CardContent className="flex flex-col items-center md:items-start">
+                      <Button
+                        className="w-fit mx-auto md:mx-0"
+                        onClick={() => handleInternalSession(event.code)}
+                      >
+                        Register for Homebase
+                      </Button>
+                      {/* <Badge
                         className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
                           event.availabilityStatus === "soon"
                             ? "bg-green-700"
@@ -166,7 +178,7 @@ const EventsPage = () => {
                             </div>
                           </>
                         )}
-                      </div>
+                      </div> */}
                     </CardContent>
                     <CardFooter>
                       {/* Link to event sessions page */}
