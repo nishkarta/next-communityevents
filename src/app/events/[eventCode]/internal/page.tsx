@@ -42,7 +42,7 @@ const EventInternal = () => {
         setIsLoading(true); // Set loading state
 
         const response = await fetch(
-          `${API_BASE_URL}/api/v2/internal/events/${eventCode}/summary`,
+          `${API_BASE_URL}/api/v2/events/${eventCode}`,
           {
             headers: {
               "X-API-KEY": API_KEY || "",
@@ -106,18 +106,21 @@ const EventInternal = () => {
                 </CardHeader>
                 <CardContent className="flex flex-col">
                   <Badge
-                    className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
-                      instance.status === "active"
+                    className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                      instance.availabilityStatus === "available"
                         ? "bg-green-700"
-                        : instance.status === "closed"
+                        : instance.availabilityStatus === "unavailable"
                         ? "bg-red-500"
                         : "bg-gray-400" // Default color for other statuses
                     }`}
                   >
-                    <span className="mx-auto">{instance.status}</span>
+                    <span className="mx-auto">
+                      {instance.availabilityStatus}
+                    </span>
                   </Badge>
+
                   <p className="text-base font-light my-2 pb-2">
-                    {instance.description}
+                    {instance.LocationName}
                   </p>
                   <Separator />
                   {/* <div className="mt-2 pt-4">
@@ -144,7 +147,7 @@ const EventInternal = () => {
                 </CardContent>
                 <CardFooter>
                   {/* Link to register instances page */}
-                  {instance.status === "active" ? (
+                  {instance.availabilityStatus === "available" ? (
                     <VerifyTicketDialog
                       eventName={details.title ?? "Homebase"}
                       eventCode={
@@ -152,6 +155,7 @@ const EventInternal = () => {
                       }
                       sessionCode={instance.code}
                       sessionName={instance.title}
+                      onlineEvent={true}
                     />
                   ) : (
                     <Button disabled>Registration Closed</Button>

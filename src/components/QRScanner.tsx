@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
-import { AuthProvider } from "./providers/AuthProvider";
 import { useAuth } from "./providers/AuthProvider";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
 import {
@@ -43,11 +42,25 @@ function QrCodeScanner({
       handleExpiredToken();
       return;
     }
-    if (result && result.length > 0 && !onlineEvent) {
-      const communityId = result[0]?.rawValue;
+
+    if (result && result.length > 0) {
+      const rawValue = result[0]?.rawValue;
 
       try {
         setLoading(true);
+
+        let communityId, eventCodeToUse, sessionCodeToUse;
+
+        if (onlineEvent) {
+          // Split the rawValue to get eventCode and sessionCode
+          [eventCodeToUse, sessionCodeToUse] = rawValue.split("+");
+          communityId = userData.communityId; // Assuming communityId is available in userData
+        } else {
+          communityId = rawValue;
+          eventCodeToUse = eventCode;
+          sessionCodeToUse = sessionCode;
+        }
+
         // Run the POST request to register the user
         const postResponse = await fetch(
           `${API_BASE_URL}/api/v2/events/registers`,
@@ -60,20 +73,16 @@ function QrCodeScanner({
             },
             body: JSON.stringify({
               communityId: communityId,
-              eventCode: eventCode,
-              instanceCode: sessionCode,
+              eventCode: eventCodeToUse,
+              instanceCode: sessionCodeToUse,
               isPersonalQR: true,
               name: userData.name,
               registerAt: new Date().toISOString(),
-              // registrants: [
-              //   {
-              //     name: userData.name,
-              //   },
-              // ],
             }),
           }
         );
 
+        // Handle the response
         if (postResponse.ok) {
           const responseData = await postResponse.json();
           setDialogTitle("Success!");

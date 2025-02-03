@@ -43,7 +43,7 @@ const EventsPage = () => {
       try {
         setIsLoading(true); // Set loading state
 
-        const response = await fetch(`${API_BASE_URL}/api/v2/internal/events`, {
+        const response = await fetch(`${API_BASE_URL}/api/v2/events`, {
           headers: {
             "X-API-KEY": API_KEY,
             "Content-Type": "application/json",
@@ -131,13 +131,7 @@ const EventsPage = () => {
                       {/* Event name */}
                     </CardHeader>
                     <CardContent className="flex flex-col items-center md:items-start">
-                      <Button
-                        className="w-fit mx-auto md:mx-0"
-                        onClick={() => handleInternalSession(event.code)}
-                      >
-                        Register for Homebase
-                      </Button>
-                      {/* <Badge
+                      <Badge
                         className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
                           event.availabilityStatus === "soon"
                             ? "bg-green-700"
@@ -178,9 +172,15 @@ const EventsPage = () => {
                             </div>
                           </>
                         )}
-                      </div> */}
+                      </div>
                     </CardContent>
                     <CardFooter>
+                      <Button
+                        className="w-fit mx-auto md:mx-0"
+                        onClick={() => handleInternalSession(event.code)}
+                      >
+                        Register for Homebase
+                      </Button>
                       {/* Link to event sessions page */}
                       {event.status === "active" ? (
                         <Button onClick={() => handleSession(event.code)}>
