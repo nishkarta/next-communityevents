@@ -60,6 +60,7 @@ const QRScan: React.FC = () => {
           isPersonalQR: true,
           name: userData.name,
           registerAt: new Date().toISOString(),
+          description: "Offline Registration",
           // registrants: [
           //   {
           //     name: userData.name,
