@@ -78,9 +78,7 @@ function QrCodeScanner({
               isPersonalQR: true,
               name: userData.name,
               registerAt: new Date().toISOString(),
-              description: onlineEvent
-                ? "Online Registration"
-                : "Offline Registration",
+              description: onlineEvent ? "online" : "offline",
             }),
           }
         );

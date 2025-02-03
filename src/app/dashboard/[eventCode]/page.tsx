@@ -317,6 +317,7 @@ function EventSessionsAdmin({ params }: { params: { eventCode: string } }) {
                           eventName={eventDetails ? eventDetails.title : ""}
                           sessionCode={session.code}
                           sessionName={session.title}
+                          onlineEvent={false}
                         ></VerifyTicketDialog>
                       </TableCell>
                       <TableCell>

@@ -41,7 +41,7 @@ const VerifyTicketDialog = ({
             <QrCodeScanner
               eventCode={eventCode}
               sessionCode={sessionCode}
-              onlineEvent={true}
+              onlineEvent={onlineEvent}
             />
           ) : (
             <div className="text-red-500">Error: Please select a session.</div>
