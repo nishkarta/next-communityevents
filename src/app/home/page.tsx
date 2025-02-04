@@ -334,7 +334,7 @@ const Home = () => {
         )}
 
         <div className="mt-8 flex justify-center">
-          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-auto-fill-md lg:grid-cols-auto-fill-lg gap-3 md:gap-6 p-3 justify-items-center w-full">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6 p-3 justify-items-center w-full">
             <IconButton
               href="/events"
               iconName="fi fi-tr-calendar-star"
@@ -370,7 +370,13 @@ const Home = () => {
               iconColor="text-green-500"
               openInNewTab={true}
             />
-
+            <IconButton
+              href="/profile"
+              iconName="fi fi-rr-user"
+              name="Profile"
+              iconColor="text-blue-500"
+              openInNewTab={false}
+            />
             {hasType(userData, "admin") ? (
               <IconButton
                 href="/dashboard"
@@ -378,15 +384,7 @@ const Home = () => {
                 name="Admin"
                 iconColor="text-black-500"
               />
-            ) : (
-              <></>
-            )}
-
-            {/* {[1, 2].map((num) => (
-						<Button key={num} variant="outline" className="h-20">
-							Button {num}
-						</Button>
-					))} */}
+            ) : null}
           </div>
         </div>
         {/* Upcoming Events */}

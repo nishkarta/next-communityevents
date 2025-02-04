@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
-
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,6 +48,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ChevronsUpDown } from "lucide-react";
 import HeaderNav from "@/components/HeaderNav";
+import { set } from "lodash";
 
 interface CategoryMap {
   [key: string]: string;
@@ -61,6 +62,7 @@ const Profile = () => {
   const { toast } = useToast();
   interface UserData {
     name: string;
+    communityId: string;
     email: string;
     phoneNumber: string;
     placeOfBirth: string;
@@ -71,10 +73,13 @@ const Profile = () => {
     coolId: string;
     campusCode: string;
     userTypes: string[];
+    isBaptized: boolean;
+    isKom100: boolean;
   }
 
   const [userData, setUserData] = useState<UserData>({
     name: "",
+    communityId: "",
     email: "",
     phoneNumber: "",
     placeOfBirth: "",
@@ -85,6 +90,8 @@ const Profile = () => {
     coolId: "",
     campusCode: "",
     userTypes: [],
+    isBaptized: false,
+    isKom100: false,
   });
   const categoryMap: CategoryMap = categoryDatasets.reduce((map, category) => {
     map[category.name.toUpperCase()] = category.code;
@@ -100,9 +107,9 @@ const Profile = () => {
 
   useEffect(() => {
     if (
-      userData.userTypes.includes("volunteer") ||
-      userData.userTypes.includes("admin") ||
-      userData.userTypes.includes("usher")
+      userData.userTypes?.includes("volunteer") ||
+      userData.userTypes?.includes("admin") ||
+      userData.userTypes?.includes("usher")
     ) {
       setIsWorker(true);
     } else {
@@ -133,6 +140,8 @@ const Profile = () => {
   const [selectedHomebase, setSelectedHomebase] = useState("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [isBaptized, setIsBaptized] = useState(false);
+  const [isKom100, setIsKom100] = useState(false);
 
   useEffect(() => {
     setName(userData.name);
@@ -146,6 +155,8 @@ const Profile = () => {
     setCool(userData.coolId);
     setHomebase(userData.campusCode);
     setUserTypes(userData.userTypes);
+    setIsBaptized(userData.isBaptized);
+    setIsKom100(userData.isKom100);
   }, [userData]);
 
   const getHomebaseName = (code: string) => {
@@ -161,6 +172,82 @@ const Profile = () => {
       (item) => item.no.toString() === code.toString()
     );
     return cool ? cool.cool : "Select COOL";
+  };
+  const handleSave = async () => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    const communityId = userData.communityId; // Assuming communityId is part of userData
+
+    const requestBody = {
+      name,
+      email,
+      phoneNumber,
+      gender,
+      address: "", // Assuming address is not part of the form
+      campusCode: homebase,
+      placeOfBirth,
+      dateOfBirth: format(dateOfBirth, "yyyy-MM-dd"),
+      coolId: parseInt(cool),
+      departmentCode: department,
+      maritalStatus,
+      dateOfMarriage: "", // Assuming dateOfMarriage is not part of the form
+      employmentStatus: "", // Assuming employmentStatus is not part of the form
+      educationLevel: "", // Assuming educationLevel is not part of the form
+      kkjNumber: "", // Assuming kkjNumber is not part of the form
+      jemaatId: "", // Assuming jemaatId is not part of the form
+      isBaptized,
+      isKom100,
+    };
+
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${API_BASE_URL}/api/v2/users/${communityId}/profile`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-API-Key": API_KEY || "",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          handleExpiredToken();
+          return;
+        }
+        throw new Error("Failed to update user profile");
+      }
+
+      const updatedUserData = await response.json();
+      const existingUserData = JSON.parse(
+        localStorage.getItem("userData") || "{}"
+      );
+      const mergedUserData = { ...existingUserData, ...updatedUserData };
+      localStorage.setItem("userData", JSON.stringify(mergedUserData));
+      setUserData(mergedUserData);
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
+        className: "bg-green-400",
+        duration: 2000,
+      });
+      setTimeout(() => {
+        router.push("/home");
+      }, 1000);
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      setError("Failed to update user profile. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <>
@@ -232,7 +319,7 @@ const Profile = () => {
                           <CommandGroup>
                             <CommandItem
                               onSelect={() => {
-                                setGender("Male");
+                                setGender("male");
                                 setOpenGenderBox(false);
                               }}
                             >
@@ -240,7 +327,7 @@ const Profile = () => {
                             </CommandItem>
                             <CommandItem
                               onSelect={() => {
-                                setGender("Female");
+                                setGender("female");
                                 setOpenGenderBox(false);
                               }}
                             >
@@ -424,6 +511,40 @@ const Profile = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
+                <div className="grid w-full items-center mt-2">
+                  <div className="flex flex-col gap-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="baptis"
+                        checked={isBaptized}
+                        onCheckedChange={(checked) => {
+                          setIsBaptized(checked === true);
+                        }}
+                      />
+                      <label
+                        htmlFor="baptis"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Baptis
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="kom"
+                        checked={isKom100}
+                        onCheckedChange={(checked) => {
+                          setIsKom100(checked === true);
+                        }}
+                      />
+                      <label
+                        htmlFor="kom"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Kom100
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
           </CardContent>
@@ -431,8 +552,12 @@ const Profile = () => {
             <Button variant="outline" onClick={() => router.push("/home")}>
               Cancel
             </Button>
-            <Button variant="default" onClick={() => console.log("Save")}>
-              Save
+            <Button
+              variant="default"
+              onClick={() => handleSave()}
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Save"}
             </Button>
           </CardFooter>
         </Card>
