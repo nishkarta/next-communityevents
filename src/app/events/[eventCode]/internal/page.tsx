@@ -133,17 +133,6 @@ const EventInternal = () => {
                   </div> */}
 
                   <Separator />
-                  <div className="mt-2 pt-4">
-                    <p className="font-semibold text-gray-700">
-                      Number of seats:
-                    </p>
-                    <p className="text-sm text-gray-500 my-3">
-                      <span className="font-medium text-gray-700">
-                        {instance.totalSeats}
-                      </span>
-                    </p>
-                  </div>
-                  <Separator />
                 </CardContent>
                 <CardFooter>
                   {/* Link to register instances page */}

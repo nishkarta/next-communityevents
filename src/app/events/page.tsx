@@ -132,15 +132,15 @@ const EventsPage = () => {
                     </CardHeader>
                     <CardContent className="flex flex-col items-center md:items-start">
                       <Badge
-                        className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
-                          event.availabilityStatus === "soon"
+                        className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                          event.availabilityStatus === "available"
                             ? "bg-green-700"
-                            : event.status === "closed"
-                            ? "bg-red-500"
                             : "bg-primary" // Default color for other statuses
                         }`}
                       >
-                        <span className="mx-auto">{event.locationType}</span>
+                        <span className="mx-auto">
+                          {event.availabilityStatus}
+                        </span>
                       </Badge>
                       <p className="text-base font-light">
                         {`This is a ${
@@ -178,6 +178,7 @@ const EventsPage = () => {
                       <Button
                         className="w-fit mx-auto md:mx-0"
                         onClick={() => handleInternalSession(event.code)}
+                        disabled={event.availabilityStatus === "soon"}
                       >
                         Register for Homebase
                       </Button>
