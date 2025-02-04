@@ -161,11 +161,11 @@ const Profile = () => {
 
   const getHomebaseName = (code: string) => {
     const homebase = homebaseDatasets.find((item) => item.code === code);
-    return homebase ? homebase.homebase : "Select Homebase";
+    return homebase ? homebase.homebase : "Select Campus";
   };
   const getDepartmentName = (code: string) => {
     const department = departmentDatasets.find((item) => item.code === code);
-    return department ? department.department : "Select Homebase";
+    return department ? department.department : "Select Department";
   };
   const getCOOLName = (code: string) => {
     const cool = coolDatasets.find(
@@ -186,14 +186,14 @@ const Profile = () => {
       name,
       email,
       phoneNumber,
-      gender,
+      gender: gender.toLowerCase(),
       address: "", // Assuming address is not part of the form
       campusCode: homebase,
       placeOfBirth,
       dateOfBirth: format(dateOfBirth, "yyyy-MM-dd"),
       coolId: parseInt(cool),
       departmentCode: department,
-      maritalStatus,
+      maritalStatus: maritalStatus.toLowerCase(),
       dateOfMarriage: "", // Assuming dateOfMarriage is not part of the form
       employmentStatus: "", // Assuming employmentStatus is not part of the form
       educationLevel: "", // Assuming educationLevel is not part of the form
@@ -287,6 +287,9 @@ const Profile = () => {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="border rounded-md p-2"
               />
+              <Label className=" ml-1 text-sm font-normal text-gray-500">
+                Phone number format: 087800001234
+              </Label>
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="dateofBirth">Date of Birth</Label>
@@ -298,96 +301,136 @@ const Profile = () => {
                 selected={dateOfBirth}
                 onChange={(date: Date | null) => date && setDateOfBirth(date)}
               />
+              <Label className=" ml-1 text-sm font-normal text-gray-500">
+                Date format: MM/DD/YYYY
+              </Label>
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="homebase">Campus</Label>
+              <Popover open={openHomebaseBox} onOpenChange={setOpenHomebaseBox}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between border rounded-md p-2"
+                  >
+                    {getHomebaseName(homebase)}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandList>
+                      {homebaseDatasets.map((item, index) => (
+                        <CommandGroup key={index}>
+                          <CommandItem
+                            onSelect={() => {
+                              setHomebase(item.code.toUpperCase());
+                              setSelectedHomebase(item.homebase);
+                              setOpenHomebaseBox(false);
+                            }}
+                          >
+                            <span className="font-medium">
+                              {item.homebase.toUpperCase()}
+                            </span>
+                          </CommandItem>
+                        </CommandGroup>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="gender">Gender</Label>
+              <Popover open={openGenderBox} onOpenChange={setOpenGenderBox}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between border rounded-md p-2"
+                  >
+                    {gender
+                      ? gender.charAt(0).toUpperCase() + gender.slice(1)
+                      : "Select Gender"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          onSelect={() => {
+                            setGender("male");
+                            setOpenGenderBox(false);
+                          }}
+                        >
+                          Male
+                        </CommandItem>
+                        <CommandItem
+                          onSelect={() => {
+                            setGender("female");
+                            setOpenGenderBox(false);
+                          }}
+                        >
+                          Female
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="maritalStatus">Marital Status</Label>
+              <Popover open={openMarriageBox} onOpenChange={setOpenMarriageBox}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between border rounded-md p-2"
+                  >
+                    {maritalStatus
+                      ? maritalStatus.charAt(0).toUpperCase() +
+                        maritalStatus.slice(1)
+                      : "Select Marital Status"}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          onSelect={() => {
+                            setMaritalStatus("single");
+                            setOpenMarriageBox(false);
+                          }}
+                        >
+                          Single
+                        </CommandItem>
+                        <CommandItem
+                          onSelect={() => {
+                            setMaritalStatus("married");
+                            setOpenMarriageBox(false);
+                          }}
+                        >
+                          Married
+                        </CommandItem>
+                        <CommandItem
+                          onSelect={() => {
+                            setMaritalStatus("others");
+                            setOpenMarriageBox(false);
+                          }}
+                        >
+                          Others
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
             {isWorker && (
               <>
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="gender">Gender</Label>
-                  <Popover open={openGenderBox} onOpenChange={setOpenGenderBox}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between border rounded-md p-2"
-                      >
-                        {gender || "Select Gender"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandList>
-                          <CommandGroup>
-                            <CommandItem
-                              onSelect={() => {
-                                setGender("male");
-                                setOpenGenderBox(false);
-                              }}
-                            >
-                              Male
-                            </CommandItem>
-                            <CommandItem
-                              onSelect={() => {
-                                setGender("female");
-                                setOpenGenderBox(false);
-                              }}
-                            >
-                              Female
-                            </CommandItem>
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="maritalStatus">Marital Status</Label>
-                  <Popover
-                    open={openMarriageBox}
-                    onOpenChange={setOpenMarriageBox}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between border rounded-md p-2"
-                      >
-                        {maritalStatus || "Select Marital Status"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandList>
-                          <CommandGroup>
-                            <CommandItem
-                              onSelect={() => {
-                                setMaritalStatus("single");
-                                setOpenMarriageBox(false);
-                              }}
-                            >
-                              Single
-                            </CommandItem>
-                            <CommandItem
-                              onSelect={() => {
-                                setMaritalStatus("married");
-                                setOpenMarriageBox(false);
-                              }}
-                            >
-                              Married
-                            </CommandItem>
-                            <CommandItem
-                              onSelect={() => {
-                                setMaritalStatus("others");
-                                setOpenMarriageBox(false);
-                              }}
-                            >
-                              Others
-                            </CommandItem>
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </div>
                 <div className="grid w-full items-center gap-1.5">
                   <Label htmlFor="department">Department</Label>
                   <Popover
@@ -473,44 +516,7 @@ const Profile = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <div className="grid w-full items-center gap-1.5">
-                  <Label htmlFor="homebase">Homebase</Label>
-                  <Popover
-                    open={openHomebaseBox}
-                    onOpenChange={setOpenHomebaseBox}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-between border rounded-md p-2"
-                      >
-                        {getHomebaseName(homebase)}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
-                      <Command>
-                        <CommandList>
-                          {homebaseDatasets.map((item, index) => (
-                            <CommandGroup key={index}>
-                              <CommandItem
-                                onSelect={() => {
-                                  setHomebase(item.code.toUpperCase());
-                                  setSelectedHomebase(item.homebase);
-                                  setOpenHomebaseBox(false);
-                                }}
-                              >
-                                <span className="font-medium">
-                                  {item.homebase.toUpperCase()}
-                                </span>
-                              </CommandItem>
-                            </CommandGroup>
-                          ))}
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </div>
+
                 <div className="grid w-full items-center mt-2">
                   <div className="flex flex-col gap-y-2">
                     <div className="flex items-center space-x-2">
