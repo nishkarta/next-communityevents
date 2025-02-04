@@ -24,5 +24,7 @@
   { "id": 22, "department": "Grow Youth", "code": "GROW_YOUTH" },
   { "id": 23, "department": "Grow College", "code": "GROW_COLLEGE" },
   { "id": 24, "department": "Grow Warrior", "code": "GROW_WARRIOR" },
-  { "id": 25, "department": "Grow Dance", "code": "GROW_DANCE" }
+  { "id": 25, "department": "Grow Dance", "code": "GROW_DANCE" },
+  { "id": 26, "department": "Ibadah Raya Bekasi", "code": "IBADAH_RAYA_BKS" },
+  { "id": 27, "department": "Ibadah Raya Manado", "code": "IBADAH_RAYA_MDO" }
 ]

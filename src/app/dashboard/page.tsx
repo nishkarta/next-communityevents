@@ -7,6 +7,7 @@ import { Event } from "@/lib/types/event";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import {
   Card,
@@ -36,15 +37,33 @@ import {
 } from "@/components/ui/dialog";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import HeaderNav from "@/components/HeaderNav";
+import { useToast } from "@/components/ui/use-toast";
+
+interface User {
+  name: string;
+  communityId: string;
+  phoneNumber: string;
+  email: string;
+  status: string;
+  departmentName: string;
+  coolName: string;
+  createdAt: string;
+  updatedAt: string;
+  userTypes: string[];
+}
+import { Input } from "@/components/ui/input";
 
 function EventsAdmin() {
   const [events, setEvents] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Add loading state
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Add loading state
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
     useAuth();
+  const { toast } = useToast();
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
@@ -67,6 +86,108 @@ function EventsAdmin() {
       minute: "2-digit",
     };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+  const fetchUsers = async (
+    cursor: string | null = null,
+    direction: string | null = null,
+    name: string | null = null
+  ) => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const url = new URL(`${API_BASE_URL}/api/v2/internal/users`);
+      url.searchParams.append("limit", "10");
+      if (cursor) {
+        url.searchParams.append("cursor", cursor);
+      }
+      if (direction) {
+        url.searchParams.append("direction", direction);
+      }
+      if (name) {
+        url.searchParams.append("searchBy", "name");
+        url.searchParams.append("search", name);
+      }
+
+      const response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          "X-API-Key": API_KEY || "",
+        },
+      });
+
+      if (response.status === 401) {
+        handleExpiredToken();
+        return;
+      }
+
+      const data = await response.json();
+      setUsers(data.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const upgradeUser = async (communityId: string) => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v2/users/roles-types/update`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-API-Key": API_KEY || "",
+          },
+          body: JSON.stringify({
+            field: "userType",
+            communityIds: [communityId],
+            changes: ["volunteer"],
+          }),
+        }
+      );
+
+      if (response.status === 401) {
+        handleExpiredToken();
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to upgrade user");
+      }
+
+      toast({
+        title: "Success",
+        description: "User upgraded to worker successfully.",
+        className: "bg-green-400",
+        duration: 3000,
+      });
+
+      // Optionally, refetch users to update the list
+      fetchUsers(null, null, searchQuery);
+    } catch (error) {
+      console.error("Error upgrading user:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upgrade user. Please try again later.",
+        className: "bg-red-400",
+        duration: 3000,
+      });
+    }
   };
 
   useEffect(() => {
@@ -129,10 +250,72 @@ function EventsAdmin() {
 
   return (
     <>
-      <div className="flex min-h-screen w-full flex-col">
+      <div className="flex min-h-screen w-full flex-col gap-y-4">
         <HeaderNav name="Admin Dashboard" link="home"></HeaderNav>
+        <div className="relative w-full max-w-lg mx-auto">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <div className="flex w-full max-w-sm items-center space-x-2">
+            {" "}
+            <Input
+              type="search"
+              placeholder="Search a user"
+              className="w-full rounded-lg bg-background pl-8"
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchQuery(value);
+                if (value === "") {
+                  setSearchQuery(null);
+                  setUsers([]); // Clear users when search query is empty
+                }
+              }}
+            />
+            <Button
+              type="submit"
+              onClick={() => {
+                fetchUsers(null, null, searchQuery);
+              }}
+            >
+              Search
+            </Button>
+          </div>
+        </div>
+
         <div className="container mx-auto p-4">
-          <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+          {users && users.length > 0 && (
+            <>
+              <h1 className="text-2xl font-bold mb-4">Search Results</h1>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Community ID</TableHead>
+                    <TableHead>User Type</TableHead>
+                    <TableHead>Upgrade to Worker</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.email}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.communityId}</TableCell>
+                      <TableCell>{user.userTypes.join(", ")}</TableCell>
+                      <TableCell>
+                        {user.userTypes.includes("user") && (
+                          <Button onClick={() => upgradeUser(user.communityId)}>
+                            Upgrade
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
+
+          <h1 className="text-2xl font-bold mb-4">Events List</h1>
           {isLoading ? (
             <p>Loading...</p>
           ) : (

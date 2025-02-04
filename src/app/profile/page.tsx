@@ -4,10 +4,29 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { API_BASE_URL, API_KEY } from "@/lib/config";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormDescription,
+} from "@/components/ui/form";
 import {
   Popover,
   PopoverTrigger,
@@ -23,17 +42,38 @@ import {
 import departmentDatasets from "../../lib/datasets/departments_dataset.json";
 import coolDatasets from "../../lib/datasets/cool_dataset.json";
 import homebaseDatasets from "../../lib/datasets/homebase_dataset.json";
+import categoryDatasets from "../../lib/datasets/cool_categories_dataset.json";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ChevronsUpDown } from "lucide-react";
+import HeaderNav from "@/components/HeaderNav";
+
+interface CategoryMap {
+  [key: string]: string;
+}
 
 const Profile = () => {
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
     useAuth();
+
   const router = useRouter();
   const { toast } = useToast();
-  const [userData, setUserData] = useState({
+  interface UserData {
+    name: string;
+    email: string;
+    phoneNumber: string;
+    placeOfBirth: string;
+    dateOfBirth: Date;
+    gender: string;
+    maritalStatus: string;
+    departmentCode: string;
+    coolId: string;
+    campusCode: string;
+    userTypes: string[];
+  }
+
+  const [userData, setUserData] = useState<UserData>({
     name: "",
     email: "",
     phoneNumber: "",
@@ -41,21 +81,15 @@ const Profile = () => {
     dateOfBirth: new Date(),
     gender: "",
     maritalStatus: "",
-    department: "",
-    cool: "",
-    homebase: "",
+    departmentCode: "",
+    coolId: "",
+    campusCode: "",
+    userTypes: [],
   });
-  const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [openGenderBox, setOpenGenderBox] = useState(false);
-  const [openMarriageBox, setOpenMarriageBox] = useState(false);
-  const [openDepartmentBox, setOpenDepartmentBox] = useState(false);
-  const [openCoolBox, setOpenCoolBox] = useState(false);
-  const [openHomebaseBox, setOpenHomebaseBox] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState("");
-  const [selectedCool, setSelectedCool] = useState("");
-  const [selectedHomebase, setSelectedHomebase] = useState("");
+  const categoryMap: CategoryMap = categoryDatasets.reduce((map, category) => {
+    map[category.name.toUpperCase()] = category.code;
+    return map;
+  }, {} as CategoryMap);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -64,386 +98,346 @@ const Profile = () => {
     }
   }, []);
 
-  const handleSave = async () => {
-    const accessToken = await getValidAccessToken();
-    if (!accessToken) {
-      handleExpiredToken();
-      return;
+  useEffect(() => {
+    if (
+      userData.userTypes.includes("volunteer") ||
+      userData.userTypes.includes("admin") ||
+      userData.userTypes.includes("usher")
+    ) {
+      setIsWorker(true);
+    } else {
+      setIsWorker(false);
     }
+  }, [userData]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber);
+  const [placeOfBirth, setPlaceOfBirth] = useState(userData.placeOfBirth);
+  const [dateOfBirth, setDateOfBirth] = useState(userData.dateOfBirth);
+  const [gender, setGender] = useState(userData.gender);
+  const [maritalStatus, setMaritalStatus] = useState(userData.maritalStatus);
+  const [department, setDepartment] = useState(userData.departmentCode);
+  const [cool, setCool] = useState(userData.coolId);
+  const [homebase, setHomebase] = useState(userData.campusCode);
+  const [userTypes, setUserTypes] = useState(userData.userTypes);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isWorker, setIsWorker] = useState<boolean>(false);
+  const [openGenderBox, setOpenGenderBox] = useState(false);
+  const [openMarriageBox, setOpenMarriageBox] = useState(false);
+  const [openDepartmentBox, setOpenDepartmentBox] = useState(false);
+  const [openCoolBox, setOpenCoolBox] = useState(false);
+  const [openHomebaseBox, setOpenHomebaseBox] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCool, setSelectedCool] = useState("");
+  const [selectedHomebase, setSelectedHomebase] = useState("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/v2/users/me`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-          "X-API-Key": API_KEY || "",
-        },
-        body: JSON.stringify(userData),
-      });
+  useEffect(() => {
+    setName(userData.name);
+    setEmail(userData.email);
+    setPhoneNumber(userData.phoneNumber);
+    setPlaceOfBirth(userData.placeOfBirth);
+    setDateOfBirth(userData.dateOfBirth);
+    setGender(userData.gender);
+    setMaritalStatus(userData.maritalStatus);
+    setDepartment(userData.departmentCode);
+    setCool(userData.coolId);
+    setHomebase(userData.campusCode);
+    setUserTypes(userData.userTypes);
+  }, [userData]);
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          handleExpiredToken();
-          return;
-        }
-        throw new Error("Failed to update user data");
-      }
-
-      const data = await response.json();
-      setUserData(data);
-      localStorage.setItem("userData", JSON.stringify(data));
-      setIsEditing(false);
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
-        className: "bg-green-400",
-        duration: 3000,
-      });
-    } catch (error) {
-      console.error("Error updating user data:", error);
-      setError("Failed to update user data. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
+  const getHomebaseName = (code: string) => {
+    const homebase = homebaseDatasets.find((item) => item.code === code);
+    return homebase ? homebase.homebase : "Select Homebase";
   };
-
+  const getDepartmentName = (code: string) => {
+    const department = departmentDatasets.find((item) => item.code === code);
+    return department ? department.department : "Select Homebase";
+  };
+  const getCOOLName = (code: string) => {
+    const cool = coolDatasets.find(
+      (item) => item.no.toString() === code.toString()
+    );
+    return cool ? cool.cool : "Select COOL";
+  };
   return (
-    <div className="p-4 sm:p-6 lg:p-8 md:flex md:flex-col md:items-center md:justify-center">
-      <h1 className="text-xl font-bold mb-4">Profile</h1>
-
-      {error && <p className="text-red-500">{error}</p>}
-
-      <div className="space-y-6 md:w-1/3">
-        <div>
-          <Label htmlFor="name">Full Name</Label>
-          <div className="flex gap-4 mt-2">
-            <Input
-              id="name"
-              value={userData.name}
-              disabled={!isEditing}
-              onChange={(e) =>
-                setUserData({ ...userData, name: e.target.value })
-              }
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <div className="flex gap-4 mt-2">
-            <Input
-              id="email"
-              type="email"
-              value={userData.email}
-              disabled={!isEditing}
-              onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
-              }
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="phoneNumber">Phone Number</Label>
-          <div className="flex gap-4 mt-2">
-            <Input
-              id="phoneNumber"
-              value={userData.phoneNumber}
-              disabled={!isEditing}
-              onChange={(e) =>
-                setUserData({ ...userData, phoneNumber: e.target.value })
-              }
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="placeOfBirth">Place of Birth</Label>
-          <div className="flex gap-4 mt-2">
-            <Input
-              id="placeOfBirth"
-              value={userData.placeOfBirth}
-              disabled={!isEditing}
-              onChange={(e) =>
-                setUserData({ ...userData, placeOfBirth: e.target.value })
-              }
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="dateOfBirth">Date of Birth</Label>
-          <div className="flex gap-4 mt-2">
-            <DatePicker
-              id="dateOfBirth"
-              selected={new Date(userData.dateOfBirth)}
-              onChange={(date) =>
-                setUserData({ ...userData, dateOfBirth: date || new Date() })
-              }
-              disabled={!isEditing}
-              className="border p-2 rounded shadow-md focus-visible:ring-primary-light"
-              showYearDropdown
-              yearDropdownItemNumber={80}
-              scrollableYearDropdown
-              placeholderText="Select your date of birth"
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="gender">Gender</Label>
-          <div className="flex gap-4 mt-2">
-            <Popover open={openGenderBox} onOpenChange={setOpenGenderBox}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-between"
-                  disabled={!isEditing}
-                >
-                  {userData.gender || "Select Gender"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        onSelect={() => {
-                          setUserData({ ...userData, gender: "Male" });
-                          setOpenGenderBox(false);
-                        }}
+    <>
+      <HeaderNav name="Profile" link="home" />
+      <div className="flex flex-col p-4 items-center justify-center w-full">
+        <Card className="flex flex-col items-center gap-y-4 md:w-fit p-6 shadow-lg rounded-lg">
+          <CardTitle className="text-2xl font-bold mb-4">
+            Your Profile
+          </CardTitle>
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="border rounded-md p-2"
+              />
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border rounded-md p-2"
+              />
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Input
+                type="text"
+                id="phoneNumber"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                className="border rounded-md p-2"
+              />
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="dateofBirth">Date of Birth</Label>
+              <DatePicker
+                className="border p-[0.4rem] mt-[0.25rem] rounded w-full"
+                showYearDropdown
+                yearDropdownItemNumber={80}
+                scrollableYearDropdown
+                selected={dateOfBirth}
+                onChange={(date: Date | null) => date && setDateOfBirth(date)}
+              />
+            </div>
+            {isWorker && (
+              <>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="gender">Gender</Label>
+                  <Popover open={openGenderBox} onOpenChange={setOpenGenderBox}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between border rounded-md p-2"
                       >
-                        Male
-                      </CommandItem>
-                      <CommandItem
-                        onSelect={() => {
-                          setUserData({ ...userData, gender: "Female" });
-                          setOpenGenderBox(false);
-                        }}
+                        {gender || "Select Gender"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandList>
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setGender("Male");
+                                setOpenGenderBox(false);
+                              }}
+                            >
+                              Male
+                            </CommandItem>
+                            <CommandItem
+                              onSelect={() => {
+                                setGender("Female");
+                                setOpenGenderBox(false);
+                              }}
+                            >
+                              Female
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="maritalStatus">Marital Status</Label>
+                  <Popover
+                    open={openMarriageBox}
+                    onOpenChange={setOpenMarriageBox}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between border rounded-md p-2"
                       >
-                        Female
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="maritalStatus">Marital Status</Label>
-          <div className="flex gap-4 mt-2">
-            <Popover open={openMarriageBox} onOpenChange={setOpenMarriageBox}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-between"
-                  disabled={!isEditing}
-                >
-                  {userData.maritalStatus || "Select Marital Status"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandList>
-                    <CommandGroup>
-                      <CommandItem
-                        onSelect={() => {
-                          setUserData({ ...userData, maritalStatus: "single" });
-                          setOpenMarriageBox(false);
-                        }}
+                        {maritalStatus || "Select Marital Status"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandList>
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setMaritalStatus("single");
+                                setOpenMarriageBox(false);
+                              }}
+                            >
+                              Single
+                            </CommandItem>
+                            <CommandItem
+                              onSelect={() => {
+                                setMaritalStatus("married");
+                                setOpenMarriageBox(false);
+                              }}
+                            >
+                              Married
+                            </CommandItem>
+                            <CommandItem
+                              onSelect={() => {
+                                setMaritalStatus("others");
+                                setOpenMarriageBox(false);
+                              }}
+                            >
+                              Others
+                            </CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="department">Department</Label>
+                  <Popover
+                    open={openDepartmentBox}
+                    onOpenChange={setOpenDepartmentBox}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between border rounded-md p-2"
                       >
-                        Single
-                      </CommandItem>
-                      <CommandItem
-                        onSelect={() => {
-                          setUserData({
-                            ...userData,
-                            maritalStatus: "married",
-                          });
-                          setOpenMarriageBox(false);
-                        }}
+                        {getDepartmentName(department)}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput />
+                        <CommandList>
+                          {departmentDatasets.map((item, index) => (
+                            <CommandGroup key={index}>
+                              <CommandItem
+                                onSelect={() => {
+                                  setDepartment(item.code.toUpperCase());
+                                  setSelectedDepartment(
+                                    item.department.toUpperCase()
+                                  );
+                                  setOpenDepartmentBox(false);
+                                }}
+                              >
+                                <span className="font-medium">
+                                  {item.department.toUpperCase()}
+                                </span>
+                              </CommandItem>
+                            </CommandGroup>
+                          ))}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="cool">COOL</Label>
+                  <Popover open={openCoolBox} onOpenChange={setOpenCoolBox}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between border rounded-md p-2"
                       >
-                        Married
-                      </CommandItem>
-                      <CommandItem
-                        onSelect={() => {
-                          setUserData({ ...userData, maritalStatus: "others" });
-                          setOpenMarriageBox(false);
-                        }}
+                        {cool ? getCOOLName(cool) : "Select COOL"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Search COOL..." />
+                        <CommandList>
+                          {coolDatasets.map((item, index) => (
+                            <CommandGroup key={index} heading={item.category}>
+                              <CommandItem
+                                onSelect={() => {
+                                  setCool(item.no.toString());
+                                  setSelectedCool(item.cool);
+                                  setOpenCoolBox(false);
+                                }}
+                              >
+                                <div className="flex flex-col">
+                                  <span className="font-medium">
+                                    {item.cool.toUpperCase()}
+                                  </span>
+                                  <span className="text-sm text-gray-500">
+                                    Leader(s): {item.leader.toUpperCase()}
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    {item.campus.trim()}
+                                  </span>
+                                </div>
+                              </CommandItem>
+                            </CommandGroup>
+                          ))}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="homebase">Homebase</Label>
+                  <Popover
+                    open={openHomebaseBox}
+                    onOpenChange={setOpenHomebaseBox}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-between border rounded-md p-2"
                       >
-                        Others
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="department">Department</Label>
-          <div className="flex gap-4 mt-2">
-            <Popover
-              open={openDepartmentBox}
-              onOpenChange={setOpenDepartmentBox}
-            >
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-between"
-                  disabled={!isEditing}
-                >
-                  {selectedDepartment || "Select Department"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandInput placeholder="Search department..." />
-                  <CommandList>
-                    {departmentDatasets.map((item, index) => (
-                      <CommandGroup key={index}>
-                        <CommandItem
-                          onSelect={() => {
-                            setUserData({
-                              ...userData,
-                              department: item.code.toUpperCase(),
-                            });
-                            setSelectedDepartment(
-                              item.department.toUpperCase()
-                            );
-                            setOpenDepartmentBox(false);
-                          }}
-                        >
-                          <span className="font-medium">
-                            {item.department.toUpperCase()}
-                          </span>
-                        </CommandItem>
-                      </CommandGroup>
-                    ))}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="cool">COOL</Label>
-          <div className="flex gap-4 mt-2">
-            <Popover open={openCoolBox} onOpenChange={setOpenCoolBox}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-between"
-                  disabled={!isEditing}
-                >
-                  {selectedCool || "Select COOL"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandInput placeholder="Search COOL..." />
-                  <CommandList>
-                    {coolDatasets.map((item, index) => (
-                      <CommandGroup key={index} heading={item.category}>
-                        <CommandItem
-                          onSelect={() => {
-                            setUserData({
-                              ...userData,
-                              cool: item.no.toString(),
-                            });
-                            setSelectedCool(item.cool);
-                            setOpenCoolBox(false);
-                          }}
-                        >
-                          <div className="flex flex-col">
-                            <span className="font-medium">
-                              {item.cool.toUpperCase()}
-                            </span>
-                            <span className="text-sm text-gray-500">
-                              Leader(s): {item.leader.toUpperCase()}
-                            </span>
-                            <span className="text-xs text-gray-400">
-                              {item.campus.trim()}
-                            </span>
-                          </div>
-                        </CommandItem>
-                      </CommandGroup>
-                    ))}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="homebase">Homebase</Label>
-          <div className="flex gap-4 mt-2">
-            <Popover open={openHomebaseBox} onOpenChange={setOpenHomebaseBox}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-between"
-                  disabled={!isEditing}
-                >
-                  {selectedHomebase || "Select Homebase"}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
-                  <CommandList>
-                    {homebaseDatasets.map((item, index) => (
-                      <CommandGroup key={index}>
-                        <CommandItem
-                          onSelect={() => {
-                            setUserData({
-                              ...userData,
-                              homebase: item.code.toUpperCase(),
-                            });
-                            setSelectedHomebase(item.homebase);
-                            setOpenHomebaseBox(false);
-                          }}
-                        >
-                          <span className="font-medium">
-                            {item.homebase.toUpperCase()}
-                          </span>
-                        </CommandItem>
-                      </CommandGroup>
-                    ))}
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-
-        <div className="flex justify-end gap-4 mt-4">
-          {isEditing ? (
-            <>
-              <Button onClick={() => setIsEditing(false)} disabled={loading}>
-                Cancel
-              </Button>
-              <Button onClick={handleSave} disabled={loading}>
-                {loading ? "Saving..." : "Save"}
-              </Button>
-            </>
-          ) : (
-            <Button onClick={() => setIsEditing(true)}>Edit</Button>
-          )}
-        </div>
+                        {getHomebaseName(homebase)}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandList>
+                          {homebaseDatasets.map((item, index) => (
+                            <CommandGroup key={index}>
+                              <CommandItem
+                                onSelect={() => {
+                                  setHomebase(item.code.toUpperCase());
+                                  setSelectedHomebase(item.homebase);
+                                  setOpenHomebaseBox(false);
+                                }}
+                              >
+                                <span className="font-medium">
+                                  {item.homebase.toUpperCase()}
+                                </span>
+                              </CommandItem>
+                            </CommandGroup>
+                          ))}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </>
+            )}
+          </CardContent>
+          <CardFooter className="w-full flex justify-end gap-4">
+            <Button variant="outline" onClick={() => router.push("/home")}>
+              Cancel
+            </Button>
+            <Button variant="default" onClick={() => console.log("Save")}>
+              Save
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
-    </div>
+    </>
   );
 };
 
