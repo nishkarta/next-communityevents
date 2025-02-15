@@ -26,7 +26,8 @@ const EventRegistration = () => {
 
   const [registrantData, setRegistrantData] = useState<{ name: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const { isAuthenticated, handleExpiredToken } = useAuth();
+  const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
+    useAuth();
   const userData = isAuthenticated
     ? JSON.parse(localStorage.getItem("userData") || "{}")
     : null;
@@ -83,31 +84,35 @@ const EventRegistration = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const token = userData?.token;
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
 
     const payload = {
-      name: registrantData[0]?.name.trim(),
+      communityId: userData.communityId,
+      eventCode: eventCode,
+      instanceCode: sessionCode,
       identifier: identifier.trim(),
-      eventCode: eventCode, // Use the event code from the params
-      sessionCode: sessionCode, // Use the session code from the params
-      otherRegister: registrantData.slice(1).map((input) => ({
+      isPersonalQR: false,
+      name: registrantData[0]?.name.trim(),
+      registerAt: new Date().toISOString(),
+      registrants: registrantData.slice(1).map((input) => ({
         name: input.name.trim(),
       })),
     };
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/events/registration`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            "X-API-Key": API_KEY,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY,
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (response.ok) {
         toast({

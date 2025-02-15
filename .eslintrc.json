@@ -3,6 +3,8 @@
   "rules": {
     "react-hooks/exhaustive-deps": "off",
     "react-hooks/rules-of-hooks": "off",
-    "react/no-unescaped-entities": "off"
+    "react/no-unescaped-entities": "off",
+    "no-unused-vars": "off", // Ignore no-unused-vars rule
+    "no-console": "off" // Ignore no-console rule
   }
 }

@@ -8,7 +8,6 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,43 +24,49 @@ const EventSessions = () => {
   const [sessions, setSessions] = useState<any[]>([]); // State to hold sessions
   const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading
   const [error, setError] = useState<string | null>(null); // State for errors
-  const { isAuthenticated, handleExpiredToken } = useAuth();
-  const userData = isAuthenticated
-    ? JSON.parse(localStorage.getItem("userData") || "{}")
-    : null;
+  const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
+    useAuth();
+
   const router = useRouter();
 
   // Fetch sessions when the component mounts or when eventCode changes
   useEffect(() => {
     async function fetchSessions() {
-      if (!userData.token || !eventCode) return;
+      const accessToken = await getValidAccessToken();
+      if (!accessToken) {
+        handleExpiredToken();
+        return;
+      }
       setIsLoading(true); // Set loading state
       setError(null); // Reset error state
 
       try {
         const response = await fetch(
-          `${API_BASE_URL}/api/v1/events/${eventCode}/sessions`,
+          `${API_BASE_URL}/api/v2/events/${eventCode}`,
           {
             headers: {
               "X-API-KEY": API_KEY || "",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${userData.token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
 
-        if (response.status === 401) {
-          handleExpiredToken();
-          return;
-        }
-        if (response.status === 404) {
-          setSessions([]);
-          return;
+        if (!response.ok) {
+          if (response.status === 401) {
+            handleExpiredToken();
+            console.error("Unauthorized - Token expired or invalid");
+            return;
+          }
+          if (response.status === 404) {
+            setSessions([]);
+            return;
+          }
+          throw new Error("Failed to fetch events");
         }
 
         const data = await response.json();
-        console.log(data);
-        console.log(data.data);
+        console.log("Fetched sessions data:", data);
         setSessions(data.data); // Update sessions state
       } catch (error) {
         console.error("Failed to fetch sessions:", error);
@@ -96,25 +101,26 @@ const EventSessions = () => {
           // Display fetched sessions
           sessions.map((session) => (
             <Card
-              key={session.id}
+              key={session.code}
               className="rounded-xl mx-2 my-5 md:w-1/2 md:mx-auto"
             >
               <div className="flex flex-col">
                 <CardHeader>
-                  <CardTitle>{session.name}</CardTitle> {/* Session Name */}
-                  {/* Session Number */}
+                  <CardTitle>{session.title}</CardTitle> {/* Session Title */}
                 </CardHeader>
                 <CardContent className="flex flex-col">
                   <Badge
-                    className={`flex w-14 p-2 text-center justify-center items-center mb-2 ${
-                      session.status === "active"
+                    className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                      session.availabilityStatus === "available"
                         ? "bg-green-700"
-                        : session.status === "closed"
+                        : session.availabilityStatus === "unavailable"
                         ? "bg-red-500"
                         : "bg-gray-400" // Default color for other statuses
                     }`}
                   >
-                    <span className="mx-auto">{session.status}</span>
+                    <span className="mx-auto">
+                      {session.availabilityStatus}
+                    </span>
                   </Badge>
                   <p className="text-base font-light my-2 pb-2">
                     {session.description}
@@ -124,7 +130,7 @@ const EventSessions = () => {
                     <p className="font-semibold text-gray-700">Event Time:</p>
                     <p className="text-sm text-gray-500 my-3">
                       <span className="font-medium text-gray-700">
-                        {formatDate(new Date(session.time))}
+                        {formatDate(new Date(session.instanceStartAt))}
                       </span>
                     </p>
                   </div>
@@ -136,7 +142,7 @@ const EventSessions = () => {
                     </p>
                     <p className="text-sm text-gray-500 my-3">
                       <span className="font-medium text-gray-700">
-                        {session.availableSeats}
+                        {session.totalRemainingSeats}
                       </span>
                     </p>
                   </div>
@@ -144,7 +150,7 @@ const EventSessions = () => {
                 </CardContent>
                 <CardFooter>
                   {/* Link to register sessions page */}
-                  {session.status === "active" ? (
+                  {session.availabilityStatus === "available" ? (
                     <Button
                       onClick={() =>
                         handleRegistration(eventCode, session.code)

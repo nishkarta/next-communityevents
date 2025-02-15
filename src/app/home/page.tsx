@@ -36,7 +36,8 @@ const Home = () => {
   const router = useRouter();
   const IMAGE_URL =
     "https://images.unsplash.com/photo-1555817128-342e1c8b3101?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
-  const { isAuthenticated, logout, handleExpiredToken } = useAuth();
+  const { isAuthenticated, logout, handleExpiredToken, getValidAccessToken } =
+    useAuth();
 
   const [isAnnouncementVisible, setIsAnnouncementVisible] = useState(false);
 
@@ -76,16 +77,20 @@ const Home = () => {
 
   const [registrationsCount, setRegistrationsCount] = useState<number>(0);
   const fetchRegistrations = async () => {
-    if (!userData?.token) return;
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/events/registers`,
         {
           headers: {
             "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${userData.token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
@@ -98,7 +103,7 @@ const Home = () => {
 
       const data = await response.json();
       const registeredCount = data.data.filter(
-        (registration: any) => registration.status === "registered"
+        (registration: any) => registration.status === "active"
       ).length;
       setRegistrationsCount(registeredCount);
     } catch (error) {
@@ -149,7 +154,7 @@ const Home = () => {
           <div className="flex flex-row gap-x-8">
             {/* Button to Trigger Announcement Programmatically */}
 
-            <Popover>
+            {/* <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
                   <i className="fi fi-rs-file-invoice text-2xl mt-1"></i>
@@ -177,7 +182,7 @@ const Home = () => {
                   )}
                 </div>
               </PopoverContent>
-            </Popover>
+            </Popover> */}
             <Popover>
               <PopoverTrigger asChild>
                 <div className="relative inline-block cursor-pointer">
