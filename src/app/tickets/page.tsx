@@ -92,16 +92,28 @@ const TicketsPage = () => {
     );
     if (!confirm) return;
 
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    const payload = {
+      status: "cancelled",
+      updatedAt: new Date().toISOString(),
+    };
+
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/events/registration/${id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v2/events/registers/${id}/status`,
         {
-          method: "DELETE",
+          method: "PATCH",
           headers: {
             "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY || "",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${userData?.token}`,
+            Authorization: `Bearer ${accessToken}`,
           },
+          body: JSON.stringify(payload),
         }
       );
 
