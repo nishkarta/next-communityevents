@@ -356,8 +356,7 @@ export default function Register() {
               </FormItem>
             )}
           />
-
-          {/* Worker Checkbox */}
+          {/* Worker Checkbox
           <FormItem className="my-5">
             <div className="flex items-center space-x-2">
               <Checkbox
@@ -369,8 +368,7 @@ export default function Register() {
                 I am a worker (pengerja, volunteer, aktivis)
               </Label>
             </div>
-          </FormItem>
-
+          </FormItem> */}
           {/* Conditionally render Worker-specific form fields */}
           {isWorker && (
             <>
@@ -685,7 +683,6 @@ export default function Register() {
               />
             </>
           )}
-
           {/* Submit Button */}
           <Button
             type="submit"

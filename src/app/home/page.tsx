@@ -102,8 +102,12 @@ const Home = () => {
       }
 
       const data = await response.json();
-      const registeredCount = data.data.filter(
-        (registration: any) => registration.status === "active"
+      const registeredCount = data.data.flatMap((event: any) =>
+        event.instances.flatMap((instance: any) =>
+          instance.registrants.filter(
+            (registrant: any) => registrant.registrationStatus === "active"
+          )
+        )
       ).length;
       setRegistrationsCount(registeredCount);
     } catch (error) {
