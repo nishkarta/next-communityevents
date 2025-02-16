@@ -41,21 +41,23 @@ const Home = () => {
 
   const [isAnnouncementVisible, setIsAnnouncementVisible] = useState(false);
 
-  useEffect(() => {
-    const hasSeenAnnouncement = localStorage.getItem("hasSeenAnnouncement");
-    const timestamp = localStorage.getItem("announcementTimestamp");
+  /* Announcement useEffect */
 
-    // Show announcement if user hasn't seen it or timestamp expired (more than 3 hours)
-    if (
-      !hasSeenAnnouncement ||
-      !timestamp ||
-      Date.now() - parseInt(timestamp) > 3 * 60 * 60 * 1000
-    ) {
-      setIsAnnouncementVisible(true);
-      localStorage.setItem("hasSeenAnnouncement", "true");
-      localStorage.setItem("announcementTimestamp", Date.now().toString());
-    }
-  }, []);
+  // useEffect(() => {
+  //   const hasSeenAnnouncement = localStorage.getItem("hasSeenAnnouncement");
+  //   const timestamp = localStorage.getItem("announcementTimestamp");
+
+  //   // Show announcement if user hasn't seen it or timestamp expired (more than 3 hours)
+  //   if (
+  //     !hasSeenAnnouncement ||
+  //     !timestamp ||
+  //     Date.now() - parseInt(timestamp) > 3 * 60 * 60 * 1000
+  //   ) {
+  //     setIsAnnouncementVisible(true);
+  //     localStorage.setItem("hasSeenAnnouncement", "true");
+  //     localStorage.setItem("announcementTimestamp", Date.now().toString());
+  //   }
+  // }, []);
 
   // Programmatic trigger for announcement
   const showAnnouncement = () => {
@@ -105,7 +107,7 @@ const Home = () => {
       const registeredCount = data.data.flatMap((event: any) =>
         event.instances.flatMap((instance: any) =>
           instance.registrants.filter(
-            (registrant: any) => registrant.registrationStatus === "active"
+            (registrant: any) => registrant.registrationStatus === "pending"
           )
         )
       ).length;

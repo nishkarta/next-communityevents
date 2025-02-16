@@ -40,6 +40,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import { useToast } from "@/components/ui/use-toast";
+
 interface EventDetails {
   details: {
     title: string;
@@ -99,6 +101,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
     EventDetails["data"][0] | null
   >(null);
   const { getValidAccessToken, handleExpiredToken } = useAuth();
+  const { toast } = useToast();
 
   const fetchRegistrants = async (
     cursor: string | null = null,
@@ -183,6 +186,55 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
 
     fetchEventDetails();
   }, [params.eventCode, getValidAccessToken, handleExpiredToken]);
+
+  const updateRegistrantStatus = async (id: string) => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/v2/events/registers/${id}/status`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "X-API-Key": API_KEY || "",
+          },
+          body: JSON.stringify({
+            status: "success",
+            updatedAt: new Date().toISOString(),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        toast({
+          title: "Registrant status updated!",
+          description: "User has attended the event.",
+          className: "bg-green-400",
+          duration: 2000,
+        });
+      }
+
+      if (response.status === 401) {
+        handleExpiredToken();
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error("Failed to update registrant status");
+      }
+
+      // Optionally, refetch registrants to update the UI
+      fetchRegistrants();
+    } catch (error) {
+      console.error("Error updating registrant status:", error);
+    }
+  };
 
   useEffect(() => {
     fetchRegistrants();
@@ -327,8 +379,8 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
               <TableHead>Instance Name</TableHead>
               <TableHead>Department Name</TableHead>
               <TableHead>Cool Name</TableHead>
-              <TableHead>Registered At</TableHead>
-              <TableHead>Verified At</TableHead>
+              <TableHead>Registration Status</TableHead>
+              <TableHead>Manual Register</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -342,11 +394,21 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
                   <TableCell>{registrant.instanceName}</TableCell>
                   <TableCell>{registrant.departmentName ?? null}</TableCell>
                   <TableCell>{registrant.coolName ?? null}</TableCell>
-                  <TableCell>
-                    {new Date(registrant.registeredAt).toLocaleString()}
+                  <TableCell
+                    className={
+                      registrant.status === "success" ? "text-green-500" : ""
+                    }
+                  >
+                    {registrant.status}
                   </TableCell>
                   <TableCell>
-                    {new Date(registrant.verifiedAt).toLocaleString()}
+                    <Button
+                      onClick={() => {
+                        updateRegistrantStatus(registrant.id);
+                      }}
+                    >
+                      Register
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
