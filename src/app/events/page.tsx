@@ -97,74 +97,80 @@ const EventsPage = () => {
               <LoadingSpinner />
             </p>
           ) : events && events.length > 0 ? (
-            events
-              .filter((event) => event.allowedFor === "public")
-              .map((event) => (
-                <Card key={event.code} className="rounded-xl mb-4">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Left Half / Top Half: Image */}
-                    <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
-                      <Image
-                        src={EVENT_EXAMPLE_IMAGE_URL}
-                        alt="Event Image"
-                        layout="fill"
-                        className="object-cover"
-                        priority
-                      />
-                    </div>
-                    {/* Right Half / Bottom Half: Event Information */}
-                    <div className="md:w-1/2">
-                      <CardHeader>
-                        <CardTitle className="mx-auto md:mx-0">
-                          {event.title}
-                        </CardTitle>{" "}
-                        {/* Event name */}
-                      </CardHeader>
-                      <CardContent className="flex flex-col items-center md:items-start">
+            events.map((event) => (
+              <Card key={event.code} className="rounded-xl mb-4">
+                <div className="flex flex-col md:flex-row">
+                  {/* Left Half / Top Half: Image */}
+                  <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
+                    <Image
+                      src={EVENT_EXAMPLE_IMAGE_URL}
+                      alt="Event Image"
+                      layout="fill"
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
+                  {/* Right Half / Bottom Half: Event Information */}
+                  <div className="md:w-1/2">
+                    <CardHeader>
+                      <CardTitle className="mx-auto md:mx-0">
+                        {event.title}
+                      </CardTitle>{" "}
+                      {/* Event name */}
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center md:items-start">
+                      <div className="flex flex-row gap-x-3">
                         <Badge
                           className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
                             event.availabilityStatus === "available"
                               ? "bg-green-700"
-                              : "bg-primary" // Default color for other statuses
+                              : "bg-gray-500" // Default color for other statuses
                           }`}
                         >
                           <span className="mx-auto">
                             {event.availabilityStatus}
                           </span>
                         </Badge>
-                        <div className="my-2 p-4">
-                          <p className="font-semibold text-gray-700">
-                            Event Time:
-                          </p>
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              Start: {formatDate(new Date(event.eventStartAt))}
-                            </span>
-                          </p>
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              End: {formatDate(new Date(event.eventEndAt))}
-                            </span>
-                          </p>
-                          <p className="font-semibold text-gray-700">
-                            Registration Time:
-                          </p>
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              Open:{" "}
-                              {formatDate(new Date(event.registerStartAt))}
-                            </span>
-                          </p>
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              Closed:{" "}
-                              {formatDate(new Date(event.registerEndAt))}
-                            </span>
-                          </p>
-                        </div>
+                        <Badge
+                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
+                            event.locationType === "onsite"
+                              ? "bg-green-700"
+                              : "bg-primary" // Default color for other statuses
+                          }`}
+                        >
+                          <span className="mx-auto">{event.locationType}</span>
+                        </Badge>
+                      </div>
 
-                        <Separator />
-                        <div className="mt-2 pt-4">
+                      <div className="my-2 p-4">
+                        <p className="font-semibold text-gray-700">
+                          Event Time:
+                        </p>
+                        <p className="text-sm text-gray-500 my-3">
+                          <span className="font-medium text-gray-700">
+                            Start: {formatDate(new Date(event.eventStartAt))}
+                          </span>
+                        </p>
+                        <p className="text-sm text-gray-500 my-3">
+                          <span className="font-medium text-gray-700">
+                            End: {formatDate(new Date(event.eventEndAt))}
+                          </span>
+                        </p>
+                        <p className="font-semibold text-gray-700">
+                          Registration Time:
+                        </p>
+                        <p className="text-sm text-gray-500 my-3">
+                          <span className="font-medium text-gray-700">
+                            Open: {formatDate(new Date(event.registerStartAt))}
+                          </span>
+                        </p>
+                        <p className="text-sm text-gray-500 my-3">
+                          <span className="font-medium text-gray-700">
+                            Closed: {formatDate(new Date(event.registerEndAt))}
+                          </span>
+                        </p>
+                        <div className="mt-4">
+                          {" "}
                           <p className="font-semibold text-gray-700">
                             Total Remaining Seats:
                           </p>
@@ -173,27 +179,33 @@ const EventsPage = () => {
                               {event.totalRemainingSeats}
                             </span>
                           </p>
+                          {/* Link to event sessions page */}
+                          <div className="flex justify-center md:justify-start">
+                            {event.availabilityStatus === "available" ? (
+                              <Button
+                                className="mx-auto w-full "
+                                onClick={() => handleSession(event.code)}
+                              >
+                                Register Now!
+                              </Button>
+                            ) : event.status === "walkin" ? (
+                              <Button disabled>
+                                Walk-in : Register On Site
+                              </Button>
+                            ) : (
+                              <>
+                                <Button disabled>Unavailable</Button>
+                              </>
+                            )}
+                          </div>
                         </div>
-                      </CardContent>
-                      <CardFooter>
-                        {/* Link to event sessions page */}
-                        {event.availabilityStatus === "available" ? (
-                          <Button
-                            className="mx-auto md:mx-0"
-                            onClick={() => handleSession(event.code)}
-                          >
-                            Register Now!
-                          </Button>
-                        ) : event.status === "walkin" ? (
-                          <Button disabled>Walk-in : Register On Site</Button>
-                        ) : (
-                          <></>
-                        )}
-                      </CardFooter>
-                    </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-center md:justify-start"></CardFooter>
                   </div>
-                </Card>
-              ))
+                </div>
+              </Card>
+            ))
           ) : events && events.length === 0 ? (
             <p>No events found.</p>
           ) : (

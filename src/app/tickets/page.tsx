@@ -165,17 +165,15 @@ const TicketsPage = () => {
                 filter === "pending" ? "bg-blue-500 text-white" : "bg-gray-200"
               }`}
             >
-              Pending
+              Registered
             </button>
             <button
-              onClick={() => setFilter("verified")}
+              onClick={() => setFilter("success")}
               className={`px-4 py-2 rounded ${
-                filter === "verified"
-                  ? "bg-green-700 text-white"
-                  : "bg-gray-200"
+                filter === "success" ? "bg-green-700 text-white" : "bg-gray-200"
               }`}
             >
-              Verified
+              Scanned
             </button>
           </div>
 
@@ -203,13 +201,17 @@ const TicketsPage = () => {
                       className={`flex w-17 p-2 text-center justify-center items-center mb-2 ${
                         registration.registrationStatus === "pending"
                           ? "bg-blue-500"
-                          : registration.registrationStatus === "verified"
+                          : registration.registrationStatus === "success"
                           ? "bg-green-700"
                           : "bg-gray-400" // Default color for other statuses
                       }`}
                     >
                       <span className="mx-auto">
-                        {registration.registrationStatus}
+                        {registration.registrationStatus === "pending"
+                          ? "Registered"
+                          : registration.registrationStatus === "success"
+                          ? "Scanned"
+                          : "Unknown"}
                       </span>
                     </Badge>
                     <Dialog>

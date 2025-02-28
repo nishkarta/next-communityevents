@@ -36,6 +36,64 @@ function QrCodeScanner({
   const [dialogVariant, setDialogVariant] = useState("info"); // You can set variants based on the type of alert
   const [loading, setLoading] = useState<boolean>(false);
 
+  const handleScanPublic = async (result: IDetectedBarcode[]) => {
+    const accessToken = await getValidAccessToken();
+    if (!accessToken) {
+      handleExpiredToken();
+      return;
+    }
+
+    if (result && result.length > 0) {
+      const rawValue = result[0]?.rawValue;
+
+      try {
+        setLoading(true);
+
+        // Run the PATCH request to update the status
+        const patchResponse = await fetch(
+          `${API_BASE_URL}/api/v2/events/registers/${rawValue}/status`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+              "X-API-Key": API_KEY || "",
+            },
+            body: JSON.stringify({
+              status: "success",
+              updatedAt: new Date().toISOString(),
+            }),
+          }
+        );
+
+        // Handle the response
+        if (patchResponse.ok) {
+          setDialogTitle("Success!");
+          setDialogDescription(`Status updated.`);
+          setDialogVariant("success");
+        } else {
+          if (patchResponse.status === 401) {
+            handleExpiredToken();
+            return; // Exit function after handling expired token
+          } else {
+            const errorData = await patchResponse.json();
+            setDialogTitle(errorData.status || "Error");
+            setDialogDescription(errorData.message || "Something went wrong.");
+            setDialogVariant("error");
+          }
+        }
+      } catch (error) {
+        setDialogTitle("Error");
+        setDialogDescription("Error while connecting to the API.");
+        setDialogVariant("error");
+        console.error("Error while connecting to the API", error);
+      } finally {
+        setLoading(false);
+      }
+      setDialogOpen(true);
+    }
+  };
+
   const handleScan = async (result: IDetectedBarcode[]) => {
     const accessToken = await getValidAccessToken();
     if (!accessToken) {
@@ -117,7 +175,7 @@ function QrCodeScanner({
       <Scanner
         scanDelay={5000}
         allowMultiple={true}
-        onScan={handleScan}
+        onScan={handleScanPublic}
         paused={loading || dialogOpen} // Pause scanning when the dialog is open
       />
 
