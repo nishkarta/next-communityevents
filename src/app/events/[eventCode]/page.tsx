@@ -81,9 +81,12 @@ const EventSessions = () => {
 
   function handleRegistration(
     eventCode: string | string[],
-    sessionCode: string
+    sessionCode: string,
+    maxRegistrants: number
   ) {
-    return router.push(`/events/${eventCode}/${sessionCode}/registration`);
+    return router.push(
+      `/events/${eventCode}/${sessionCode}/${maxRegistrants}/registration`
+    );
   }
 
   return (
@@ -153,7 +156,11 @@ const EventSessions = () => {
                   {session.availabilityStatus === "available" ? (
                     <Button
                       onClick={() =>
-                        handleRegistration(eventCode, session.code)
+                        handleRegistration(
+                          eventCode,
+                          session.code,
+                          session.maxPerTransaction
+                        )
                       }
                     >
                       Register Now!

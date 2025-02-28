@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
-import HeaderNav from "../../../../../components/HeaderNav";
-import { Button } from "../../../../../components/ui/button";
+import HeaderNav from "@/components/HeaderNav";
+import { Button } from "@/components/ui/button";
 import { UserMinus, Loader2 } from "lucide-react";
 import {
   Card,
@@ -11,16 +11,16 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "../../../../../components/ui/card";
-import { Input } from "../../../../../components/ui/input";
-import { API_BASE_URL, API_KEY } from "../../../../../lib/config";
-import { useAuth } from "../../../../../components/providers/AuthProvider";
-import withAuth from "../../../../../components/providers/AuthWrapper";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { API_BASE_URL, API_KEY } from "@/lib/config";
+import { useAuth } from "@/components/providers/AuthProvider";
+import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
-import { useToast } from "../../../../../components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 const EventRegistration = () => {
-  const { eventCode, sessionCode } = useParams();
+  const { eventCode, sessionCode, maxRegistrants } = useParams();
   const [numberOfRegistrants, setNumberOfRegistrants] = useState<number>(1);
   const [confirmed, setConfirmed] = useState<boolean>(false);
   const [registrantData, setRegistrantData] = useState<{ name: string }[]>([]);
@@ -36,7 +36,9 @@ const EventRegistration = () => {
 
   const incrementRegistrants = () => {
     if (numberOfRegistrants <= 3) {
-      setNumberOfRegistrants((prev) => prev + 1);
+      if (numberOfRegistrants < parseInt(maxRegistrants as string)) {
+        setNumberOfRegistrants((prev) => prev + 1);
+      }
     }
   };
 
