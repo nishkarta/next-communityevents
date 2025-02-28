@@ -407,7 +407,7 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
                         updateRegistrantStatus(registrant.id);
                       }}
                     >
-                      Register
+                      Verify
                     </Button>
                   </TableCell>
                 </TableRow>
