@@ -106,7 +106,7 @@ const EventsPage = () => {
                       src={event.imagesLinks[0]}
                       alt="Event Image"
                       layout="fill"
-                      className="object-cover"
+                      className="object-contain"
                       priority
                     />
                   </div>
