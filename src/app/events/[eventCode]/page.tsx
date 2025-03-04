@@ -19,9 +19,33 @@ import withAuth from "@/components/providers/AuthWrapper";
 import { useRouter } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 
+interface EventDetails {
+  type: string;
+  code: string;
+  title: string;
+  allowedCampuses: string[];
+  allowedFor: string;
+  allowedRoles: string[];
+  allowedUsers: string[];
+  availabilityStatus: string;
+  description: string;
+  eventEndAt: string;
+  eventStartAt: string;
+  imageLinks: string[];
+  isRecurring: boolean;
+  locationName: string;
+  locationType: string;
+  recurrence: string;
+  registerEndAt: string;
+  registerStartAt: string;
+  termsAndConditions: string;
+  topics: string[];
+}
+
 const EventSessions = () => {
   const { eventCode } = useParams(); // Retrieve eventCode from the route params
   const [sessions, setSessions] = useState<any[]>([]); // State to hold sessions
+  const [details, setDetails] = useState<EventDetails | null>(null); // State to hold sessions
   const [isLoading, setIsLoading] = useState<boolean>(false); // State for loading
   const [error, setError] = useState<string | null>(null); // State for errors
   const { isAuthenticated, handleExpiredToken, getValidAccessToken } =
@@ -60,6 +84,7 @@ const EventSessions = () => {
           }
           if (response.status === 404) {
             setSessions([]);
+            setDetails(null);
             return;
           }
           throw new Error("Failed to fetch events");
@@ -68,6 +93,7 @@ const EventSessions = () => {
         const data = await response.json();
         console.log("Fetched sessions data:", data);
         setSessions(data.data); // Update sessions state
+        setDetails(data.details);
       } catch (error) {
         console.error("Failed to fetch sessions:", error);
         setError("Failed to load sessions. Please try again later.");
@@ -87,6 +113,10 @@ const EventSessions = () => {
     return router.push(
       `/events/${eventCode}/${sessionCode}/${maxRegistrants}/registration`
     );
+  }
+
+  function handlePrivateRegistration() {
+    return router.push(`/events/${eventCode}/internal`);
   }
 
   return (
@@ -152,19 +182,26 @@ const EventSessions = () => {
                   <Separator />
                 </CardContent>
                 <CardFooter>
-                  {/* Link to register sessions page */}
                   {session.availabilityStatus === "available" ? (
-                    <Button
-                      onClick={() =>
-                        handleRegistration(
-                          eventCode,
-                          session.code,
-                          session.maxPerTransaction
-                        )
-                      }
-                    >
-                      Register Now!
-                    </Button>
+                    details?.allowedFor === "public" ? (
+                      <Button
+                        onClick={() =>
+                          handleRegistration(
+                            eventCode,
+                            session.code,
+                            session.maxPerTransaction
+                          )
+                        }
+                      >
+                        Register Now!
+                      </Button>
+                    ) : details?.allowedFor === "private" ? (
+                      <Button onClick={() => handlePrivateRegistration()}>
+                        Register for Private Event
+                      </Button>
+                    ) : (
+                      <Button disabled>Invalid Event Type</Button>
+                    )
                   ) : (
                     <Button disabled>Registration Closed</Button>
                   )}

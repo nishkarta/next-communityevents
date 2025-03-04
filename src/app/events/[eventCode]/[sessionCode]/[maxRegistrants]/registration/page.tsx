@@ -160,7 +160,7 @@ const EventRegistration = () => {
 
   return (
     <>
-      <HeaderNav name=" link={`events/${eventCode}`} />
+      <HeaderNav name="Register" link={`events/${eventCode}`} />
       <main className="my-4">
         {!confirmed && (
           <div className="flex flex-col items-center space-y-10">

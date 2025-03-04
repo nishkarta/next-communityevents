@@ -103,10 +103,10 @@ const EventsPage = () => {
                   {/* Left Half / Top Half: Image */}
                   <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
                     <Image
-                      src={EVENT_EXAMPLE_IMAGE_URL}
+                      src={event.imagesLinks[0]}
                       alt="Event Image"
                       layout="fill"
-                      className="object-cover"
+                      className="object-contain"
                       priority
                     />
                   </div>
