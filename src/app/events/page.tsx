@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeaderNav from "@/components/HeaderNav";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -82,7 +82,7 @@ const EventsPage = () => {
     <>
       <HeaderNav name="Events" link="home"></HeaderNav>
       <main>
-        <div className="my-4 mx-2 flex relative flex-1 md:grow-0">
+        <div className="my-4 mx-4 flex relative flex-1 md:grow-0">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
@@ -91,96 +91,100 @@ const EventsPage = () => {
           />
         </div>
         <Separator />
-        <div className="my-4 mx-2 p-3">
+        <div className="my-4 mx-2 py-2 px-2 flex flex-col gap-4 md:px-8">
           {isLoading ? (
             <p>
               <LoadingSpinner />
             </p>
           ) : events && events.length > 0 ? (
             events.map((event) => (
-              <Card key={event.code} className="rounded-xl mb-4">
-                <div className="flex flex-col md:flex-row">
+              <Card key={event.code} className="rounded-xl p-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   {/* Left Half / Top Half: Image */}
-                  <div className="relative md:w-1/2 h-60 md:h-96 overflow-hidden rounded-t-lg md:rounded-l-lg">
+                  <div className="relative md:w-2/3 aspect-[16/9]
+                    overflow-hidden rounded-lg">
                     <Image
-                      src={event.imagesLinks[0]}
+                      src={event?.imagesLink?.length ? event.imagesLinks[0] : EVENT_EXAMPLE_IMAGE_URL}
                       alt="Event Image"
                       layout="fill"
-                      className="object-contain"
+                      className="object-cover"
                       priority
                     />
                   </div>
                   {/* Right Half / Bottom Half: Event Information */}
-                  <div className="md:w-1/2">
-                    <CardHeader>
-                      <CardTitle className="mx-auto md:mx-0">
+                  <div
+                    className="md:w-1/3  flex flex-col"
+                  >
+                    <CardHeader className="p-3 md:p-6">
+                      <CardTitle className="mx-0">
                         {event.title}
                       </CardTitle>{" "}
                       {/* Event name */}
                     </CardHeader>
-                    <CardContent className="flex flex-col items-center md:items-start">
-                      <div className="flex flex-row gap-x-3">
+                    <CardContent className="flex flex-col p-3 md:p-6 grow items-start">
+                      <div className="flex flex-row gap-x-3 pb-4 ">
                         <Badge
-                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                            event.availabilityStatus === "available"
-                              ? "bg-green-700"
-                              : "bg-gray-500" // Default color for other statuses
-                          }`}
+                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${event.availabilityStatus === "available"
+                            ? "bg-green-700"
+                            : "bg-gray-500" // Default color for other statuses
+                            }`}
                         >
-                          <span className="mx-auto">
+                          <span className="">
                             {event.availabilityStatus}
                           </span>
                         </Badge>
                         <Badge
-                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${
-                            event.locationType === "onsite"
-                              ? "bg-green-700"
-                              : "bg-primary" // Default color for other statuses
-                          }`}
+                          className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${event.locationType === "onsite"
+                            ? "bg-green-700"
+                            : "bg-primary" // Default color for other statuses
+                            }`}
                         >
                           <span className="mx-auto">{event.locationType}</span>
                         </Badge>
                       </div>
 
-                      <div className="my-2 p-4">
-                        <p className="font-semibold text-gray-700">
+                      <div className="w-full flex flex-col grow ">
+                        <p className="font-semibold text-gray-700 pb-3">
                           Event Time:
                         </p>
-                        <p className="text-sm text-gray-500 my-3">
+                        <p className="text-sm text-gray-500 mb-2">
                           <span className="font-medium text-gray-700">
                             Start: {formatDate(new Date(event.eventStartAt))}
                           </span>
                         </p>
-                        <p className="text-sm text-gray-500 my-3">
+                        <p className="text-sm text-gray-500 mb-4">
                           <span className="font-medium text-gray-700">
                             End: {formatDate(new Date(event.eventEndAt))}
                           </span>
                         </p>
-                        <p className="font-semibold text-gray-700">
+                        <p className="font-semibold text-gray-700 pb-3">
                           Registration Time:
                         </p>
-                        <p className="text-sm text-gray-500 my-3">
+                        <p className="text-sm text-gray-500 mb-2">
                           <span className="font-medium text-gray-700">
                             Open: {formatDate(new Date(event.registerStartAt))}
                           </span>
                         </p>
-                        <p className="text-sm text-gray-500 my-3">
+                        <p className="text-sm text-gray-500">
                           <span className="font-medium text-gray-700">
                             Closed: {formatDate(new Date(event.registerEndAt))}
                           </span>
                         </p>
-                        <div className="mt-4">
+                        <div className="flex flex-row md:flex-col grow pt-4 ">
                           {" "}
-                          <p className="font-semibold text-gray-700">
-                            Total Remaining Seats:
-                          </p>
-                          <p className="text-sm text-gray-500 my-3">
-                            <span className="font-medium text-gray-700">
-                              {event.totalRemainingSeats}
-                            </span>
-                          </p>
+                          <div className="grow">
+                            <p className="font-semibold text-gray-700">
+                              Total Remaining Seats:
+                            </p>
+                            <p className="text-sm text-gray-500 my-3">
+                              <span className="font-medium text-gray-700">
+                                {event.totalRemainingSeats}
+                              </span>
+                            </p>
+                          </div>
+
                           {/* Link to event sessions page */}
-                          <div className="flex justify-center md:justify-start">
+                          <div className="flex">
                             {event.availabilityStatus === "available" ? (
                               <Button
                                 className="mx-auto w-full "
@@ -201,7 +205,7 @@ const EventsPage = () => {
                         </div>
                       </div>
                     </CardContent>
-                    <CardFooter className="flex justify-center md:justify-start"></CardFooter>
+                    {/* <CardFooter className="flex justify-center md:justify-start"></CardFooter> */}
                   </div>
                 </div>
               </Card>
