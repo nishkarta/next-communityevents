@@ -102,3 +102,14 @@ export const formatDate = (date: Date): string => {
   // Combine formatted date and time
   return `${formattedDateWithComma}, ${formattedTime}`;
 };
+
+export const capitalizedFirstLetter = (sentence: 'string') => {
+  const words = sentence?.split(" ");
+
+  for (let i = 0; i < words?.length; i++) {
+    const lowercased = words[i]?.toLowerCase();
+    words[i] = lowercased[0]?.toUpperCase() + lowercased?.substr(1);
+  }
+
+  return words?.join(" ");
+}

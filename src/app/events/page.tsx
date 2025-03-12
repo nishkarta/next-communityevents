@@ -19,7 +19,9 @@ import { useRouter } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import withAuth from "@/components/providers/AuthWrapper";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { formatDate } from "@/lib/utils";
+import { capitalizedFirstLetter, formatDate } from "@/lib/utils";
+import { Carousel } from "flowbite-react";
+
 
 const EventsPage = () => {
   const [events, setEvents] = useState<any[]>([]); // State to hold fetched events
@@ -103,13 +105,28 @@ const EventsPage = () => {
                   {/* Left Half / Top Half: Image */}
                   <div className="relative md:w-2/3 aspect-[16/9]
                     overflow-hidden rounded-lg">
-                    <Image
-                      src={event?.imagesLink?.length ? event.imagesLinks[0] : EVENT_EXAMPLE_IMAGE_URL}
-                      alt="Event Image"
-                      layout="fill"
-                      className="object-cover"
-                      priority
-                    />
+                    {
+                      event?.imagesLinks?.length > 1
+                        ?
+                        // <div className="h-56 sm:h-64 xl:h-80 2xl:h-96">
+                        <Carousel>
+                          {event?.imagesLinks?.map((src: string, index: number) => (
+                            <div key={index} className="relative w-full h-full">
+                              <Image src={src} alt={`Slide ${index + 1}`} fill className="object-cover rounded-lg" priority />
+                            </div>
+                          ))}
+                        </Carousel>
+                        // </div>
+                        :
+                        <Image
+                          src={event?.imagesLinks?.length ? event.imagesLinks[0] : EVENT_EXAMPLE_IMAGE_URL}
+                          alt="Event Image"
+                          layout="fill"
+                          className="object-cover"
+                          priority
+                        />
+                    }
+
                   </div>
                   {/* Right Half / Bottom Half: Event Information */}
                   <div
@@ -198,7 +215,7 @@ const EventsPage = () => {
                               </Button>
                             ) : (
                               <>
-                                <Button disabled>Unavailable</Button>
+                                <Button disabled>{capitalizedFirstLetter(event?.availabilityStatus)}</Button>
                               </>
                             )}
                           </div>
