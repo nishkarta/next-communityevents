@@ -181,7 +181,8 @@ const EventsPage = () => {
                           </p>
                           {/* Link to event sessions page */}
                           <div className="flex justify-center md:justify-start">
-                            {event.availabilityStatus === "available" ? (
+                            {event.availabilityStatus === "available" ||
+                            event.availabilityStatus === "soon" ? (
                               <Button
                                 className="mx-auto w-full "
                                 onClick={() => handleSession(event.code)}
