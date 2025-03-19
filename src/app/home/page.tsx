@@ -250,7 +250,7 @@ const Home = () => {
                               width: 200, // Larger width for display
                               color: {
                                 dark: "#000000",
-                                light: "#FFFFFF",
+                                light: "#00000000",
                               },
                             }}
                           />

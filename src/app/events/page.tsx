@@ -143,11 +143,15 @@ const EventsPage = () => {
                         <Badge
                           className={`flex w-fit p-2 text-center justify-center items-center mb-2 ${event.availabilityStatus === "available"
                             ? "bg-green-700"
-                            : "bg-gray-500" // Default color for other statuses
+                            : (
+                              event.availabilityStatus === "full"
+                                ? "bg-yellow-700"
+                                :
+                                "bg-gray-500") // Default color for other statuses
                             }`}
                         >
                           <span className="">
-                            {event.availabilityStatus}
+                            {capitalizedFirstLetter(event.availabilityStatus)}
                           </span>
                         </Badge>
                         <Badge
@@ -156,7 +160,7 @@ const EventsPage = () => {
                             : "bg-primary" // Default color for other statuses
                             }`}
                         >
-                          <span className="mx-auto">{event.locationType}</span>
+                          <span className="mx-auto">{capitalizedFirstLetter(event.locationType)}</span>
                         </Badge>
                       </div>
 

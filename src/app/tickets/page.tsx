@@ -228,7 +228,7 @@ const TicketsPage = () => {
                               width: 200,
                               color: {
                                 dark: "#000000",
-                                light: "#FFFFFF",
+                                light: "#00000000",
                               },
                             }}
                           />
