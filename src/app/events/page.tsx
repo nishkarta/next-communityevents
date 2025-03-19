@@ -93,14 +93,14 @@ const EventsPage = () => {
           />
         </div>
         <Separator />
-        <div className="my-4 mx-2 py-2 px-2 flex flex-col gap-4 md:px-8">
+        <div className="my-4 mx-2 py-2 px-3 pb-7 flex flex-col gap-4 md:px-8">
           {isLoading ? (
             <p>
               <LoadingSpinner />
             </p>
           ) : events && events.length > 0 ? (
             events.map((event) => (
-              <Card key={event.code} className="rounded-xl p-4">
+              <Card key={event.code} className="rounded-xl md:p-4 p-3">
                 <div className="flex flex-col md:flex-row gap-4">
                   {/* Left Half / Top Half: Image */}
                   <div className="relative md:w-2/3 aspect-[16/9]
