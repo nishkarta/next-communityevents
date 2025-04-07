@@ -71,6 +71,7 @@ const TicketsPage = () => {
             eventName: event.title,
             sessionName: instance.title,
             sessionCode: instance.code,
+            sessionDescription: instance.description,
           }))
         )
       );
@@ -279,6 +280,9 @@ const TicketsPage = () => {
                       <p className="text-sm text-gray-700">
                         <b>Session:</b> {registration.sessionName} (
                         {registration.sessionCode})
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <b>Description:</b> {registration.sessionDescription}
                       </p>
                     </CardContent>
                     <CardFooter>
