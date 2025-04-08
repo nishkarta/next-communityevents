@@ -45,6 +45,23 @@ const QRScan: React.FC = () => {
       return;
     }
 
+    // try {
+    //   const patchResponse = await fetch(
+    //     `${API_BASE_URL}/api/v2/events/registers/${qrCode}/status`,
+    //     {
+    //       method: "PATCH",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${accessToken}`,
+    //         "X-API-Key": API_KEY || "",
+    //       },
+    //       body: JSON.stringify({
+    //         status: "success",
+    //         updatedAt: new Date().toISOString(),
+    //       }),
+    //     }
+    //   );
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/v2/events/registers`, {
         method: "POST",

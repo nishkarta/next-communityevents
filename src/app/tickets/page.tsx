@@ -26,6 +26,25 @@ import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 
 const TicketsPage = () => {
+  const convertLinksToAnchors = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlRegex).map((part, i) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={i}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-700 underline"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [filter, setFilter] = useState<string>("pending"); // Default filter
   const [loading, setLoading] = useState<boolean>(true); // Add loading state
@@ -71,6 +90,7 @@ const TicketsPage = () => {
             eventName: event.title,
             sessionName: instance.title,
             sessionCode: instance.code,
+            sessionDescription: instance.description,
           }))
         )
       );
@@ -279,6 +299,12 @@ const TicketsPage = () => {
                       <p className="text-sm text-gray-700">
                         <b>Session:</b> {registration.sessionName} (
                         {registration.sessionCode})
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <b>Description:</b>{" "}
+                        {convertLinksToAnchors(
+                          registration.sessionDescription || ""
+                        )}
                       </p>
                     </CardContent>
                     <CardFooter>

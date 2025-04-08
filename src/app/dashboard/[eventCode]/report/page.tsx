@@ -403,11 +403,12 @@ const ReportPage = ({ params }: { params: { eventCode: string } }) => {
                   </TableCell>
                   <TableCell>
                     <Button
+                      disabled={registrant.status === "success"}
                       onClick={() => {
                         updateRegistrantStatus(registrant.id);
                       }}
                     >
-                      Verify
+                      Update
                     </Button>
                   </TableCell>
                 </TableRow>
